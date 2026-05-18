@@ -9,50 +9,304 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as MarketingRouteImport } from './routes/_marketing'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as MarketingIndexRouteImport } from './routes/_marketing.index'
+import { Route as MarketingShopRouteImport } from './routes/_marketing.shop'
+import { Route as MarketingServicesRouteImport } from './routes/_marketing.services'
+import { Route as MarketingProjectsRouteImport } from './routes/_marketing.projects'
+import { Route as MarketingPortfolioRouteImport } from './routes/_marketing.portfolio'
+import { Route as MarketingContactRouteImport } from './routes/_marketing.contact'
+import { Route as MarketingAboutRouteImport } from './routes/_marketing.about'
 
-const IndexRoute = IndexRouteImport.update({
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingRoute = MarketingRouteImport.update({
+  id: '/_marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => DashboardRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingShopRoute = MarketingShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingServicesRoute = MarketingServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingProjectsRoute = MarketingProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingPortfolioRoute = MarketingPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingContactRoute = MarketingContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingAboutRoute = MarketingAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => MarketingRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof MarketingIndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/about': typeof MarketingAboutRoute
+  '/contact': typeof MarketingContactRoute
+  '/portfolio': typeof MarketingPortfolioRoute
+  '/projects': typeof MarketingProjectsRoute
+  '/services': typeof MarketingServicesRoute
+  '/shop': typeof MarketingShopRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/about': typeof MarketingAboutRoute
+  '/contact': typeof MarketingContactRoute
+  '/portfolio': typeof MarketingPortfolioRoute
+  '/projects': typeof MarketingProjectsRoute
+  '/services': typeof MarketingServicesRoute
+  '/shop': typeof MarketingShopRoute
+  '/': typeof MarketingIndexRoute
+  '/admin': typeof AdminIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_marketing': typeof MarketingRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/contact': typeof MarketingContactRoute
+  '/_marketing/portfolio': typeof MarketingPortfolioRoute
+  '/_marketing/projects': typeof MarketingProjectsRoute
+  '/_marketing/services': typeof MarketingServicesRoute
+  '/_marketing/shop': typeof MarketingShopRoute
+  '/_marketing/': typeof MarketingIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/dashboard'
+    | '/about'
+    | '/contact'
+    | '/portfolio'
+    | '/projects'
+    | '/services'
+    | '/shop'
+    | '/admin/'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/about'
+    | '/contact'
+    | '/portfolio'
+    | '/projects'
+    | '/services'
+    | '/shop'
+    | '/'
+    | '/admin'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/_marketing'
+    | '/admin'
+    | '/dashboard'
+    | '/_marketing/about'
+    | '/_marketing/contact'
+    | '/_marketing/portfolio'
+    | '/_marketing/projects'
+    | '/_marketing/services'
+    | '/_marketing/shop'
+    | '/_marketing/'
+    | '/admin/'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  MarketingRoute: typeof MarketingRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_marketing': {
+      id: '/_marketing'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MarketingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_marketing/': {
+      id: '/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/shop': {
+      id: '/_marketing/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof MarketingShopRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/services': {
+      id: '/_marketing/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof MarketingServicesRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/projects': {
+      id: '/_marketing/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof MarketingProjectsRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/portfolio': {
+      id: '/_marketing/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof MarketingPortfolioRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/contact': {
+      id: '/_marketing/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof MarketingContactRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/about': {
+      id: '/_marketing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof MarketingAboutRouteImport
+      parentRoute: typeof MarketingRoute
     }
   }
 }
 
+interface MarketingRouteChildren {
+  MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingContactRoute: typeof MarketingContactRoute
+  MarketingPortfolioRoute: typeof MarketingPortfolioRoute
+  MarketingProjectsRoute: typeof MarketingProjectsRoute
+  MarketingServicesRoute: typeof MarketingServicesRoute
+  MarketingShopRoute: typeof MarketingShopRoute
+  MarketingIndexRoute: typeof MarketingIndexRoute
+}
+
+const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingAboutRoute: MarketingAboutRoute,
+  MarketingContactRoute: MarketingContactRoute,
+  MarketingPortfolioRoute: MarketingPortfolioRoute,
+  MarketingProjectsRoute: MarketingProjectsRoute,
+  MarketingServicesRoute: MarketingServicesRoute,
+  MarketingShopRoute: MarketingShopRoute,
+  MarketingIndexRoute: MarketingIndexRoute,
+}
+
+const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
+  MarketingRouteChildren,
+)
+
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  MarketingRoute: MarketingRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
+  DashboardRoute: DashboardRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
