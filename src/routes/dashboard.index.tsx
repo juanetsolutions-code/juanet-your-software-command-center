@@ -22,12 +22,17 @@ function DashboardHome() {
         </button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
         <StatCard label="Active projects" value="4" delta="+1 this month" icon={FolderKanban} />
         <StatCard label="Open requests" value="7" delta="2 pending review" icon={Activity} accent="from-brand-blue to-brand-violet" />
-        <StatCard label="Spend this month" value="$12,480" delta="On budget" icon={Wallet} accent="from-brand-violet to-brand-cyan" />
-        <StatCard label="Active licenses" value="9" delta="All valid" icon={KeyRound} accent="from-brand-cyan to-brand-violet" />
-      </div>
+        <StatCard label="Unread messages" value="3" delta="2 from Marcus" icon={MessageSquare} accent="from-brand-cyan to-brand-violet" />
+        <StatCard label="Outstanding" value="$8,400" delta="Due May 22" icon={Wallet} accent="from-brand-violet to-brand-cyan" />
+      </motion.div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 glass rounded-2xl p-5">
@@ -38,22 +43,35 @@ function DashboardHome() {
             </button>
           </div>
           <div className="mt-5 space-y-4">
-            {ongoingProjects.slice(0, 5).map((p) => (
-              <div key={p.id} className="grid grid-cols-12 items-center gap-3">
+            {clientProjects.slice(0, 5).map((p, i) => (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05 * i }}
+                className="grid grid-cols-12 items-center gap-3"
+              >
                 <div className="col-span-5">
-                  <div className="text-sm font-medium truncate">{p.name}</div>
-                  <div className="text-[11px] text-muted-foreground">{p.category} • {p.due}</div>
+                  <div className="text-sm font-medium truncate flex items-center gap-2">
+                    {p.name}
+                  </div>
+                  <div className="text-[11px] text-muted-foreground flex items-center gap-2">
+                    <StatusBadge status={p.status} />
+                    <span>{p.due}</span>
+                  </div>
                 </div>
                 <div className="col-span-5">
                   <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
-                    <div
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${p.progress}%` }}
+                      transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 * i }}
                       className="h-full bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-violet"
-                      style={{ width: `${p.progress}%` }}
                     />
                   </div>
                 </div>
                 <div className="col-span-2 text-right text-xs text-muted-foreground">{p.progress}%</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
