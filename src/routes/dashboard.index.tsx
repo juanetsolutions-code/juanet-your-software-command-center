@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Activity, FolderKanban, Wallet, KeyRound, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Activity, FolderKanban, MessageSquare, Wallet, ArrowUpRight } from "lucide-react";
 import { StatCard } from "@/components/app/StatCard";
-import { ongoingProjects } from "@/lib/site";
+import { StatusBadge } from "@/components/app/StatusBadge";
+import { clientProjects } from "@/lib/site";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
