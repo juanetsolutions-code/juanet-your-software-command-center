@@ -1,25 +1,52 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { Activity, FolderKanban, MessageSquare, Wallet, ArrowUpRight } from "lucide-react";
+import {
+  Activity,
+  ArrowUpRight,
+  FolderKanban,
+  MessageSquare,
+  Wallet,
+} from "lucide-react";
 import { StatCard } from "@/components/app/StatCard";
-import { StatusBadge } from "@/components/app/StatusBadge";
-import { clientProjects } from "@/lib/site";
+import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
+import { ProjectPipelineRow } from "@/components/dashboard/ProjectPipelineRow";
+import {
+  getDashboardSummary,
+  listProjects,
+  listRecentActivity,
+} from "@/lib/dashboard";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
 });
 
+function formatMoney(amount: number, currency: "USD" | "KES") {
+  if (currency === "USD") return `$${amount.toLocaleString()}`;
+  return `KES ${amount.toLocaleString()}`;
+}
+
 function DashboardHome() {
+  const summary = getDashboardSummary();
+  const projects = listProjects().slice(0, 5);
+  const activity = listRecentActivity();
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Welcome back, Jane</h1>
-          <p className="text-sm text-muted-foreground mt-1">Here's what's happening across your engagements.</p>
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+            Welcome back, Jane
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Here's what's happening across your engagements.
+          </p>
         </div>
-        <button className="h-10 px-4 rounded-lg text-sm font-medium bg-gradient-to-r from-brand-blue to-brand-violet text-primary-foreground glow-primary">
+        <Link
+          to="/dashboard/requests"
+          className="h-10 px-4 inline-flex items-center justify-center rounded-lg text-sm font-medium bg-gradient-to-r from-brand-blue to-brand-violet text-primary-foreground glow-primary"
+        >
           + New Request
-        </button>
+        </Link>
       </div>
 
       <motion.div
@@ -28,72 +55,59 @@ function DashboardHome() {
         transition={{ duration: 0.4 }}
         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
-        <StatCard label="Active projects" value="4" delta="+1 this month" icon={FolderKanban} />
-        <StatCard label="Open requests" value="7" delta="2 pending review" icon={Activity} accent="from-brand-blue to-brand-violet" />
-        <StatCard label="Unread messages" value="3" delta="2 from Marcus" icon={MessageSquare} accent="from-brand-cyan to-brand-violet" />
-        <StatCard label="Outstanding" value="$8,400" delta="Due May 22" icon={Wallet} accent="from-brand-violet to-brand-cyan" />
+        <StatCard
+          label="Active projects"
+          value={String(summary.activeProjects)}
+          delta="+1 this month"
+          icon={FolderKanban}
+        />
+        <StatCard
+          label="Open requests"
+          value={String(summary.openRequests)}
+          delta="2 pending review"
+          icon={Activity}
+          accent="from-brand-blue to-brand-violet"
+        />
+        <StatCard
+          label="Unread messages"
+          value={String(summary.unreadMessages)}
+          delta="2 from Marcus"
+          icon={MessageSquare}
+          accent="from-brand-cyan to-brand-violet"
+        />
+        <StatCard
+          label="Outstanding"
+          value={formatMoney(
+            summary.outstandingAmount.amount,
+            summary.outstandingAmount.currency,
+          )}
+          delta="Due May 22"
+          icon={Wallet}
+          accent="from-brand-violet to-brand-cyan"
+        />
       </motion.div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 glass rounded-2xl p-5">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold">Project pipeline</h2>
-            <button className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
+            <Link
+              to="/dashboard/projects"
+              className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+            >
               View all <ArrowUpRight className="h-3 w-3" />
-            </button>
+            </Link>
           </div>
           <div className="mt-5 space-y-4">
-            {clientProjects.slice(0, 5).map((p, i) => (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.05 * i }}
-                className="grid grid-cols-12 items-center gap-3"
-              >
-                <div className="col-span-5">
-                  <div className="text-sm font-medium truncate flex items-center gap-2">
-                    {p.name}
-                  </div>
-                  <div className="text-[11px] text-muted-foreground flex items-center gap-2">
-                    <StatusBadge status={p.status} />
-                    <span>{p.due}</span>
-                  </div>
-                </div>
-                <div className="col-span-5">
-                  <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${p.progress}%` }}
-                      transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 * i }}
-                      className="h-full bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-violet"
-                    />
-                  </div>
-                </div>
-                <div className="col-span-2 text-right text-xs text-muted-foreground">{p.progress}%</div>
-              </motion.div>
+            {projects.map((p, i) => (
+              <ProjectPipelineRow key={p.id} project={p} index={i} />
             ))}
           </div>
         </div>
 
         <div className="glass rounded-2xl p-5">
           <h2 className="font-semibold">Recent activity</h2>
-          <ul className="mt-5 space-y-4">
-            {[
-              { t: "Deploy", d: "atlas-core deployed to staging", time: "12m" },
-              { t: "Message", d: "Marcus replied on Skyline LMS", time: "1h" },
-              { t: "Invoice", d: "INV-1042 paid via M-Pesa", time: "3h" },
-              { t: "License", d: "Pulse CRM key issued", time: "Yesterday" },
-            ].map((a) => (
-              <li key={a.d} className="flex items-start gap-3">
-                <span className="mt-1 h-2 w-2 rounded-full bg-brand-cyan" />
-                <div className="text-sm flex-1">
-                  <div>{a.d}</div>
-                  <div className="text-[11px] text-muted-foreground">{a.t} • {a.time} ago</div>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <ActivityFeed items={activity} />
         </div>
       </div>
     </div>
