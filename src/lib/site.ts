@@ -93,3 +93,79 @@ export const stats = [
   { label: "Countries Served", value: "12" },
   { label: "Uptime SLA", value: "99.99%" },
 ];
+
+// ===== Client Dashboard demo data =====
+
+export type ClientProject = {
+  id: string;
+  name: string;
+  client: string;
+  category: string;
+  status: "pending" | "in progress" | "completed";
+  progress: number;
+  due: string;
+  lead: string;
+  updated: string;
+};
+
+export const clientProjects: ClientProject[] = [
+  { id: "cp-01", name: "Atlas Banking Core", client: "Atlas Financial", category: "FinTech", status: "in progress", progress: 64, due: "Sep 12, 2025", lead: "Marcus Otieno", updated: "12m ago" },
+  { id: "cp-02", name: "MediTrack HMS", client: "Nairobi Health", category: "Healthcare", status: "in progress", progress: 88, due: "Aug 02, 2025", lead: "Aisha Kamau", updated: "1h ago" },
+  { id: "cp-03", name: "Harvest ERP", client: "Greenfields", category: "Agritech", status: "pending", progress: 12, due: "Nov 20, 2025", lead: "Brian Mwangi", updated: "Yesterday" },
+  { id: "cp-04", name: "Skyline LMS v2", client: "Skyline Academy", category: "Education", status: "completed", progress: 100, due: "Jun 30, 2025", lead: "Joy Wanjiru", updated: "3 days ago" },
+  { id: "cp-05", name: "RetailOps CRM", client: "Urban Retail", category: "Retail", status: "in progress", progress: 48, due: "Sep 28, 2025", lead: "Kelvin Njoroge", updated: "4h ago" },
+  { id: "cp-06", name: "Logix Fleet", client: "Logix", category: "Logistics", status: "pending", progress: 8, due: "Dec 10, 2025", lead: "Marcus Otieno", updated: "2 days ago" },
+];
+
+export type Conversation = {
+  id: string;
+  name: string;
+  role: string;
+  preview: string;
+  time: string;
+  unread: number;
+  online: boolean;
+};
+
+export const conversations: Conversation[] = [
+  { id: "c-01", name: "Marcus Otieno", role: "Tech Lead — Atlas", preview: "Pushed the new auth flow to staging — could you take a look?", time: "12m", unread: 2, online: true },
+  { id: "c-02", name: "Aisha Kamau", role: "PM — MediTrack", preview: "QA round 2 looks clean. Targeting Friday release.", time: "1h", unread: 0, online: true },
+  { id: "c-03", name: "Joy Wanjiru", role: "Designer", preview: "Updated the dashboard tokens in Figma.", time: "3h", unread: 1, online: false },
+  { id: "c-04", name: "Brian Mwangi", role: "Backend — Harvest", preview: "Schema draft attached. Ready for review.", time: "Yesterday", unread: 0, online: false },
+  { id: "c-05", name: "Kelvin Njoroge", role: "DevOps", preview: "CI pipeline migrated to the new runner.", time: "2d", unread: 0, online: true },
+];
+
+export type ThreadMessage = {
+  id: string;
+  from: "me" | "them";
+  text: string;
+  time: string;
+};
+
+export const sampleThread: ThreadMessage[] = [
+  { id: "m-1", from: "them", text: "Morning! Pushed the new auth flow to staging.", time: "09:12" },
+  { id: "m-2", from: "them", text: "Includes magic-link + Google OAuth.", time: "09:12" },
+  { id: "m-3", from: "me", text: "Awesome — testing now. Did you wire the audit log?", time: "09:24" },
+  { id: "m-4", from: "them", text: "Yes, every sign-in event lands in `auth_events`.", time: "09:26" },
+  { id: "m-5", from: "me", text: "Perfect. Let's demo this on Thursday's call.", time: "09:31" },
+  { id: "m-6", from: "them", text: "Sounds good. I'll prep a short walkthrough deck.", time: "09:33" },
+];
+
+export type Invoice = {
+  id: string;
+  project: string;
+  amount: number;
+  currency: "USD" | "KES";
+  status: "paid" | "due" | "overdue" | "draft";
+  issued: string;
+  due: string;
+};
+
+export const invoices: Invoice[] = [
+  { id: "INV-1048", project: "Atlas Banking Core — Sprint 6", amount: 8400, currency: "USD", status: "due", issued: "May 02, 2026", due: "May 22, 2026" },
+  { id: "INV-1047", project: "MediTrack HMS — QA Retainer", amount: 3200, currency: "USD", status: "paid", issued: "Apr 28, 2026", due: "May 10, 2026" },
+  { id: "INV-1046", project: "Harvest ERP — Discovery", amount: 1800, currency: "USD", status: "paid", issued: "Apr 18, 2026", due: "Apr 28, 2026" },
+  { id: "INV-1045", project: "Skyline LMS v2 — Final", amount: 12500, currency: "USD", status: "paid", issued: "Apr 02, 2026", due: "Apr 16, 2026" },
+  { id: "INV-1044", project: "RetailOps CRM — Sprint 3", amount: 540000, currency: "KES", status: "overdue", issued: "Mar 22, 2026", due: "Apr 05, 2026" },
+  { id: "INV-1043", project: "Logix Fleet — Kickoff", amount: 2200, currency: "USD", status: "draft", issued: "—", due: "—" },
+];
