@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Loader2, Lock, Mail, User, AlertCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { readSession } from "@/lib/auth/store";
-import { Field } from "./_auth.login";
+import { Field } from "./auth.login";
 
 export const Route = createFileRoute("/auth/signup")({
   beforeLoad: () => {
