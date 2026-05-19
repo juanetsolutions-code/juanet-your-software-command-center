@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
-export const Route = createFileRoute("/_auth")({
+export const Route = createFileRoute("/auth")({
   component: AuthLayout,
 });
 
