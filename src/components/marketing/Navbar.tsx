@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
 import { marketingNav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isAuthenticated, user } = useAuth();
+  const portalHref = user?.role === "admin" ? "/admin" : "/dashboard";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -65,11 +68,19 @@ export function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
+            {!isAuthenticated && (
+              <Link
+                to="/auth/login"
+                className="hidden sm:inline-flex items-center h-9 px-3 rounded-md text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Sign in
+              </Link>
+            )}
             <Link
-              to="/dashboard"
+              to={isAuthenticated ? portalHref : "/auth/signup"}
               className="hidden sm:inline-flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium bg-gradient-to-r from-brand-blue to-brand-violet text-primary-foreground hover:opacity-90 transition-opacity glow-primary"
             >
-              Client Portal
+              {isAuthenticated ? "Open Portal" : "Get Started"}
             </Link>
             <button
               onClick={() => setOpen((v) => !v)}
@@ -94,12 +105,20 @@ export function Navbar() {
                   </Link>
                 </li>
               ))}
-              <li className="mt-2">
+              <li className="mt-2 space-y-2">
+                {!isAuthenticated && (
+                  <Link
+                    to="/auth/login"
+                    className="block text-center h-10 leading-10 rounded-md text-sm border border-border/60 hover:bg-white/5"
+                  >
+                    Sign in
+                  </Link>
+                )}
                 <Link
-                  to="/dashboard"
+                  to={isAuthenticated ? portalHref : "/auth/signup"}
                   className="block text-center h-10 leading-10 rounded-md text-sm font-medium bg-gradient-to-r from-brand-blue to-brand-violet text-primary-foreground"
                 >
-                  Client Portal
+                  {isAuthenticated ? "Open Portal" : "Get Started"}
                 </Link>
               </li>
             </ul>

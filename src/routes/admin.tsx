@@ -12,6 +12,7 @@ import {
   Settings,
 } from "lucide-react";
 import { AppShell, type NavItem } from "@/components/app/AppShell";
+import { requireRole } from "@/lib/auth";
 
 const items: NavItem[] = [
   { label: "Overview", to: "/admin", icon: LayoutDashboard },
@@ -27,6 +28,7 @@ const items: NavItem[] = [
 ];
 
 export const Route = createFileRoute("/admin")({
+  beforeLoad: ({ location }) => requireRole("admin", location.href),
   component: AdminLayout,
 });
 

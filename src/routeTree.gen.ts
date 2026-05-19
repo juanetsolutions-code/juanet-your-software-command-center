@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
@@ -19,6 +20,9 @@ import { Route as DashboardRequestsRouteImport } from './routes/dashboard.reques
 import { Route as DashboardProjectsRouteImport } from './routes/dashboard.projects'
 import { Route as DashboardPaymentsRouteImport } from './routes/dashboard.payments'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messages'
+import { Route as AuthSignupRouteImport } from './routes/auth.signup'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
 import { Route as MarketingShopRouteImport } from './routes/_marketing.shop'
 import { Route as MarketingServicesRouteImport } from './routes/_marketing.services'
 import { Route as MarketingProjectsRouteImport } from './routes/_marketing.projects'
@@ -29,6 +33,11 @@ import { Route as MarketingAboutRouteImport } from './routes/_marketing.about'
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -75,6 +84,21 @@ const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
   path: '/messages',
   getParentRoute: () => DashboardRoute,
 } as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthForgotRoute = AuthForgotRouteImport.update({
+  id: '/forgot',
+  path: '/forgot',
+  getParentRoute: () => AuthRoute,
+} as any)
 const MarketingShopRoute = MarketingShopRouteImport.update({
   id: '/shop',
   path: '/shop',
@@ -109,6 +133,7 @@ const MarketingAboutRoute = MarketingAboutRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/about': typeof MarketingAboutRoute
   '/contact': typeof MarketingContactRoute
@@ -116,6 +141,9 @@ export interface FileRoutesByFullPath {
   '/projects': typeof MarketingProjectsRoute
   '/services': typeof MarketingServicesRoute
   '/shop': typeof MarketingShopRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/payments': typeof DashboardPaymentsRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
@@ -124,12 +152,16 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
+  '/auth': typeof AuthRouteWithChildren
   '/about': typeof MarketingAboutRoute
   '/contact': typeof MarketingContactRoute
   '/portfolio': typeof MarketingPortfolioRoute
   '/projects': typeof MarketingProjectsRoute
   '/services': typeof MarketingServicesRoute
   '/shop': typeof MarketingShopRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/payments': typeof DashboardPaymentsRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
@@ -142,6 +174,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_marketing': typeof MarketingRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/_marketing/about': typeof MarketingAboutRoute
   '/_marketing/contact': typeof MarketingContactRoute
@@ -149,6 +182,9 @@ export interface FileRoutesById {
   '/_marketing/projects': typeof MarketingProjectsRoute
   '/_marketing/services': typeof MarketingServicesRoute
   '/_marketing/shop': typeof MarketingShopRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
   '/dashboard/payments': typeof DashboardPaymentsRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
@@ -162,6 +198,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/auth'
     | '/dashboard'
     | '/about'
     | '/contact'
@@ -169,6 +206,9 @@ export interface FileRouteTypes {
     | '/projects'
     | '/services'
     | '/shop'
+    | '/auth/forgot'
+    | '/auth/login'
+    | '/auth/signup'
     | '/dashboard/messages'
     | '/dashboard/payments'
     | '/dashboard/projects'
@@ -177,12 +217,16 @@ export interface FileRouteTypes {
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/auth'
     | '/about'
     | '/contact'
     | '/portfolio'
     | '/projects'
     | '/services'
     | '/shop'
+    | '/auth/forgot'
+    | '/auth/login'
+    | '/auth/signup'
     | '/dashboard/messages'
     | '/dashboard/payments'
     | '/dashboard/projects'
@@ -194,6 +238,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_marketing'
     | '/admin'
+    | '/auth'
     | '/dashboard'
     | '/_marketing/about'
     | '/_marketing/contact'
@@ -201,6 +246,9 @@ export interface FileRouteTypes {
     | '/_marketing/projects'
     | '/_marketing/services'
     | '/_marketing/shop'
+    | '/auth/forgot'
+    | '/auth/login'
+    | '/auth/signup'
     | '/dashboard/messages'
     | '/dashboard/payments'
     | '/dashboard/projects'
@@ -213,6 +261,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   MarketingRoute: typeof MarketingRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
 }
 
@@ -223,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -287,6 +343,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/messages'
       preLoaderRoute: typeof DashboardMessagesRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/forgot': {
+      id: '/auth/forgot'
+      path: '/forgot'
+      fullPath: '/auth/forgot'
+      preLoaderRoute: typeof AuthForgotRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/_marketing/shop': {
       id: '/_marketing/shop'
@@ -367,6 +444,20 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface AuthRouteChildren {
+  AuthForgotRoute: typeof AuthForgotRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignupRoute: typeof AuthSignupRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthForgotRoute: AuthForgotRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignupRoute: AuthSignupRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 interface DashboardRouteChildren {
   DashboardMessagesRoute: typeof DashboardMessagesRoute
   DashboardPaymentsRoute: typeof DashboardPaymentsRoute
@@ -390,8 +481,19 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   MarketingRoute: MarketingRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
