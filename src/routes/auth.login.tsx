@@ -7,7 +7,7 @@ import { readSession } from "@/lib/auth/store";
 
 type LoginSearch = { redirect?: string };
 
-export const Route = createFileRoute("/_auth/login")({
+export const Route = createFileRoute("/auth/login")({
   validateSearch: (s: Record<string, unknown>): LoginSearch => ({
     redirect: typeof s.redirect === "string" ? s.redirect : undefined,
   }),

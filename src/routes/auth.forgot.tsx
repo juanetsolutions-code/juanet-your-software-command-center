@@ -5,7 +5,7 @@ import { Loader2, Mail, AlertCircle, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Field } from "./_auth.login";
 
-export const Route = createFileRoute("/_auth/forgot")({
+export const Route = createFileRoute("/auth/forgot")({
   component: ForgotPage,
 });
 

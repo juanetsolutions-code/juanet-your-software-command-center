@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { readSession } from "@/lib/auth/store";
 import { Field } from "./_auth.login";
 
-export const Route = createFileRoute("/_auth/signup")({
+export const Route = createFileRoute("/auth/signup")({
   beforeLoad: () => {
     if (typeof window === "undefined") return;
     const s = readSession();
