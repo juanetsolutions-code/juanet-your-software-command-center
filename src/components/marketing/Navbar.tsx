@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
 import { marketingNav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
