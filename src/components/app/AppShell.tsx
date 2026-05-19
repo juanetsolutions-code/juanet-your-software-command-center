@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Bell,
   ChevronDown,
@@ -6,10 +6,21 @@ import {
   Sparkles,
   PanelLeftClose,
   PanelLeft,
+  LogOut,
+  User as UserIcon,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export type NavItem = { label: string; to: string; icon: LucideIcon };
 
@@ -24,6 +35,20 @@ export function AppShell({
 }) {
   const [open, setOpen] = useState(true);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const initials = (user?.fullName ?? "JN")
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+  const roleLabel = user?.role === "admin" ? "Admin" : "Client";
+
+  async function handleLogout() {
+    await signOut();
+    navigate({ to: "/auth/login" });
+  }
 
   return (
     <div className="min-h-screen flex">
@@ -98,14 +123,33 @@ export function AppShell({
               <Bell className="h-4 w-4" />
               <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-brand-cyan" />
             </button>
-            <button className="h-9 pl-1 pr-2 flex items-center gap-2 rounded-md hover:bg-white/5">
-              <span className="h-7 w-7 rounded-full bg-gradient-to-br from-brand-cyan to-brand-violet grid place-items-center text-[11px] font-semibold">JN</span>
-              <span className="hidden sm:block text-xs">
-                <span className="block leading-tight">Jane Ndegwa</span>
-                <span className="block text-muted-foreground leading-tight">Client</span>
-              </span>
-              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="h-9 pl-1 pr-2 flex items-center gap-2 rounded-md hover:bg-white/5">
+                  <span className="h-7 w-7 rounded-full bg-gradient-to-br from-brand-cyan to-brand-violet grid place-items-center text-[11px] font-semibold">
+                    {initials}
+                  </span>
+                  <span className="hidden sm:block text-xs text-left">
+                    <span className="block leading-tight">{user?.fullName ?? "Guest"}</span>
+                    <span className="block text-muted-foreground leading-tight">{roleLabel}</span>
+                  </span>
+                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="text-xs text-muted-foreground font-normal">
+                  {user?.email ?? "Not signed in"}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => navigate({ to: "/dashboard" })}>
+                  <UserIcon className="h-4 w-4 mr-2" /> Profile
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={handleLogout} className="text-destructive focus:text-destructive">
+                  <LogOut className="h-4 w-4 mr-2" /> Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
 
