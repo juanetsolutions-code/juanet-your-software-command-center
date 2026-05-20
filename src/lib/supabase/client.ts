@@ -1,19 +1,22 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+import { getSupabaseAnonKey, getSupabaseUrl, isSupabaseConfigured } from "@/lib/utils/env";
 
 let browserClient: SupabaseClient | null = null;
 
 function createBrowserClient(): SupabaseClient {
   if (browserClient) return browserClient;
 
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    console.warn("Supabase not configured - running in mock mode");
-    return createClient("https://placeholder.supabase.co", "public-anon-key");
+  const url = getSupabaseUrl();
+  const key = getSupabaseAnonKey();
+
+  if (!url || !key) {
+    // Placeholder client — calls will fail, but repositories gate on
+    // SUPABASE_READY and fall back to mock data.
+    browserClient = createClient("https://placeholder.supabase.co", "public-anon-key");
+    return browserClient;
   }
 
-  browserClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  browserClient = createClient(url, key, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
@@ -25,4 +28,4 @@ function createBrowserClient(): SupabaseClient {
 
 export const supabase = createBrowserClient();
 
-export const SUPABASE_READY = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+export const SUPABASE_READY = isSupabaseConfigured();
