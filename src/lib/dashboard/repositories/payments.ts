@@ -1,39 +1,57 @@
 import { supabase } from "@/lib/supabase/client";
 import { SUPABASE_READY } from "@/lib/supabase/status";
 import { logger } from "@/lib/utils/logger";
-import { TABLES } from "@/lib/supabase/schema";
-import { toPaymentMethod } from "@/lib/supabase/mappers";
 import type { PaymentMethod, BillingAddress } from "@/lib/dashboard/types";
 import {
   mockPaymentMethods,
   mockBillingAddress,
   mockBillingOverview,
 } from "@/lib/dashboard/mock";
+import { handleSupabaseError, safeSelect } from "./_shared";
+
+interface DbPaymentMethod {
+  id: string;
+  brand?: string | null;
+  last4?: string | null;
+  expiry_label?: string | null;
+  is_primary?: boolean | null;
+}
+
+function mapDbPaymentMethod(row: DbPaymentMethod): PaymentMethod {
+  return {
+    id: row.id,
+    brand: row.brand ?? "CARD",
+    last4: row.last4 ?? "0000",
+    expiryLabel: row.expiry_label ?? "—",
+    primary: !!row.is_primary,
+  };
+}
 
 export async function listPaymentMethods(): Promise<PaymentMethod[]> {
   if (!SUPABASE_READY) {
+    logger.info("[Mock Mode] Using mock payment methods data");
     return mockPaymentMethods;
   }
 
   try {
     const { data, error } = await supabase
-      .from(TABLES.paymentMethods)
+      .from("payment_methods")
       .select("*")
       .order("is_primary", { ascending: false });
 
     if (error) throw error;
-    return (data ?? []).map(toPaymentMethod);
+    const rows = safeSelect<DbPaymentMethod>(data);
+    if (rows.length === 0) return mockPaymentMethods;
+    return rows.map(mapDbPaymentMethod);
   } catch (err) {
-    logger.error("Failed to fetch payment methods", err);
+    handleSupabaseError(err, "listPaymentMethods");
     return mockPaymentMethods;
   }
 }
 
 export async function getBillingAddress(): Promise<BillingAddress> {
-  if (!SUPABASE_READY) {
-    return mockBillingAddress;
-  }
-  // For now return mock until billing_addresses table is used
+  if (!SUPABASE_READY) return mockBillingAddress;
+  // billing_addresses table not yet modeled; safe fallback.
   return mockBillingAddress;
 }
 
@@ -45,15 +63,20 @@ export async function markInvoicePaid(invoiceId: string): Promise<void> {
   if (!SUPABASE_READY) return;
 
   try {
-    await supabase.from(TABLES.payments).insert({
+    const { error: insertErr } = await supabase.from("payments").insert({
       invoice_id: invoiceId,
       amount: 0,
       currency: "USD",
       status: "succeeded",
-      processor: "manual",
     });
-    await supabase.from(TABLES.invoices).update({ status: "paid" }).eq("id", invoiceId);
+    if (insertErr) throw insertErr;
+
+    const { error: updateErr } = await supabase
+      .from("invoices")
+      .update({ status: "paid" })
+      .eq("id", invoiceId);
+    if (updateErr) throw updateErr;
   } catch (err) {
-    logger.error("Failed to mark invoice as paid", err);
+    handleSupabaseError(err, "markInvoicePaid");
   }
 }
