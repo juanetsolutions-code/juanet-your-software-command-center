@@ -7,7 +7,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { onSessionChange, readSession } from "./store";
+import { supabase } from "@/lib/supabase/client";
+import { mapSession } from "./session";
 import * as authApi from "./api";
 import type {
   AuthRole,
@@ -37,15 +38,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>("loading");
 
   useEffect(() => {
-    const sync = () => {
-      const s = readSession();
-      setSession(s);
-      setStatus(s ? "authenticated" : "unauthenticated");
-    };
+  const sync = async () => {
+    const { data } = await supabase.auth.getSession();
 
+    const s = mapSession(data.session);
+
+    setSession(s);
+    setStatus(s ? "authenticated" : "unauthenticated");
+  };
+
+  sync();
+
+  const { data: listener } = supabase.auth.onAuthStateChange(() => {
     sync();
-    return onSessionChange(sync);
-  }, []);
+  });
+
+  return () => {
+    listener.subscription.unsubscribe();
+  };
+}, []);
 
   const signOut = useCallback(async () => {
     return authApi.signOut();
