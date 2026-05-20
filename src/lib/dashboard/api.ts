@@ -49,16 +49,15 @@ export function listRecentActivity(): ActivityItem[] {
 }
 
 // ---------- Projects ----------
+// NOTE: The current UI is synchronous and consumes mock data directly.
+// Repositories return promises and are wired here for future async migration
+// (e.g. via React Query / loaders). Calling them eagerly on every render
+// would create spurious requests, so we expose them on the side instead.
 export function listProjects(): Project[] {
-  // Fire async repository call (non-blocking for current sync UI)
-  void projectsRepo.listProjects().then((data) => {
-    // Future: could update a cache or Zustand store here
-  });
   return mockProjects;
 }
 
 export function getProject(id: string): Project | undefined {
-  void projectsRepo.getProject(id);
   return mockProjects.find((p) => p.id === id);
 }
 
@@ -68,7 +67,6 @@ export function listProjectTimeline(project: Project): ProjectTimelineEvent[] {
 
 // ---------- Service Requests ----------
 export function listRequests(): ServiceRequest[] {
-  void requestsRepo.listRequests();
   return mockRequests;
 }
 
@@ -87,12 +85,10 @@ export function createServiceRequest(draft: ServiceRequestDraft): { id: string }
 
 // ---------- Messaging ----------
 export function listConversations(): Conversation[] {
-  void messagesRepo.listConversations();
   return mockConversations;
 }
 
 export function listMessages(conversationId: string): Message[] {
-  void messagesRepo.listMessages(conversationId);
   return mockMessagesByConversation[conversationId] ?? mockMessagesByConversation["c-01"] ?? [];
 }
 
@@ -102,17 +98,14 @@ export function sendMessage(conversationId: string, text: string): void {
 
 // ---------- Payments & Billing ----------
 export function listInvoices(): Invoice[] {
-  void invoicesRepo.listInvoices();
   return mockInvoices;
 }
 
 export function listPaymentMethods(): PaymentMethod[] {
-  void paymentsRepo.listPaymentMethods();
   return mockPaymentMethods;
 }
 
 export function getBillingAddress(): BillingAddress {
-  void paymentsRepo.getBillingAddress();
   return mockBillingAddress;
 }
 
@@ -123,3 +116,13 @@ export function getBillingOverview() {
 export function markInvoicePaid(invoiceId: string): void {
   void paymentsRepo.markInvoicePaid(invoiceId);
 }
+
+// ---------- Async repository surface (for future React Query migration) ----------
+export const repositories = {
+  projects: projectsRepo,
+  requests: requestsRepo,
+  messages: messagesRepo,
+  invoices: invoicesRepo,
+  payments: paymentsRepo,
+};
+
