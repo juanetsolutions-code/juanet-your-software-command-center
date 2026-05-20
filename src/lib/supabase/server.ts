@@ -1,23 +1,34 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+import {
+  getSupabaseAnonKey,
+  getSupabaseServiceRoleKey,
+  getSupabaseUrl,
+} from "@/lib/utils/env";
 
 let requestClient: SupabaseClient | null = null;
+let adminClient: SupabaseClient | null = null;
+
+const PLACEHOLDER_URL = "https://placeholder.supabase.co";
+const PLACEHOLDER_KEY = "public-anon-key";
 
 /**
  * Server-side Supabase client for TanStack Start.
  * Accepts optional access token for user-scoped RLS.
+ *
+ * Env is read lazily inside the function so Cloudflare Workers'
+ * per-request env injection works correctly.
  */
 export function getRequestSupabase(accessToken?: string): SupabaseClient {
   if (requestClient && !accessToken) return requestClient;
 
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    console.warn("Supabase not configured - running in mock mode");
-    return createClient("https://placeholder.supabase.co", "public-anon-key");
+  const url = getSupabaseUrl();
+  const key = getSupabaseAnonKey();
+
+  if (!url || !key) {
+    return createClient(PLACEHOLDER_URL, PLACEHOLDER_KEY);
   }
 
-  const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  const client = createClient(url, key, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -29,4 +40,25 @@ export function getRequestSupabase(accessToken?: string): SupabaseClient {
 
   if (!accessToken) requestClient = client;
   return client;
+}
+
+/**
+ * Server-only admin client using the service role key. BYPASSES RLS.
+ * Returns a placeholder client when credentials are not configured so
+ * callers can still type-check; calls will simply fail at runtime.
+ */
+export function getAdminSupabase(): SupabaseClient {
+  if (adminClient) return adminClient;
+
+  const url = getSupabaseUrl();
+  const serviceKey = getSupabaseServiceRoleKey();
+
+  if (!url || !serviceKey) {
+    return createClient(PLACEHOLDER_URL, PLACEHOLDER_KEY);
+  }
+
+  adminClient = createClient(url, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  return adminClient;
 }
