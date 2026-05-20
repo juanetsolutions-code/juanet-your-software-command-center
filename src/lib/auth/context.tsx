@@ -42,9 +42,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(s);
       setStatus(s ? "authenticated" : "unauthenticated");
     };
+
     sync();
     return onSessionChange(sync);
   }, []);
+
+  const signOut = useCallback(async () => {
+    return authApi.signOut();
+  }, []);
+
+  const signIn = useCallback((p: SignInPayload) => {
+    return authApi.signIn(p);
+  }, []);
+
+  const signUp = useCallback((p: SignUpPayload) => {
+    return authApi.signUp(p);
+  }, []);
+
+  const requestPasswordReset = useCallback((email: string) => {
+    return authApi.requestPasswordReset(email);
+  }, []);
+
+  const hasRole = useCallback(
+    (role: AuthRole) => session?.user.role === role,
+    [session]
+  );
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -52,20 +74,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       user: session?.user ?? null,
       isAuthenticated: !!session,
-      hasRole: (role) => session?.user.role === role,
-      signIn: authApi.signIn,
-      signUp: authApi.signUp,
-      signOut: useCallbackBound(authApi.signOut),
-      requestPasswordReset: authApi.requestPasswordReset,
+      hasRole,
+      signIn,
+      signUp,
+      signOut,
+      requestPasswordReset,
     }),
-    [status, session],
+    [status, session, hasRole, signIn, signUp, signOut, requestPasswordReset]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-function useCallbackBound<T extends (...a: never[]) => unknown>(fn: T): T {
-  return useCallback(((...args: never[]) => fn(...args)) as T, [fn]);
 }
 
 export function useAuth(): AuthContextValue {
