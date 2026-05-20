@@ -48,3 +48,19 @@ export async function listRequests(): Promise<ServiceRequest[]> {
 
 // NOTE: Write operations (create/update) are intentionally omitted per requirements.
 // Only read integration for now.
+
+import type { ServiceRequestDraft } from "@/lib/dashboard/types";
+
+/**
+ * Stub for future create operation. Currently a no-op when Supabase is not
+ * configured; safe to call from UI without crashing.
+ */
+export async function createServiceRequest(
+  _draft: ServiceRequestDraft,
+  _userId: string,
+): Promise<{ id: string } | null> {
+  if (!SUPABASE_READY) return null;
+  // Future: insert into requests table and return the new id.
+  return null;
+}
+
