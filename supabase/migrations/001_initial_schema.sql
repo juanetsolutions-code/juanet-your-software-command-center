@@ -34,6 +34,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  -- fallback uuid generator
 -- =====================================================================
 -- 1. Reusable trigger function for automatic updated_at maintenance
 -- =====================================================================
+
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()
 RETURNS TRIGGER
 LANGUAGE plpgsql
