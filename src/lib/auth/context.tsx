@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { onSessionChange, readSession } from "./store";
+import { onSessionChange, readSession, waitForSessionInit, isSessionReady } from "./store";
 import * as authApi from "./api";
 import type {
   AuthRole,
@@ -17,6 +17,7 @@ import type {
   SignInPayload,
   SignUpPayload,
 } from "./types";
+import { hasAnyRoleAccess, hasPermission, type AuthPermission } from "./roles";
 
 interface AuthContextValue {
   status: AuthStatus;
@@ -24,6 +25,8 @@ interface AuthContextValue {
   session: AuthSession | null;
   isAuthenticated: boolean;
   hasRole: (role: AuthRole) => boolean;
+  hasAnyRole: (roles: AuthRole[]) => boolean;
+  hasPermission: (permission: AuthPermission) => boolean;
   signIn: (p: SignInPayload) => ReturnType<typeof authApi.signIn>;
   signUp: (p: SignUpPayload) => ReturnType<typeof authApi.signUp>;
   signOut: () => Promise<void>;
@@ -37,13 +40,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>("loading");
 
   useEffect(() => {
-    const sync = () => {
+    const sync = async () => {
+      if (!isSessionReady()) {
+        setStatus("loading");
+        await waitForSessionInit();
+      }
       const s = readSession();
       setSession(s);
       setStatus(s ? "authenticated" : "unauthenticated");
     };
 
-    sync();
+    void sync();
     return onSessionChange(sync);
   }, []);
 
@@ -64,7 +71,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const hasRole = useCallback(
-    (role: AuthRole) => session?.user.role === role,
+    (role: AuthRole) => (session ? hasAnyRoleAccess(session.user.role, [role]) : false),
+    [session]
+  );
+
+  const hasAnyRole = useCallback(
+    (roles: AuthRole[]) => (session ? hasAnyRoleAccess(session.user.role, roles) : false),
+    [session]
+  );
+
+  const can = useCallback(
+    (permission: AuthPermission) => (session ? hasPermission(session.user.role, permission) : false),
     [session]
   );
 
@@ -75,12 +92,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user: session?.user ?? null,
       isAuthenticated: !!session,
       hasRole,
+      hasAnyRole,
+      hasPermission: can,
       signIn,
       signUp,
       signOut,
       requestPasswordReset,
     }),
-    [status, session, hasRole, signIn, signUp, signOut, requestPasswordReset]
+    [status, session, hasRole, hasAnyRole, can, signIn, signUp, signOut, requestPasswordReset]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
