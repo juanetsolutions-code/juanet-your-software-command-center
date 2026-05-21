@@ -1,5 +1,6 @@
 import type { Session, User } from "@supabase/supabase-js";
-import type { AuthSession, AuthUser, AuthRole } from "./types";
+import type { AuthSession, AuthUser } from "./types";
+import { normalizeAuthRole } from "./roles";
 
 /**
  * Maps a Supabase user to our internal AuthUser type.
@@ -7,7 +8,7 @@ import type { AuthSession, AuthUser, AuthRole } from "./types";
  */
 export function mapUser(supabaseUser: User): AuthUser {
   const metadata = supabaseUser.user_metadata || {};
-  const role: AuthRole = (metadata.role as AuthRole) || "client";
+  const role = normalizeAuthRole(metadata.role);
 
   return {
     id: supabaseUser.id,
