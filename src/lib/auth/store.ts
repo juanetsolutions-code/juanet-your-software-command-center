@@ -17,9 +17,6 @@ const listeners = new Set<() => void>();
 
 function emitChange() {
   listeners.forEach((listener) => listener());
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(new Event("juanet:auth"));
-  }
 }
 
 function readMockSession(): AuthSession | null {
@@ -115,12 +112,9 @@ export function onSessionChange(cb: () => void): () => void {
   if (typeof window === "undefined") return () => {};
   void waitForSessionInit();
   listeners.add(cb);
-  const handler = () => cb();
-  window.addEventListener("juanet:auth", handler);
-  window.addEventListener("storage", handler);
+  window.addEventListener("storage", cb);
   return () => {
     listeners.delete(cb);
-    window.removeEventListener("juanet:auth", handler);
-    window.removeEventListener("storage", handler);
+    window.removeEventListener("storage", cb);
   };
 }
