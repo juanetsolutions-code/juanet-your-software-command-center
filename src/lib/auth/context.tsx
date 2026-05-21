@@ -38,33 +38,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>("loading");
 
   useEffect(() => {
-  const sync = async () => {
-    const { data } = await supabase.auth.getSession();
+    const sync = async () => {
+      const { data } = await supabase.auth.getSession();
 
-    const s = mapSession(data.session);
+      const s = mapSession(data.session);
 
-    setSession(s);
-    setStatus(s ? "authenticated" : "unauthenticated");
-  };
+      setSession(s);
+      setStatus(s ? "authenticated" : "unauthenticated");
+    };
 
-  sync();
-
-  const { data: listener } = supabase.auth.onAuthStateChange(() => {
     sync();
-  });
 
-  return () => {
-    listener.subscription.unsubscribe();
-  };
-}, []);
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      sync();
+    });
 
-  const signOut = useCallback(async () => {
-    return authApi.signOut();
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
-  const signIn = useCallback((p: SignInPayload) => {
-    return authApi.signIn(p);
-  }, []);
+    const signOut = useCallback(async () => {
+      return authApi.signOut();
+    }, []);
+
+    const signIn = useCallback((p: SignInPayload) => {
+      return authApi.signIn(p);
+    }, []);
 
   const signUp = useCallback((p: SignUpPayload) => {
     return authApi.signUp(p);
