@@ -43,7 +43,8 @@ export function AppShell({
     .slice(0, 2)
     .join("")
     .toUpperCase();
-  const roleLabel = user?.role === "admin" ? "Admin" : "Client";
+  const roleLabel =
+    user?.role === "superadmin" ? "Superadmin" : user?.role === "admin" ? "Admin" : "Client";
 
   async function handleLogout() {
     await signOut();
