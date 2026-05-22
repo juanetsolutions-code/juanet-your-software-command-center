@@ -71,5 +71,8 @@ export function scopedSelect(
   columns = "*",
   options: { column?: string; orgId?: string | null } = {},
 ) {
-  return scopedQuery(client.from(table).select(columns), options);
+  const builder = client.from(table).select(columns) as unknown as {
+    eq: (col: string, val: unknown) => typeof builder;
+  };
+  return scopedQuery(builder, options);
 }
