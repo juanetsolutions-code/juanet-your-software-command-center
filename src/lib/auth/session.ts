@@ -1,10 +1,11 @@
 import type { Session, User } from "@supabase/supabase-js";
 import type { AuthSession, AuthUser } from "./types";
 import { normalizeAuthRole } from "./roles";
+import { resolveProfile } from "./profile";
 
 /**
- * Maps a Supabase user to our internal AuthUser type.
- * Role defaults to "client" until we add a profiles table with role column.
+ * Synchronous mapping fallback (auth metadata only).
+ * Used during the initial paint before the profiles table is fetched.
  */
 export function mapUser(supabaseUser: User): AuthUser {
   const metadata = supabaseUser.user_metadata || {};
@@ -23,16 +24,10 @@ export function mapUser(supabaseUser: User): AuthUser {
   };
 }
 
-/**
- * Converts a Supabase session into our internal AuthSession format.
- */
 export function mapSession(supabaseSession: Session | null): AuthSession | null {
   if (!supabaseSession?.user) return null;
-
-  const user = mapUser(supabaseSession.user);
-
   return {
-    user,
+    user: mapUser(supabaseSession.user),
     accessToken: supabaseSession.access_token,
     expiresAt: supabaseSession.expires_at
       ? supabaseSession.expires_at * 1000
@@ -41,10 +36,25 @@ export function mapSession(supabaseSession: Session | null): AuthSession | null 
 }
 
 /**
- * Convenience helper to get the current session from Supabase.
- * (Used later when we wire real auth.)
+ * Async session mapping that consults the profiles table for the
+ * authoritative role and full name. Falls back to metadata transparently.
  */
+export async function mapSessionAsync(
+  supabaseSession: Session | null,
+): Promise<AuthSession | null> {
+  if (!supabaseSession?.user) return null;
+  const resolved = await resolveProfile(supabaseSession.user);
+  return {
+    user: resolved.user,
+    accessToken: supabaseSession.access_token,
+    expiresAt: supabaseSession.expires_at
+      ? supabaseSession.expires_at * 1000
+      : Date.now() + 60 * 60 * 1000,
+  };
+}
+
 export async function getSession(supabase: any): Promise<AuthSession | null> {
   const { data } = await supabase.auth.getSession();
-  return mapSession(data.session);
+  return mapSessionAsync(data.session);
 }
+
