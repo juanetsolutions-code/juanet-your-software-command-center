@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Loader2, Lock, Mail, AlertCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { readSession } from "@/lib/auth/store";
+import { getDefaultPortalPath } from "@/lib/auth/roles";
 
 type LoginSearch = { redirect?: string };
 
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/auth/login")({
     if (typeof window === "undefined") return;
     const s = readSession();
     if (s) {
-      throw redirect({ to: search.redirect ?? (s.user.role === "admin" ? "/admin" : "/dashboard") });
+      throw redirect({ to: search.redirect ?? getDefaultPortalPath(s.user.role) });
     }
   },
   component: LoginPage,
@@ -40,8 +41,7 @@ function LoginPage() {
       setError(res.error ?? "Unable to sign in.");
       return;
     }
-    const dest =
-      redirectTo ?? (res.session.user.role === "admin" ? "/admin" : "/dashboard");
+    const dest = redirectTo ?? getDefaultPortalPath(res.session.user.role);
     navigate({ to: dest });
   }
 

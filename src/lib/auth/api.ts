@@ -4,17 +4,11 @@
  * When Supabase env vars are present, real calls are attempted.
  * Otherwise falls back to existing mock behavior.
  */
-import type {
-  AuthResult,
-  AuthRole,
-  AuthSession,
-  AuthUser,
-  SignInPayload,
-  SignUpPayload,
-} from "./types";
+import type { AuthResult, AuthRole, AuthSession, AuthUser, SignInPayload, SignUpPayload } from "./types";
 import { clearSession, writeSession } from "./store";
 import { supabase, SUPABASE_READY } from "@/lib/supabase/client";
-import { mapSession } from "./session";
+import { getSession, mapSession } from "./session";
+import { normalizeAuthRole } from "./roles";
 
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 
@@ -24,6 +18,8 @@ function delay<T>(value: T, ms = 600): Promise<T> {
 
 function deriveRole(email: string, fallback: AuthRole = "client"): AuthRole {
   const e = email.trim().toLowerCase();
+  if (e.startsWith("superadmin")) return "superadmin";
+  if (e.includes("+superadmin")) return "superadmin";
   if (e.startsWith("admin")) return "admin";
   if (e.includes("+admin")) return "admin";
   if (e === "client@juanet.io") return "client";
@@ -53,16 +49,17 @@ export async function signIn(payload: SignInPayload): Promise<AuthResult> {
     return delay({ ok: false, error: "Email and password are required." });
   }
 
-  // TODO: Replace with real Supabase call when auth is wired
   if (SUPABASE_READY) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password: payload.password,
     });
     if (error) return { ok: false, error: error.message };
-    const session = mapSession(data.session);
-    if (session) writeSession(session);
-    return { ok: true, session: session ?? undefined };
+    const session = mapSession(data.session) ?? (await getSession(supabase));
+    if (!session) {
+      return { ok: false, error: "Authenticated, but no active session was returned." };
+    }
+    return { ok: true, session };
   }
 
   // Mock fallback (current behavior)
@@ -90,18 +87,18 @@ export async function signUp(payload: SignUpPayload): Promise<AuthResult> {
     return delay({ ok: false, error: "All fields are required." });
   }
 
-  // TODO: Replace with real Supabase call
   if (SUPABASE_READY) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password: payload.password,
       options: {
-        data: { full_name: payload.fullName, role: payload.role ?? "client" },
+        emailRedirectTo:
+          typeof window !== "undefined" ? `${window.location.origin}/auth/login` : undefined,
+        data: { full_name: payload.fullName, role: normalizeAuthRole(payload.role ?? "client") },
       },
     });
     if (error) return { ok: false, error: error.message };
-    const session = mapSession(data.session);
-    if (session) writeSession(session);
+    const session = mapSession(data.session) ?? (await getSession(supabase));
     return { ok: true, session: session ?? undefined };
   }
 
@@ -135,7 +132,8 @@ export async function requestPasswordReset(email: string): Promise<AuthResult> {
 
   if (SUPABASE_READY) {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset`,
+      redirectTo:
+        typeof window !== "undefined" ? `${window.location.origin}/auth/login` : undefined,
     });
     if (error) return { ok: false, error: error.message };
     return { ok: true };

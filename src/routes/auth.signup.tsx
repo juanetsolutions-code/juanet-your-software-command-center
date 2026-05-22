@@ -4,13 +4,14 @@ import { motion } from "framer-motion";
 import { Loader2, Lock, Mail, User, AlertCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { readSession } from "@/lib/auth/store";
+import { getDefaultPortalPath } from "@/lib/auth/roles";
 import { Field } from "./auth.login";
 
 export const Route = createFileRoute("/auth/signup")({
   beforeLoad: () => {
     if (typeof window === "undefined") return;
     const s = readSession();
-    if (s) throw redirect({ to: s.user.role === "admin" ? "/admin" : "/dashboard" });
+    if (s) throw redirect({ to: getDefaultPortalPath(s.user.role) });
   },
   component: SignupPage,
 });
@@ -34,7 +35,7 @@ function SignupPage() {
       setError(res.error ?? "Unable to create account.");
       return;
     }
-    navigate({ to: res.session.user.role === "admin" ? "/admin" : "/dashboard" });
+    navigate({ to: getDefaultPortalPath(res.session.user.role) });
   }
 
   return (

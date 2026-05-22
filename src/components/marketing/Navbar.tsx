@@ -4,13 +4,14 @@ import { Menu, X, Sparkles } from "lucide-react";
 import { marketingNav, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
+import { getDefaultPortalPath } from "@/lib/auth/roles";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { isAuthenticated, user } = useAuth();
-  const portalHref = user?.role === "admin" ? "/admin" : "/dashboard";
+  const portalHref = user ? getDefaultPortalPath(user.role) : "/dashboard";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
