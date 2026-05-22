@@ -48,7 +48,10 @@ export function hasRoleAccess(currentRole: AuthRole, requiredRole: AuthRole): bo
   return ROLE_LEVEL[currentRole] >= ROLE_LEVEL[requiredRole];
 }
 
-export function hasAnyRoleAccess(currentRole: AuthRole, allowedRoles: readonly AuthRole[]): boolean {
+export function hasAnyRoleAccess(
+  currentRole: AuthRole,
+  allowedRoles: readonly AuthRole[],
+): boolean {
   return allowedRoles.some((role) => hasRoleAccess(currentRole, role));
 }
 

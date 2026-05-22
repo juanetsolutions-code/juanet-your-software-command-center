@@ -6,6 +6,7 @@ export interface AuthUser {
   fullName: string;
   role: AuthRole;
   avatarUrl?: string;
+  organizationId?: string | null;
 }
 
 export interface AuthSession {

@@ -15,7 +15,9 @@ export function MarketplacePreview({ full = false }: { full?: boolean }) {
           description="Buy battle-tested systems with self-hosted licenses, source delivery and updates."
         />
       )}
-      <div className={`mt-12 grid gap-4 ${full ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-3"}`}>
+      <div
+        className={`mt-12 grid gap-4 ${full ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-3"}`}
+      >
         {list.map((p, i) => (
           <motion.div
             key={p.id}
@@ -26,7 +28,9 @@ export function MarketplacePreview({ full = false }: { full?: boolean }) {
             className="group glass rounded-2xl p-5 hover:bg-white/[0.06] transition"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.category}</span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                {p.category}
+              </span>
               <span className="inline-flex items-center gap-1 text-xs">
                 <Star className="h-3 w-3 fill-amber-300 text-amber-300" />
                 {p.rating}
@@ -47,7 +51,10 @@ export function MarketplacePreview({ full = false }: { full?: boolean }) {
       </div>
       {!full && (
         <div className="mt-10 text-center">
-          <Link to="/shop" className="inline-flex items-center gap-2 h-11 px-6 rounded-lg glass hover:bg-white/[0.08]">
+          <Link
+            to="/shop"
+            className="inline-flex items-center gap-2 h-11 px-6 rounded-lg glass hover:bg-white/[0.08]"
+          >
             Browse the marketplace
           </Link>
         </div>

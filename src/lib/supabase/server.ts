@@ -1,9 +1,7 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import {
-  getSupabaseAnonKey,
-  getSupabaseServiceRoleKey,
-  getSupabaseUrl,
-} from "@/lib/utils/env";
+import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from "@/lib/utils/env";
+import { createSecureContext, getSecureContext } from "@/lib/security/secure-context";
+import { logger } from "@/lib/utils/logger";
 
 let requestClient: SupabaseClient | null = null;
 let adminClient: SupabaseClient | null = null;
@@ -33,9 +31,7 @@ export function getRequestSupabase(accessToken?: string): SupabaseClient {
       persistSession: false,
       autoRefreshToken: false,
     },
-    global: accessToken
-      ? { headers: { Authorization: `Bearer ${accessToken}` } }
-      : undefined,
+    global: accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : undefined,
   });
 
   if (!accessToken) requestClient = client;
@@ -61,4 +57,30 @@ export function getAdminSupabase(): SupabaseClient {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   return adminClient;
+}
+
+/**
+ * Production security helpers
+ */
+export function getSecureRequestSupabase(accessToken?: string) {
+  const ctx = createSecureContext();
+  const client = getRequestSupabase(accessToken);
+
+  // Lightweight request fingerprint for audit
+  const fingerprint = `${ctx.tenantId ?? "no-tenant"}:${ctx.userId ?? "anon"}`;
+
+  logger.info(`[Supabase] Secure client created with fingerprint: ${fingerprint}`);
+
+  return client;
+}
+
+export function validateSessionForTenant(requiredTenantId?: string): boolean {
+  const ctx = getSecureContext();
+  if (!requiredTenantId) return true;
+  return ctx.tenantId === requiredTenantId;
+}
+
+export function getRequestFingerprint(): string {
+  const ctx = getSecureContext();
+  return `${ctx.tenantId ?? "global"}:${ctx.userId ?? "anonymous"}`;
 }

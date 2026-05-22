@@ -21,9 +21,7 @@ function RequestsPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-          Request a service
-        </h1>
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Request a service</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Tell us what you're building. We'll scope it within 24 hours.
         </p>
@@ -45,10 +43,7 @@ function RequestsPage() {
             </div>
             <ul className="mt-4 space-y-3">
               {recent.map((r) => (
-                <li
-                  key={r.id}
-                  className="rounded-lg border border-white/5 bg-white/5 p-3"
-                >
+                <li key={r.id} className="rounded-lg border border-white/5 bg-white/5 p-3">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs text-muted-foreground">{r.id}</span>
                     <StatusBadge status={r.status} />

@@ -54,5 +54,4 @@ export function isSupabaseConfigured(): boolean {
   return Boolean(getSupabaseUrl() && getSupabaseAnonKey());
 }
 
-export const IS_DEV =
-  readViteEnv("DEV") === "true" || readViteEnv("MODE") === "development";
+export const IS_DEV = readViteEnv("DEV") === "true" || readViteEnv("MODE") === "development";

@@ -1,4 +1,4 @@
-import type { Session, User } from "@supabase/supabase-js";
+import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
 import type { AuthSession, AuthUser } from "./types";
 import { normalizeAuthRole } from "./roles";
 import { resolveProfile } from "./profile";
@@ -14,13 +14,10 @@ export function mapUser(supabaseUser: User): AuthUser {
   return {
     id: supabaseUser.id,
     email: supabaseUser.email ?? "",
-    fullName:
-      metadata.full_name ||
-      metadata.name ||
-      supabaseUser.email?.split("@")[0] ||
-      "User",
+    fullName: metadata.full_name || metadata.name || supabaseUser.email?.split("@")[0] || "User",
     role,
     avatarUrl: metadata.avatar_url || undefined,
+    organizationId: (metadata.organization_id as string | undefined) ?? null,
   };
 }
 
@@ -53,8 +50,7 @@ export async function mapSessionAsync(
   };
 }
 
-export async function getSession(supabase: any): Promise<AuthSession | null> {
+export async function getSession(supabase: SupabaseClient): Promise<AuthSession | null> {
   const { data } = await supabase.auth.getSession();
   return mapSessionAsync(data.session);
 }
-

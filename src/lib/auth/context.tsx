@@ -72,17 +72,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const hasRole = useCallback(
     (role: AuthRole) => (session ? hasAnyRoleAccess(session.user.role, [role]) : false),
-    [session]
+    [session],
   );
 
   const hasAnyRole = useCallback(
     (roles: AuthRole[]) => (session ? hasAnyRoleAccess(session.user.role, roles) : false),
-    [session]
+    [session],
   );
 
   const can = useCallback(
-    (permission: AuthPermission) => (session ? hasPermission(session.user.role, permission) : false),
-    [session]
+    (permission: AuthPermission) =>
+      session ? hasPermission(session.user.role, permission) : false,
+    [session],
   );
 
   const value = useMemo<AuthContextValue>(
@@ -99,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signOut,
       requestPasswordReset,
     }),
-    [status, session, hasRole, hasAnyRole, can, signIn, signUp, signOut, requestPasswordReset]
+    [status, session, hasRole, hasAnyRole, can, signIn, signUp, signOut, requestPasswordReset],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

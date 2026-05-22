@@ -7,9 +7,15 @@ export const Route = createFileRoute("/_marketing/shop")({
   head: () => ({
     meta: [
       { title: "Shop — Juanet Marketplace" },
-      { name: "description", content: "License production-ready software platforms from Juanet's marketplace." },
+      {
+        name: "description",
+        content: "License production-ready software platforms from Juanet's marketplace.",
+      },
       { property: "og:title", content: "Juanet Marketplace" },
-      { property: "og:description", content: "Battle-tested systems with self-hosted licenses and source delivery." },
+      {
+        property: "og:description",
+        content: "Battle-tested systems with self-hosted licenses and source delivery.",
+      },
     ],
   }),
   component: ShopPage,

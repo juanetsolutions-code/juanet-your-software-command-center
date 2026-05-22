@@ -16,9 +16,7 @@ export function ProjectPipelineRow({ project, index = 0 }: ProjectPipelineRowPro
       className="grid grid-cols-12 items-center gap-3"
     >
       <div className="col-span-5">
-        <div className="text-sm font-medium truncate flex items-center gap-2">
-          {project.name}
-        </div>
+        <div className="text-sm font-medium truncate flex items-center gap-2">{project.name}</div>
         <div className="text-[11px] text-muted-foreground flex items-center gap-2">
           <StatusBadge status={project.status} />
           <span>{project.dueLabel}</span>
@@ -34,9 +32,7 @@ export function ProjectPipelineRow({ project, index = 0 }: ProjectPipelineRowPro
           />
         </div>
       </div>
-      <div className="col-span-2 text-right text-xs text-muted-foreground">
-        {project.progress}%
-      </div>
+      <div className="col-span-2 text-right text-xs text-muted-foreground">{project.progress}%</div>
     </motion.div>
   );
 }

@@ -57,7 +57,9 @@ export function PortfolioGrid({ compact = false }: { compact?: boolean }) {
               <div className="absolute inset-0 grid place-items-center">
                 <div className="glass-strong rounded-xl px-4 py-3 text-center">
                   <div className="text-xs text-muted-foreground">{item.category}</div>
-                  <div className="mt-0.5 font-semibold tracking-tight text-gradient-brand">{item.title.split("—")[0]}</div>
+                  <div className="mt-0.5 font-semibold tracking-tight text-gradient-brand">
+                    {item.title.split("—")[0]}
+                  </div>
                 </div>
               </div>
               <div className="absolute top-3 right-3 h-8 w-8 grid place-items-center rounded-full glass-strong opacity-0 group-hover:opacity-100 transition">

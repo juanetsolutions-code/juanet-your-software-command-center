@@ -4,11 +4,19 @@
  * When Supabase env vars are present, real calls are attempted.
  * Otherwise falls back to existing mock behavior.
  */
-import type { AuthResult, AuthRole, AuthSession, AuthUser, SignInPayload, SignUpPayload } from "./types";
+import type {
+  AuthResult,
+  AuthRole,
+  AuthSession,
+  AuthUser,
+  SignInPayload,
+  SignUpPayload,
+} from "./types";
 import { clearSession, writeSession } from "./store";
 import { supabase, SUPABASE_READY } from "@/lib/supabase/client";
 import { getSession, mapSession } from "./session";
 import { normalizeAuthRole } from "./roles";
+import { createProfileIfMissing } from "@/lib/dashboard/repositories/profiles";
 
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 
@@ -28,9 +36,7 @@ function deriveRole(email: string, fallback: AuthRole = "client"): AuthRole {
 
 function fullNameFromEmail(email: string): string {
   const handle = email.split("@")[0] ?? "User";
-  return handle
-    .replace(/[._-]+/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return handle.replace(/[._-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 function createMockSession(user: AuthUser): AuthSession {
@@ -59,6 +65,14 @@ export async function signIn(payload: SignInPayload): Promise<AuthResult> {
     if (!session) {
       return { ok: false, error: "Authenticated, but no active session was returned." };
     }
+    // Ensure profile row exists (real DB integration, safe non-blocking)
+    const uid = data.user?.id || data.session?.user?.id;
+    if (uid) {
+      void createProfileIfMissing(uid, {
+        full_name: session.user.fullName,
+        role: session.user.role,
+      });
+    }
     return { ok: true, session };
   }
 
@@ -75,6 +89,7 @@ export async function signIn(payload: SignInPayload): Promise<AuthResult> {
     email,
     fullName: fullNameFromEmail(email),
     role,
+    organizationId: null,
   };
   const session = createMockSession(user);
   writeSession(session);
@@ -99,6 +114,14 @@ export async function signUp(payload: SignUpPayload): Promise<AuthResult> {
     });
     if (error) return { ok: false, error: error.message };
     const session = mapSession(data.session) ?? (await getSession(supabase));
+    // Auto-provision profile on signup for real Supabase (idempotent)
+    const uid = data.user?.id || data.session?.user?.id;
+    if (uid) {
+      void createProfileIfMissing(uid, {
+        full_name: payload.fullName,
+        role: session?.user.role ?? normalizeAuthRole(payload.role ?? "client"),
+      });
+    }
     return { ok: true, session: session ?? undefined };
   }
 
@@ -111,6 +134,7 @@ export async function signUp(payload: SignUpPayload): Promise<AuthResult> {
     email,
     fullName: payload.fullName.trim(),
     role,
+    organizationId: null,
   };
   const session = createMockSession(user);
   writeSession(session);

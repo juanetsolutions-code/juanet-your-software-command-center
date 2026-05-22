@@ -74,7 +74,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Juanet — Building Software Infrastructure For Modern Businesses" },
-      { name: "description", content: "Juanet designs, builds, deploys and scales modern software systems for ambitious businesses." },
+      {
+        name: "description",
+        content:
+          "Juanet designs, builds, deploys and scales modern software systems for ambitious businesses.",
+      },
       { name: "author", content: "Juanet" },
       { property: "og:title", content: "Juanet" },
       { property: "og:description", content: "Software infrastructure for modern businesses." },
@@ -85,7 +89,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,

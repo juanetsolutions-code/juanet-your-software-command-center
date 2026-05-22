@@ -43,10 +43,7 @@ function ForgotPage() {
         <p className="text-sm text-muted-foreground">
           We sent a password reset link to <span className="text-foreground">{email}</span>.
         </p>
-        <Link
-          to="/auth/login"
-          className="inline-block text-xs text-brand-cyan hover:underline"
-        >
+        <Link to="/auth/login" className="inline-block text-xs text-brand-cyan hover:underline">
           Back to sign in
         </Link>
       </motion.div>
@@ -56,9 +53,7 @@ function ForgotPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-gradient">
-          Reset your password
-        </h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-gradient">Reset your password</h1>
         <p className="text-sm text-muted-foreground mt-1">
           We'll email you a secure link to set a new password.
         </p>

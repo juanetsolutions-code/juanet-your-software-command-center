@@ -19,7 +19,7 @@ export function Hero() {
         >
           <span className="inline-flex items-center gap-2 h-8 px-3 rounded-full text-xs font-medium glass">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan animate-pulse" />
-            Now onboarding Q3 partners
+            Now onboarding new partners
             <ArrowRight className="h-3 w-3" />
           </span>
 
@@ -61,7 +61,9 @@ export function Hero() {
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((s) => (
             <div key={s.label} className="glass rounded-xl p-5 text-center">
-              <div className="text-2xl md:text-3xl font-semibold text-gradient-brand">{s.value}</div>
+              <div className="text-2xl md:text-3xl font-semibold text-gradient-brand">
+                {s.value}
+              </div>
               <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
             </div>
           ))}
@@ -110,8 +112,12 @@ function DashboardMock() {
               { l: "SLA Uptime", v: "99.99%", c: "from-brand-violet to-brand-cyan" },
             ].map((k) => (
               <div key={k.l} className="rounded-lg p-3 bg-black/20 border border-border/60">
-                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{k.l}</div>
-                <div className={`mt-1 text-lg font-semibold bg-gradient-to-r ${k.c} bg-clip-text text-transparent`}>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {k.l}
+                </div>
+                <div
+                  className={`mt-1 text-lg font-semibold bg-gradient-to-r ${k.c} bg-clip-text text-transparent`}
+                >
                   {k.v}
                 </div>
                 <div className="mt-2 h-10 flex items-end gap-0.5">
@@ -134,7 +140,11 @@ function DashboardMock() {
                 </div>
               </div>
               <div className="mt-3 space-y-2">
-                {["atlas-core • build #482", "meditrack-api • deploy #211", "skyline-lms • migrate #88"].map((s, i) => (
+                {[
+                  "atlas-core • build #482",
+                  "meditrack-api • deploy #211",
+                  "skyline-lms • migrate #88",
+                ].map((s, i) => (
                   <div key={s} className="flex items-center gap-3">
                     <span className="text-[11px] text-muted-foreground w-56 truncate">{s}</span>
                     <div className="flex-1 h-1.5 rounded-full bg-white/5 overflow-hidden">
@@ -143,7 +153,9 @@ function DashboardMock() {
                         style={{ width: `${[78, 54, 92][i]}%` }}
                       />
                     </div>
-                    <span className="text-[10px] text-muted-foreground w-8 text-right">{[78, 54, 92][i]}%</span>
+                    <span className="text-[10px] text-muted-foreground w-8 text-right">
+                      {[78, 54, 92][i]}%
+                    </span>
                   </div>
                 ))}
               </div>

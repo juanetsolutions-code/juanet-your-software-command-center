@@ -66,9 +66,7 @@ export function MessageThread({ conversation, messages, onSend }: MessageThreadP
               <div
                 className={cn(
                   "mt-1 text-[10px]",
-                  m.author === "me"
-                    ? "text-primary-foreground/70"
-                    : "text-muted-foreground",
+                  m.author === "me" ? "text-primary-foreground/70" : "text-muted-foreground",
                 )}
               >
                 {m.timeLabel}

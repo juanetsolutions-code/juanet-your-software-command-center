@@ -6,9 +6,15 @@ export const Route = createFileRoute("/_marketing/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Juanet" },
-      { name: "description", content: "Tell us about your project. We respond within one business day." },
+      {
+        name: "description",
+        content: "Tell us about your project. We respond within one business day.",
+      },
       { property: "og:title", content: "Contact Juanet" },
-      { property: "og:description", content: "Start a project, license a platform, or book a consultation." },
+      {
+        property: "og:description",
+        content: "Start a project, license a platform, or book a consultation.",
+      },
     ],
   }),
   component: ContactPage,
@@ -71,7 +77,10 @@ function ContactPage() {
   );
 }
 
-function Field({ label, ...rest }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+function Field({
+  label,
+  ...rest
+}: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
       <label className="text-xs text-muted-foreground">{label}</label>

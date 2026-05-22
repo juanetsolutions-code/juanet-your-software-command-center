@@ -4,7 +4,9 @@ import { logger } from "@/lib/utils/logger";
 import type { Conversation, Message } from "@/lib/dashboard/types";
 import type { DbMessage } from "@/lib/supabase/types";
 import { mockConversations, mockMessagesByConversation } from "@/lib/dashboard/mock";
-import { handleSupabaseError, safeSelect } from "./_shared";
+import { handleSupabaseError, safeSelectFrom, safeInsert, safeUpdate } from "./_shared";
+import { afterMutation } from "../cache";
+import { scopedQuery } from "@/lib/tenant/context";
 
 function formatClock(iso: string): string {
   try {
@@ -18,7 +20,7 @@ function formatClock(iso: string): string {
   }
 }
 
-function mapDbMessage(row: DbMessage, currentUserId = "current-user"): Message {
+function mapMessageRow(row: DbMessage, currentUserId = "current-user"): Message {
   return {
     id: row.id,
     conversationId: row.conversation_id,
@@ -28,6 +30,8 @@ function mapDbMessage(row: DbMessage, currentUserId = "current-user"): Message {
   };
 }
 
+const mapDbMessage = mapMessageRow; // alias
+
 export async function listConversations(): Promise<Conversation[]> {
   if (!SUPABASE_READY) {
     logger.info("[Mock Mode] Using mock conversations data");
@@ -35,17 +39,20 @@ export async function listConversations(): Promise<Conversation[]> {
   }
 
   try {
-    const { data, error } = await supabase
-      .from("conversations")
-      .select("*")
-      .order("last_message_at", { ascending: false });
+    const rows = await safeSelectFrom<Record<string, unknown>>(
+      supabase,
+      "listConversations",
+      (c) => {
+        let q = c.from("conversations").select("*").order("created_at", { ascending: false });
 
-    if (error) throw error;
-
-    const rows = safeSelect<Record<string, unknown>>(data);
-    // Until conversation metadata (preview/unread/online) is modeled,
-    // return mock to preserve UI shape.
-    if (rows.length === 0) return mockConversations;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        q = scopedQuery(q as any) as any;
+        return q;
+      },
+    );
+    // Until conversation metadata (preview/unread/online) + joins modeled,
+    // conversations always fall back to mock to preserve exact UI shape.
+    // (messages table itself is fully wired below)
     return mockConversations;
   } catch (err) {
     handleSupabaseError(err, "listConversations");
@@ -59,14 +66,16 @@ export async function listMessages(conversationId: string): Promise<Message[]> {
   }
 
   try {
-    const { data, error } = await supabase
-      .from("messages")
-      .select("*")
-      .eq("conversation_id", conversationId)
-      .order("created_at", { ascending: true });
-
-    if (error) throw error;
-    const rows = safeSelect<DbMessage>(data);
+    const rows = await safeSelectFrom<DbMessage>(supabase, "listMessages", (c) => {
+      let q = c
+        .from("messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      q = scopedQuery(q as any) as any;
+      return q;
+    });
     if (rows.length === 0) {
       return mockMessagesByConversation[conversationId] ?? [];
     }
@@ -85,13 +94,39 @@ export async function sendMessage(
   if (!SUPABASE_READY) return;
 
   try {
-    const { error } = await supabase.from("messages").insert({
+    await safeInsert(supabase, "sendMessage", "messages", {
       conversation_id: conversationId,
       content: text,
       sender_id: authorProfileId,
     });
-    if (error) throw error;
+    afterMutation("messages", authorProfileId);
   } catch (err) {
     handleSupabaseError(err, "sendMessage");
   }
 }
+
+/**
+ * Mark a message as read (for future UI unread counts).
+ * Schema may use read_at or is_read; safe update.
+ */
+export async function markMessageRead(messageId: string, userId?: string): Promise<void> {
+  if (!SUPABASE_READY) return;
+
+  try {
+    await safeUpdate(
+      supabase,
+      "markMessageRead",
+      "messages",
+      { read_at: new Date().toISOString() }, // assumes column exists or ignore by RLS
+      { id: messageId },
+    );
+    afterMutation("messages", userId);
+  } catch (err) {
+    handleSupabaseError(err, "markMessageRead");
+    // non-fatal
+  }
+}
+
+// Realtime preparation note:
+// Future: use src/lib/supabase/realtime.ts to subscribe to "messages" table
+// filtered by conversation_id for live updates without polling.

@@ -11,15 +11,7 @@ import { supabase, SUPABASE_READY } from "@/lib/supabase/client";
 import { logger } from "@/lib/utils/logger";
 import { normalizeAuthRole } from "./roles";
 import type { AuthRole, AuthUser } from "./types";
-
-export interface DbProfile {
-  id: string;
-  organization_id: string | null;
-  full_name: string | null;
-  role: string | null;
-  avatar_url: string | null;
-  created_at: string;
-}
+import type { DbProfile } from "@/lib/supabase/types";
 
 export interface ProfileResolved {
   user: AuthUser;
@@ -42,6 +34,7 @@ function mergeFromMetadata(supabaseUser: User, role: AuthRole): AuthUser {
     fullName: md.full_name || md.name || supabaseUser.email?.split("@")[0] || "User",
     role,
     avatarUrl: md.avatar_url || undefined,
+    organizationId: (md.organization_id as string | undefined) ?? null,
   };
 }
 
@@ -84,6 +77,7 @@ export async function resolveProfile(supabaseUser: User): Promise<ProfileResolve
         fullName: row.full_name || mergeFromMetadata(supabaseUser, role).fullName,
         role,
         avatarUrl: row.avatar_url || supabaseUser.user_metadata?.avatar_url || undefined,
+        organizationId: row.organization_id,
       };
       const resolved: ProfileResolved = {
         user: merged,

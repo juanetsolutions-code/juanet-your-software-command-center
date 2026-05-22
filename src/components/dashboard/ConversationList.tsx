@@ -16,11 +16,7 @@ export interface ConversationListProps {
   onSelect: (conversation: Conversation) => void;
 }
 
-export function ConversationList({
-  conversations,
-  activeId,
-  onSelect,
-}: ConversationListProps) {
+export function ConversationList({ conversations, activeId, onSelect }: ConversationListProps) {
   return (
     <aside className="border-b md:border-b-0 md:border-r border-white/10 flex flex-col min-h-0">
       <div className="p-3 border-b border-white/10">
@@ -53,9 +49,7 @@ export function ConversationList({
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium truncate">{c.name}</span>
-                  <span className="text-[10px] text-muted-foreground shrink-0">
-                    {c.timeLabel}
-                  </span>
+                  <span className="text-[10px] text-muted-foreground shrink-0">{c.timeLabel}</span>
                 </div>
                 <div className="text-[11px] text-muted-foreground truncate">{c.role}</div>
                 <div className="mt-1 flex items-center justify-between gap-2">

@@ -10,12 +10,7 @@
  * declaration used by future SQL generators and by the mapping layer.
  */
 
-import type {
-  Currency,
-  InvoiceStatus,
-  ProjectStatus,
-  RequestStatus,
-} from "@/lib/dashboard/types";
+import type { Currency, InvoiceStatus, ProjectStatus, RequestStatus } from "@/lib/dashboard/types";
 
 export const TABLES_V2 = {
   organizations: "organizations",

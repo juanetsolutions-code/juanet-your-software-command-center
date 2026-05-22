@@ -4,5 +4,7 @@ export * from "./rows";
 export * from "./mappers";
 export * from "./types";
 export * from "./safe-query";
+export * from "./realtime";
+export * from "./health";
 export { supabase, SUPABASE_READY } from "./client";
 export { getRequestSupabase, getAdminSupabase } from "./server";

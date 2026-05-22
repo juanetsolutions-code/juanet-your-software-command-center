@@ -65,8 +65,12 @@ export function AppShell({
           </span>
           {open && (
             <div className="leading-tight">
-              <div className="text-sm font-semibold">Juanet<span className="text-brand-cyan">.</span></div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{brand}</div>
+              <div className="text-sm font-semibold">
+                Juanet<span className="text-brand-cyan">.</span>
+              </div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                {brand}
+              </div>
             </div>
           )}
         </div>
@@ -109,7 +113,10 @@ export function AppShell({
         <header className="h-16 border-b border-border/60 bg-background/60 backdrop-blur-xl sticky top-0 z-30">
           <div className="h-full px-4 md:px-6 flex items-center gap-3">
             <div className="md:hidden">
-              <Link to="/" className="grid place-items-center h-8 w-8 rounded-lg bg-gradient-to-br from-brand-cyan to-brand-violet">
+              <Link
+                to="/"
+                className="grid place-items-center h-8 w-8 rounded-lg bg-gradient-to-br from-brand-cyan to-brand-violet"
+              >
                 <Sparkles className="h-4 w-4" />
               </Link>
             </div>
@@ -146,7 +153,10 @@ export function AppShell({
                   <UserIcon className="h-4 w-4 mr-2" /> Profile
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={handleLogout} className="text-destructive focus:text-destructive">
+                <DropdownMenuItem
+                  onSelect={handleLogout}
+                  className="text-destructive focus:text-destructive"
+                >
                   <LogOut className="h-4 w-4 mr-2" /> Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>

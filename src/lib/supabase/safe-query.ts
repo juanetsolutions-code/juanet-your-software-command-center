@@ -38,15 +38,21 @@ export async function runSafe<T>(
   context: string,
   query: PromiseLike<{ data: T | null; error: PostgrestError | null }>,
 ): Promise<SafeResult<T>> {
+  const start = Date.now();
   try {
     const { data, error } = await query;
+    const duration = Date.now() - start;
     if (error) {
       handleSupabaseError(error, context);
+      logger.info(`[Supabase] ${context} failed after ${duration}ms (fallback active)`);
       return { data: null, error, ok: false };
     }
+    logger.info(`[Supabase] ${context} ok in ${duration}ms`);
     return { data, error: null, ok: true };
   } catch (err) {
+    const duration = Date.now() - start;
     handleSupabaseError(err, context);
+    logger.info(`[Supabase] ${context} error after ${duration}ms`);
     return { data: null, error: err as Error, ok: false };
   }
 }

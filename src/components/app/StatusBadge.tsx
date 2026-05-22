@@ -1,13 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type Status =
-  | "pending"
-  | "in progress"
-  | "completed"
-  | "paid"
-  | "due"
-  | "overdue"
-  | "draft";
+type Status = "pending" | "in progress" | "completed" | "paid" | "due" | "overdue" | "draft";
 
 const styles: Record<Status, string> = {
   pending: "bg-amber-500/10 text-amber-300 border-amber-400/20",
@@ -19,13 +12,7 @@ const styles: Record<Status, string> = {
   draft: "bg-white/5 text-muted-foreground border-white/10",
 };
 
-export function StatusBadge({
-  status,
-  className,
-}: {
-  status: Status;
-  className?: string;
-}) {
+export function StatusBadge({ status, className }: { status: Status; className?: string }) {
   return (
     <span
       className={cn(

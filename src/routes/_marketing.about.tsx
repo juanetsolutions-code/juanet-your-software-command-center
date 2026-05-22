@@ -7,9 +7,16 @@ export const Route = createFileRoute("/_marketing/about")({
   head: () => ({
     meta: [
       { title: "About — Juanet" },
-      { name: "description", content: "Juanet is a software infrastructure company helping modern businesses ship and scale." },
+      {
+        name: "description",
+        content:
+          "Juanet is a software infrastructure company helping modern businesses ship and scale.",
+      },
       { property: "og:title", content: "About Juanet" },
-      { property: "og:description", content: "We build software infrastructure for modern businesses." },
+      {
+        property: "og:description",
+        content: "We build software infrastructure for modern businesses.",
+      },
     ],
   }),
   component: AboutPage,
@@ -35,9 +42,18 @@ function AboutPage() {
 
         <div className="mt-20 grid gap-6 md:grid-cols-3">
           {[
-            { t: "Engineering-led", d: "Senior engineers own outcomes end-to-end — no handoffs, no ticket-shuffling." },
-            { t: "Product-minded", d: "We design for adoption and revenue, not just shipping features." },
-            { t: "Infrastructure-grade", d: "Every system we deliver runs in production with observability and SLAs." },
+            {
+              t: "Engineering-led",
+              d: "Senior engineers own outcomes end-to-end — no handoffs, no ticket-shuffling.",
+            },
+            {
+              t: "Product-minded",
+              d: "We design for adoption and revenue, not just shipping features.",
+            },
+            {
+              t: "Infrastructure-grade",
+              d: "Every system we deliver runs in production with observability and SLAs.",
+            },
           ].map((b) => (
             <div key={b.t} className="glass rounded-2xl p-6">
               <h3 className="font-semibold tracking-tight">{b.t}</h3>

@@ -61,9 +61,7 @@ export function ProjectDetailPanel({ project, timeline }: ProjectDetailPanelProp
               <span
                 className={cn(
                   "absolute -left-[27px] top-0.5 h-3 w-3 rounded-full border-2",
-                  s.done
-                    ? "bg-brand-cyan border-brand-cyan"
-                    : "bg-background border-white/20",
+                  s.done ? "bg-brand-cyan border-brand-cyan" : "bg-background border-white/20",
                 )}
               />
               <div className="text-sm flex items-center gap-2">
@@ -79,20 +77,10 @@ export function ProjectDetailPanel({ project, timeline }: ProjectDetailPanelProp
   );
 }
 
-function Meta({
-  label,
-  value,
-  className,
-}: {
-  label: string;
-  value: string;
-  className?: string;
-}) {
+function Meta({ label, value, className }: { label: string; value: string; className?: string }) {
   return (
     <div className="rounded-lg bg-white/5 border border-white/5 p-3">
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {label}
-      </div>
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className={cn("mt-1 text-sm", className)}>{value}</div>
     </div>
   );

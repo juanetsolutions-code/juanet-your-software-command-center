@@ -49,9 +49,7 @@ function LoginPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-gradient">Welcome back</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Sign in to your Juanet control center.
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">Sign in to your Juanet control center.</p>
       </div>
 
       <form onSubmit={onSubmit} className="space-y-4">
@@ -75,10 +73,7 @@ function LoginPage() {
           placeholder="••••••••"
           required
           trailing={
-            <Link
-              to="/auth/forgot"
-              className="text-xs text-muted-foreground hover:text-brand-cyan"
-            >
+            <Link to="/auth/forgot" className="text-xs text-muted-foreground hover:text-brand-cyan">
               Forgot?
             </Link>
           }

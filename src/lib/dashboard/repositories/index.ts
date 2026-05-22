@@ -3,4 +3,7 @@ export * from "./requests";
 export * from "./messages";
 export * from "./invoices";
 export * from "./payments";
+export * from "./profiles";
+export * from "./organizations";
+export * from "./workspaces";
 export * from "./_shared";

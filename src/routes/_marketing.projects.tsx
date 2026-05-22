@@ -9,7 +9,10 @@ export const Route = createFileRoute("/_marketing/projects")({
       { title: "Ongoing Projects — Juanet" },
       { name: "description", content: "Public progress for systems Juanet is currently building." },
       { property: "og:title", content: "Juanet — Ongoing Projects" },
-      { property: "og:description", content: "Transparency by default — track our active builds in real time." },
+      {
+        property: "og:description",
+        content: "Transparency by default — track our active builds in real time.",
+      },
     ],
   }),
   component: ProjectsPage,

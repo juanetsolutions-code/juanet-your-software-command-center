@@ -10,9 +10,17 @@ export const Route = createFileRoute("/_marketing/")({
   head: () => ({
     meta: [
       { title: "Juanet — Building Software Infrastructure For Modern Businesses" },
-      { name: "description", content: "Juanet designs, builds, deploys and scales modern software systems — custom development, SaaS products, automation and enterprise infrastructure." },
+      {
+        name: "description",
+        content:
+          "Juanet designs, builds, deploys and scales modern software systems — custom development, SaaS products, automation and enterprise infrastructure.",
+      },
       { property: "og:title", content: "Juanet — Software Infrastructure for Modern Businesses" },
-      { property: "og:description", content: "Custom software, SaaS, automation, cloud infrastructure and AI — one accountable team." },
+      {
+        property: "og:description",
+        content:
+          "Custom software, SaaS, automation, cloud infrastructure and AI — one accountable team.",
+      },
     ],
   }),
   component: HomePage,

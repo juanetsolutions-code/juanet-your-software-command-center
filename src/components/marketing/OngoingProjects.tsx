@@ -5,10 +5,10 @@ import { Calendar, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const statusColor: Record<string, string> = {
-  "Planning": "bg-white/10 text-muted-foreground",
+  Planning: "bg-white/10 text-muted-foreground",
   "In Progress": "bg-brand-blue/20 text-brand-cyan",
-  "QA": "bg-amber-500/15 text-amber-300",
-  "Launching": "bg-brand-violet/25 text-violet-200",
+  QA: "bg-amber-500/15 text-amber-300",
+  Launching: "bg-brand-violet/25 text-violet-200",
 };
 
 export function OngoingProjects() {
@@ -34,7 +34,12 @@ export function OngoingProjects() {
                 <h3 className="font-semibold tracking-tight">{p.name}</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">{p.client}</p>
               </div>
-              <span className={cn("text-[10px] uppercase tracking-wider px-2 py-1 rounded-full", statusColor[p.status])}>
+              <span
+                className={cn(
+                  "text-[10px] uppercase tracking-wider px-2 py-1 rounded-full",
+                  statusColor[p.status],
+                )}
+              >
                 {p.status}
               </span>
             </div>
@@ -53,8 +58,14 @@ export function OngoingProjects() {
             </div>
 
             <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5"><Tag className="h-3 w-3" />{p.category}</span>
-              <span className="inline-flex items-center gap-1.5"><Calendar className="h-3 w-3" />{p.due}</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Tag className="h-3 w-3" />
+                {p.category}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="h-3 w-3" />
+                {p.due}
+              </span>
             </div>
           </motion.article>
         ))}

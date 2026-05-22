@@ -1,16 +1,17 @@
 /**
  * Shared repository utilities for safe Supabase access.
+ * Re-exports centralized safe query helpers to avoid duplication.
  */
 
-import { logger } from "@/lib/utils/logger";
-
-export function handleSupabaseError(err: unknown, context: string): void {
-  logger.warn(`[Supabase] ${context} failed. Falling back to mock data.`, err);
-}
-
-export function safeSelect<T>(data: T[] | null | undefined): T[] {
-  return data ?? [];
-}
+export {
+  handleSupabaseError,
+  safeSelect,
+  safeSingle,
+  runSafe,
+  safeSelectFrom,
+  safeInsert,
+  safeUpdate,
+} from "@/lib/supabase/safe-query";
 
 export function normalizeArray<T>(arr: T[] | null | undefined): T[] {
   return Array.isArray(arr) ? arr : [];

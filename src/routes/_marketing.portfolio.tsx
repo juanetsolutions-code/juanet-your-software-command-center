@@ -7,9 +7,16 @@ export const Route = createFileRoute("/_marketing/portfolio")({
   head: () => ({
     meta: [
       { title: "Portfolio — Juanet" },
-      { name: "description", content: "Systems Juanet has shipped: school, CRM, inventory, LMS, hospital and finance platforms." },
+      {
+        name: "description",
+        content:
+          "Systems Juanet has shipped: school, CRM, inventory, LMS, hospital and finance platforms.",
+      },
       { property: "og:title", content: "Juanet Portfolio" },
-      { property: "og:description", content: "A snapshot of platforms powering schools, hospitals, agencies and finance teams." },
+      {
+        property: "og:description",
+        content: "A snapshot of platforms powering schools, hospitals, agencies and finance teams.",
+      },
     ],
   }),
   component: PortfolioPage,

@@ -1,20 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import {
-  Activity,
-  ArrowUpRight,
-  FolderKanban,
-  MessageSquare,
-  Wallet,
-} from "lucide-react";
+import { Activity, ArrowUpRight, FolderKanban, MessageSquare, Wallet } from "lucide-react";
 import { StatCard } from "@/components/app/StatCard";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { ProjectPipelineRow } from "@/components/dashboard/ProjectPipelineRow";
-import {
-  getDashboardSummary,
-  listProjects,
-  listRecentActivity,
-} from "@/lib/dashboard";
+import { getDashboardSummary, listProjects, listRecentActivity } from "@/lib/dashboard";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
@@ -34,9 +24,7 @@ function DashboardHome() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            Welcome back, Jane
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Welcome back, Jane</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Here's what's happening across your engagements.
           </p>
@@ -77,10 +65,7 @@ function DashboardHome() {
         />
         <StatCard
           label="Outstanding"
-          value={formatMoney(
-            summary.outstandingAmount.amount,
-            summary.outstandingAmount.currency,
-          )}
+          value={formatMoney(summary.outstandingAmount.amount, summary.outstandingAmount.currency)}
           delta="Due May 22"
           icon={Wallet}
           accent="from-brand-violet to-brand-cyan"

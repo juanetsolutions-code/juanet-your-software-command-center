@@ -11,11 +11,7 @@ export interface RequestFormProps {
   onSubmit: (draft: ServiceRequestDraft) => { id: string };
 }
 
-export function RequestForm({
-  budgetRanges,
-  timelineOptions,
-  onSubmit,
-}: RequestFormProps) {
+export function RequestForm({ budgetRanges, timelineOptions, onSubmit }: RequestFormProps) {
   const [submitted, setSubmitted] = useState<{ id: string } | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -176,8 +172,8 @@ export function RequestForm({
             </div>
             <h2 className="mt-5 text-xl font-semibold">Request submitted</h2>
             <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
-              Your request <span className="text-foreground">#{submitted.id}</span> is in.
-              A solution architect will reach out within 24 hours with scope and pricing.
+              Your request <span className="text-foreground">#{submitted.id}</span> is in. A
+              solution architect will reach out within 24 hours with scope and pricing.
             </p>
             <div className="mt-6 flex items-center justify-center gap-3">
               <button

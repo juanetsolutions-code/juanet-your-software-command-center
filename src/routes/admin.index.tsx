@@ -20,14 +20,34 @@ function AdminHome() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Admin Overview</h1>
-        <p className="text-sm text-muted-foreground mt-1">Operational metrics across the Juanet platform.</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Operational metrics across the Juanet platform.
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Total users" value="1,284" delta="+42 this week" icon={Users} />
-        <StatCard label="Active projects" value="23" delta="6 launching" icon={FolderKanban} accent="from-brand-blue to-brand-violet" />
-        <StatCard label="MRR" value="$48,210" delta="+8.2% MoM" icon={DollarSign} accent="from-brand-violet to-brand-cyan" />
-        <StatCard label="System uptime" value="99.99%" delta="Last 30 days" icon={Activity} accent="from-brand-cyan to-brand-violet" />
+        <StatCard
+          label="Active projects"
+          value="23"
+          delta="6 launching"
+          icon={FolderKanban}
+          accent="from-brand-blue to-brand-violet"
+        />
+        <StatCard
+          label="MRR"
+          value="$48,210"
+          delta="+8.2% MoM"
+          icon={DollarSign}
+          accent="from-brand-violet to-brand-cyan"
+        />
+        <StatCard
+          label="System uptime"
+          value="99.99%"
+          delta="Last 30 days"
+          icon={Activity}
+          accent="from-brand-cyan to-brand-violet"
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -61,7 +81,9 @@ function AdminHome() {
                             style={{ width: `${p.progress}%` }}
                           />
                         </div>
-                        <span className="text-xs text-muted-foreground w-8 text-right">{p.progress}%</span>
+                        <span className="text-xs text-muted-foreground w-8 text-right">
+                          {p.progress}%
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -83,7 +105,9 @@ function AdminHome() {
                   <div className="text-sm font-medium truncate">{u.name}</div>
                   <div className="text-[11px] text-muted-foreground truncate">{u.email}</div>
                 </div>
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{u.plan}</span>
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {u.plan}
+                </span>
               </li>
             ))}
           </ul>

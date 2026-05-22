@@ -2,12 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ConversationList } from "@/components/dashboard/ConversationList";
 import { MessageThread } from "@/components/dashboard/MessageThread";
-import {
-  listConversations,
-  listMessages,
-  sendMessage,
-  type Conversation,
-} from "@/lib/dashboard";
+import { listConversations, listMessages, sendMessage, type Conversation } from "@/lib/dashboard";
 
 export const Route = createFileRoute("/dashboard/messages")({
   component: MessagesPage,
@@ -28,11 +23,7 @@ function MessagesPage() {
       </header>
 
       <div className="glass rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[320px_1fr] h-[calc(100vh-220px)] min-h-[520px]">
-        <ConversationList
-          conversations={conversations}
-          activeId={active.id}
-          onSelect={setActive}
-        />
+        <ConversationList conversations={conversations} activeId={active.id} onSelect={setActive} />
         <MessageThread
           conversation={active}
           messages={messages}

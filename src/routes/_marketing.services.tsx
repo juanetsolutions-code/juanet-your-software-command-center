@@ -7,9 +7,16 @@ export const Route = createFileRoute("/_marketing/services")({
   head: () => ({
     meta: [
       { title: "Services — Juanet" },
-      { name: "description", content: "Custom software, SaaS, automation, cloud, UI/UX, API, AI and enterprise systems by Juanet." },
+      {
+        name: "description",
+        content:
+          "Custom software, SaaS, automation, cloud, UI/UX, API, AI and enterprise systems by Juanet.",
+      },
       { property: "og:title", content: "Juanet Services" },
-      { property: "og:description", content: "End-to-end software engineering for modern businesses." },
+      {
+        property: "og:description",
+        content: "End-to-end software engineering for modern businesses.",
+      },
     ],
   }),
   component: ServicesPage,

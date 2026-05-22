@@ -20,9 +20,7 @@ export function PaymentMethodCard({ method }: PaymentMethodCardProps) {
           {method.brand}
         </span>
         {method.primary && (
-          <span className="text-[10px] uppercase tracking-wider text-brand-cyan">
-            Primary
-          </span>
+          <span className="text-[10px] uppercase tracking-wider text-brand-cyan">Primary</span>
         )}
       </div>
       <div className="mt-3 text-sm tracking-widest font-medium">•••• {method.last4}</div>

@@ -29,7 +29,9 @@ export function ServicesGrid() {
                   <Icon className="h-5 w-5 text-brand-cyan" />
                 </div>
                 <h3 className="mt-4 font-semibold tracking-tight">{s.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{s.description}</p>
+                <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                  {s.description}
+                </p>
               </div>
             </motion.div>
           );

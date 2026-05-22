@@ -46,9 +46,7 @@ export function ProjectCard({ project, active, index = 0, onSelect }: ProjectCar
             className="h-full bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-violet"
           />
         </div>
-        <span className="text-xs text-muted-foreground w-10 text-right">
-          {project.progress}%
-        </span>
+        <span className="text-xs text-muted-foreground w-10 text-right">{project.progress}%</span>
       </div>
 
       <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-foreground">

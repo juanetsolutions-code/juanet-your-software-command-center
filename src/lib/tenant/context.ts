@@ -24,9 +24,11 @@ export function getCurrentOrganization(): Organization | null {
   const session = readSession();
   if (!session) return null;
 
-  // Synthetic fallback — single-tenant per user until orgs table exists.
+  const orgId = session.user.organizationId || `org_${session.user.id}`;
+  // Synthetic fallback — single-tenant per user until orgs table + memberships exist.
+  // When real orgs are fetched, this will be replaced by lookup.
   cachedOrg = {
-    id: `org_${session.user.id}`,
+    id: orgId,
     name: `${session.user.fullName}'s Workspace`,
     slug: session.user.id,
     plan: "free",

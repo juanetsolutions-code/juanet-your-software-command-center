@@ -1,12 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  ArrowUpRight,
-  CreditCard,
-  Download,
-  Receipt,
-  TrendingUp,
-  Wallet,
-} from "lucide-react";
+import { ArrowUpRight, CreditCard, Download, Receipt, TrendingUp, Wallet } from "lucide-react";
 import { useState } from "react";
 import { StatCard } from "@/components/app/StatCard";
 import { InvoiceTable } from "@/components/dashboard/InvoiceTable";
@@ -41,9 +34,7 @@ function PaymentsPage() {
     <div className="space-y-6">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            Payments & Invoices
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Payments & Invoices</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Manage your billing, invoices and payment methods.
           </p>
@@ -123,9 +114,7 @@ function PaymentsPage() {
                 </span>
               ))}
             </div>
-            <button className="mt-4 text-xs text-brand-cyan hover:underline">
-              Edit address
-            </button>
+            <button className="mt-4 text-xs text-brand-cyan hover:underline">Edit address</button>
           </div>
         </aside>
       </div>

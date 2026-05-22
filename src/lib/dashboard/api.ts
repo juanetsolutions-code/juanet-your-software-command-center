@@ -39,6 +39,9 @@ import * as messagesRepo from "./repositories/messages";
 import * as invoicesRepo from "./repositories/invoices";
 import * as paymentsRepo from "./repositories/payments";
 
+// Wiring through unified facade (non-breaking)
+import appFacade from "@/lib/app/facade";
+
 // ---------- Dashboard summary ----------
 export function getDashboardSummary(): DashboardSummary {
   return mockSummary;
@@ -79,7 +82,8 @@ export function listTimelineOptions(): string[] {
 }
 
 export function createServiceRequest(draft: ServiceRequestDraft): { id: string } {
-  void requestsRepo.createServiceRequest(draft, "current-user");
+  // Now wired through unified facade (behavior unchanged)
+  void appFacade.createRequest(draft);
   return { id: "RQ-205" };
 }
 
@@ -93,7 +97,8 @@ export function listMessages(conversationId: string): Message[] {
 }
 
 export function sendMessage(conversationId: string, text: string): void {
-  void messagesRepo.sendMessage(conversationId, text, "current-user");
+  // Now wired through unified facade (behavior unchanged)
+  void appFacade.sendMessage(conversationId, text);
 }
 
 // ---------- Payments & Billing ----------
@@ -114,7 +119,8 @@ export function getBillingOverview() {
 }
 
 export function markInvoicePaid(invoiceId: string): void {
-  void paymentsRepo.markInvoicePaid(invoiceId);
+  // Now wired through unified facade (behavior unchanged)
+  void appFacade.markInvoicePaid(invoiceId);
 }
 
 // ---------- Async repository surface (for future React Query migration) ----------
@@ -125,4 +131,3 @@ export const repositories = {
   invoices: invoicesRepo,
   payments: paymentsRepo,
 };
-

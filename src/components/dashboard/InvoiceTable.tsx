@@ -40,9 +40,7 @@ export function InvoiceTable({ invoices, payingId, onPay, onDownload }: InvoiceT
             >
               <td className="py-3 px-5">
                 <div className="font-medium">{inv.id}</div>
-                <div className="text-[11px] text-muted-foreground md:hidden">
-                  {inv.projectName}
-                </div>
+                <div className="text-[11px] text-muted-foreground md:hidden">{inv.projectName}</div>
                 <div className="text-[11px] text-muted-foreground">Due {inv.dueLabel}</div>
               </td>
               <td className="py-3 px-3 hidden md:table-cell text-muted-foreground">
