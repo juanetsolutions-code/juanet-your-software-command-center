@@ -35,7 +35,7 @@ function SignupPage() {
       setError(res.error ?? "Unable to create account.");
       return;
     }
-    navigate({ to: res.session.user.role === "admin" ? "/admin" : "/dashboard" });
+    navigate({ to: getDefaultPortalPath(res.session.user.role) });
   }
 
   return (
