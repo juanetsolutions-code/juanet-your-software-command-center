@@ -37,14 +37,29 @@ function readMockSession(): AuthSession | null {
   }
 }
 
+async function upgradeSessionWithProfile(rawSession: Parameters<typeof mapSession>[0]) {
+  try {
+    const enriched = await mapSessionAsync(rawSession);
+    currentSession = enriched;
+    emitChange();
+  } catch {
+    /* keep metadata-mapped session */
+  }
+}
+
 function ensureSupabaseSubscription() {
   if (typeof window === "undefined" || subscribed || !SUPABASE_READY) return;
   subscribed = true;
 
-  supabase.auth.onAuthStateChange((_event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     currentSession = mapSession(session);
     ready = true;
+    if (event === "SIGNED_OUT") {
+      clearProfileCache();
+      clearOrganizationCache();
+    }
     emitChange();
+    if (session) void upgradeSessionWithProfile(session);
   });
 }
 
@@ -71,6 +86,7 @@ export async function waitForSessionInit(): Promise<AuthSession | null> {
       currentSession = mapSession(data.session);
       ready = true;
       emitChange();
+      if (data.session) void upgradeSessionWithProfile(data.session);
       return currentSession;
     })
     .catch(() => {
