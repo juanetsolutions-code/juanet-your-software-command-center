@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Loader2, Lock, Mail, AlertCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { readSession } from "@/lib/auth/store";
+import { getDefaultPortalPath } from "@/lib/auth/roles";
 
 type LoginSearch = { redirect?: string };
 
