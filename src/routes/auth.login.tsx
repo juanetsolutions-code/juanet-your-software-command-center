@@ -41,8 +41,7 @@ function LoginPage() {
       setError(res.error ?? "Unable to sign in.");
       return;
     }
-    const dest =
-      redirectTo ?? (res.session.user.role === "admin" ? "/admin" : "/dashboard");
+    const dest = redirectTo ?? getDefaultPortalPath(res.session.user.role);
     navigate({ to: dest });
   }
 
