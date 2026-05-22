@@ -6,7 +6,9 @@
  */
 import type { AuthSession } from "./types";
 import { supabase, SUPABASE_READY } from "@/lib/supabase/client";
-import { mapSession } from "./session";
+import { mapSession, mapSessionAsync } from "./session";
+import { clearProfileCache } from "./profile";
+import { clearOrganizationCache } from "@/lib/tenant/context";
 
 const STORAGE_KEY = "juanet.auth.session";
 let currentSession: AuthSession | null = null;
