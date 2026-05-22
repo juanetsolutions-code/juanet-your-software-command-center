@@ -11,7 +11,7 @@ export const Route = createFileRoute("/auth/signup")({
   beforeLoad: () => {
     if (typeof window === "undefined") return;
     const s = readSession();
-    if (s) throw redirect({ to: s.user.role === "admin" ? "/admin" : "/dashboard" });
+    if (s) throw redirect({ to: getDefaultPortalPath(s.user.role) });
   },
   component: SignupPage,
 });
