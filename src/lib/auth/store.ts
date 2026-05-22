@@ -122,6 +122,8 @@ export function clearSession(): void {
   if (typeof window === "undefined") return;
   currentSession = null;
   ready = true;
+  clearProfileCache();
+  clearOrganizationCache();
   window.localStorage.removeItem(STORAGE_KEY);
   emitChange();
 }
