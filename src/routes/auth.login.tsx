@@ -16,7 +16,7 @@ export const Route = createFileRoute("/auth/login")({
     if (typeof window === "undefined") return;
     const s = readSession();
     if (s) {
-      throw redirect({ to: search.redirect ?? (s.user.role === "admin" ? "/admin" : "/dashboard") });
+      throw redirect({ to: search.redirect ?? getDefaultPortalPath(s.user.role) });
     }
   },
   component: LoginPage,
