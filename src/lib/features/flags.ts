@@ -15,7 +15,11 @@ type FeatureKey =
   | "advanced_analytics"
   | "invoice_pdf_export"
   | "team_workspaces"
-  | "ai_assistant";
+  | "ai_assistant"
+  | "ai_automations"
+  | "ai_summarization"
+  | "ai_recommendations"
+  | "ai_agent_mode";
 
 const DEFAULTS: Record<FeatureKey, boolean> = {
   realtime_messages: true,
@@ -23,12 +27,18 @@ const DEFAULTS: Record<FeatureKey, boolean> = {
   invoice_pdf_export: true,
   team_workspaces: true,
   ai_assistant: false,
+  ai_automations: false,
+  ai_summarization: false,
+  ai_recommendations: false,
+  ai_agent_mode: false,
 };
 
 // Role overrides (higher roles can force-enable)
 const ROLE_OVERRIDES: Partial<Record<FeatureKey, string[]>> = {
   advanced_analytics: ["admin", "superadmin"],
   ai_assistant: ["superadmin"],
+  ai_automations: ["admin", "superadmin"],
+  ai_agent_mode: ["superadmin"],
 };
 
 // Tenant overrides (stored in memory for now — would come from DB in prod)

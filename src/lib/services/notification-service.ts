@@ -27,6 +27,16 @@ export const notificationService = {
   onInvoiceCreated(invoiceId: string) {
     logger.info(`[Notifications] Invoice created: ${invoiceId} (silent)`);
   },
+
+  // Automation integration (backend only)
+  onAutomationEvent(eventType: string, payload: any) {
+    logger.info(`[Notifications] Automation event ${eventType} triggered (silent)`, payload);
+  },
+
+  // AI-generated notifications (backend only, no UI)
+  onAIGeneratedAlert(tenantId: string, message: string, type = 'ai_insight') {
+    logger.info(`[Notifications] AI alert for ${tenantId}: ${message} (silent)`);
+  },
 };
 
 // Auto-init on import

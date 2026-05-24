@@ -96,7 +96,29 @@ export async function runFullSeed() {
   console.log("[Seed] Full demo seed complete.");
 }
 
-// If run directly
+/**
+ * Environment-aware seeding
+ */
+export async function seedForEnvironment(env: "local" | "staging" | "production" = "local") {
+  console.log(`[Seed] Running ${env} seed profile...`);
+
+  if (env === "production") {
+    console.warn("[Seed] Production seed is intentionally limited for safety.");
+    await seedSuperAdmin();
+    return;
+  }
+
+  if (env === "staging") {
+    await seedDemoOrganization("Staging Demo Org");
+    return;
+  }
+
+  // local / development
+  await runFullSeed();
+}
+
+// CLI entry
 if (require.main === module) {
-  runFullSeed().catch(console.error);
+  const profile = (process.env.SEED_PROFILE || process.env.NODE_ENV || "local") as any;
+  seedForEnvironment(profile).catch(console.error);
 }
