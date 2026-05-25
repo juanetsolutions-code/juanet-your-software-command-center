@@ -12,10 +12,16 @@ function k(resource: string, field: string) {
   return `${resource}:${field}`;
 }
 
-export function acquireFieldLock(resource: string, field: string, userId: string, ttlMs = 15_000): boolean {
+export function acquireFieldLock(
+  resource: string,
+  field: string,
+  userId: string,
+  ttlMs = 15_000,
+): boolean {
   const existing = locks.get(k(resource, field));
   const now = Date.now();
-  if (existing && existing.userId !== userId && now - existing.acquiredAt < existing.ttlMs) return false;
+  if (existing && existing.userId !== userId && now - existing.acquiredAt < existing.ttlMs)
+    return false;
   locks.set(k(resource, field), { resource, field, userId, acquiredAt: now, ttlMs });
   return true;
 }

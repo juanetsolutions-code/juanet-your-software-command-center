@@ -15,7 +15,10 @@ export interface RuntimeResult {
   error?: string;
 }
 
-export async function runWorkflow(wf: RuntimeWorkflow, initial: Record<string, unknown> = {}): Promise<RuntimeResult> {
+export async function runWorkflow(
+  wf: RuntimeWorkflow,
+  initial: Record<string, unknown> = {},
+): Promise<RuntimeResult> {
   logger.info(`[AutomationRuntime] start ${wf.id}`);
   try {
     const context = await runPipeline(wf.steps, initial, (stepId, ctx) =>

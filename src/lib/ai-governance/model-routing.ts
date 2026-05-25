@@ -16,7 +16,10 @@ export function listModels(): ModelDescriptor[] {
   return [...models];
 }
 
-export function pickModel(criteria: { tier?: ModelDescriptor["tier"]; provider?: string }): ModelDescriptor | null {
+export function pickModel(criteria: {
+  tier?: ModelDescriptor["tier"];
+  provider?: string;
+}): ModelDescriptor | null {
   return (
     models.find(
       (m) =>

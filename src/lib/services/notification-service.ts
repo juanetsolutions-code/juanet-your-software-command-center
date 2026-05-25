@@ -34,7 +34,7 @@ export const notificationService = {
   },
 
   // AI-generated notifications (backend only, no UI)
-  onAIGeneratedAlert(tenantId: string, message: string, type = 'ai_insight') {
+  onAIGeneratedAlert(tenantId: string, message: string, type = "ai_insight") {
     logger.info(`[Notifications] AI alert for ${tenantId}: ${message} (silent)`);
   },
 };

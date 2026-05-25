@@ -19,7 +19,11 @@ function get(name: string, threshold = 5, resetMs = 30_000): BreakerStats {
   return b;
 }
 
-export async function withBreaker<T>(name: string, fn: () => Promise<T>, opts?: { threshold?: number; resetMs?: number }): Promise<T> {
+export async function withBreaker<T>(
+  name: string,
+  fn: () => Promise<T>,
+  opts?: { threshold?: number; resetMs?: number },
+): Promise<T> {
   const b = get(name, opts?.threshold, opts?.resetMs);
   if (b.state === "open") {
     if (b.openedAt && Date.now() - b.openedAt > b.resetMs) b.state = "half-open";

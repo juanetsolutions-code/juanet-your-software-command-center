@@ -4,12 +4,12 @@
  * Never direct DB or UI access.
  */
 
-import type { ToolCall, ToolResult } from './tool-types';
-import { getTool } from './tool-registry';
+import type { ToolCall, ToolResult } from "./tool-types";
+import { getTool } from "./tool-registry";
 
 export async function executeToolCall(
-  call: ToolCall, 
-  context: { tenantId: string; userId?: string; permissions: string[] }
+  call: ToolCall,
+  context: { tenantId: string; userId?: string; permissions: string[] },
 ): Promise<ToolResult> {
   const start = Date.now();
   const toolDef = getTool(call.tool);
@@ -23,8 +23,8 @@ export async function executeToolCall(
   }
 
   // Permission check
-  const hasPerm = toolDef.requiredPermissions.every(p => 
-    context.permissions.includes(p) || context.permissions.includes('*')
+  const hasPerm = toolDef.requiredPermissions.every(
+    (p) => context.permissions.includes(p) || context.permissions.includes("*"),
   );
   if (!hasPerm) {
     return {
@@ -39,39 +39,43 @@ export async function executeToolCall(
     let result: any;
 
     switch (call.tool) {
-      case 'createInvoice':
+      case "createInvoice":
         // Safe stub adapter (integrates with billing in full impl)
-        result = { invoiceId: 'AI-INV-' + Date.now(), ...call.parameters };
+        result = { invoiceId: "AI-INV-" + Date.now(), ...call.parameters };
         break;
 
-      case 'sendNotification':
+      case "sendNotification":
         // Adapter to existing notification-service (backend only)
-        const { notificationService } = await import('@/lib/services/notification-service');
-        result = await notificationService.onAutomationEvent('tool_send_notification', {
+        const { notificationService } = await import("@/lib/services/notification-service");
+        result = await notificationService.onAutomationEvent("tool_send_notification", {
           ...call.parameters,
           tenantId: context.tenantId,
         });
         break;
 
-      case 'triggerWorkflow':
+      case "triggerWorkflow":
         // Adapter to automation engine (previous phase)
-        const { automationEngine } = await import('@/lib/automation/engine');
-        const aiContext = { tenantId: context.tenantId, userId: context.userId, triggeredAt: new Date().toISOString() };
+        const { automationEngine } = await import("@/lib/automation/engine");
+        const aiContext = {
+          tenantId: context.tenantId,
+          userId: context.userId,
+          triggeredAt: new Date().toISOString(),
+        };
         result = await automationEngine.trigger(
-          call.parameters.eventType || 'ai_tool_trigger',
+          call.parameters.eventType || "ai_tool_trigger",
           call.parameters,
-          aiContext as any
+          aiContext as any,
         );
         break;
 
-      case 'queryMetrics':
+      case "queryMetrics":
         // Safe read via existing observability/monitoring
-        const { getSystemStatus } = await import('@/lib/observability/system-status');
+        const { getSystemStatus } = await import("@/lib/observability/system-status");
         result = await getSystemStatus();
         break;
 
       default:
-        result = { message: 'Tool executed (stub)' };
+        result = { message: "Tool executed (stub)" };
     }
 
     return {
@@ -82,7 +86,7 @@ export async function executeToolCall(
   } catch (err: any) {
     return {
       success: false,
-      error: err.message || 'Tool execution failed',
+      error: err.message || "Tool execution failed",
       executionTimeMs: Date.now() - start,
     };
   }

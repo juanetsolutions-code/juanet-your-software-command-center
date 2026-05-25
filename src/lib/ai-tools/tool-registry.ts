@@ -3,7 +3,7 @@
  * Only registers safe, permission-scoped tools.
  */
 
-import type { ToolDefinition } from './tool-types';
+import type { ToolDefinition } from "./tool-types";
 
 const registeredTools: Map<string, ToolDefinition> = new Map();
 
@@ -20,8 +20,8 @@ export function listAvailableTools(): ToolDefinition[] {
 }
 
 export function getToolsForRole(role: string): ToolDefinition[] {
-  return Array.from(registeredTools.values()).filter(t => 
-    t.safeForAgentRoles.includes(role) || t.safeForAgentRoles.includes('*')
+  return Array.from(registeredTools.values()).filter(
+    (t) => t.safeForAgentRoles.includes(role) || t.safeForAgentRoles.includes("*"),
   );
 }
 

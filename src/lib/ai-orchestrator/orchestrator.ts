@@ -2,8 +2,8 @@
  * AI Orchestrator - Coordinates multiple agents and complex tasks.
  */
 
-import { decisionEngine } from '@/lib/ai-decisions/decision-engine';
-import { buildReasoningContext } from '@/lib/ai-decisions/reasoning-context';
+import { decisionEngine } from "@/lib/ai-decisions/decision-engine";
+import { buildReasoningContext } from "@/lib/ai-decisions/reasoning-context";
 
 export class AIOrchestrator {
   async orchestrateComplexTask(task: string, tenantId: string, context: any = {}): Promise<any> {
@@ -15,8 +15,8 @@ export class AIOrchestrator {
     const plan = {
       task,
       steps: [
-        { agent: 'finance', action: 'analyze' },
-        { agent: 'ops', action: 'execute' },
+        { agent: "finance", action: "analyze" },
+        { agent: "ops", action: "execute" },
       ],
       decision,
     };

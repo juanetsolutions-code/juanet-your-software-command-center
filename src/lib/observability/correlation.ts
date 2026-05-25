@@ -12,7 +12,9 @@ export function newCorrelationId(): string {
   return crypto.randomUUID();
 }
 
-export function createCorrelationContext(partial: Partial<CorrelationContext> = {}): CorrelationContext {
+export function createCorrelationContext(
+  partial: Partial<CorrelationContext> = {},
+): CorrelationContext {
   return {
     correlationId: partial.correlationId ?? newCorrelationId(),
     parentId: partial.parentId,
@@ -31,9 +33,11 @@ export function toHeaders(ctx: CorrelationContext): Record<string, string> {
   return headers;
 }
 
-export function fromHeaders(headers: Headers | Record<string, string | undefined>): CorrelationContext {
+export function fromHeaders(
+  headers: Headers | Record<string, string | undefined>,
+): CorrelationContext {
   const get = (k: string): string | undefined =>
-    headers instanceof Headers ? headers.get(k) ?? undefined : headers[k];
+    headers instanceof Headers ? (headers.get(k) ?? undefined) : headers[k];
   return {
     correlationId: get("x-correlation-id") ?? newCorrelationId(),
     parentId: get("x-parent-id"),

@@ -8,8 +8,10 @@ export function createSandbox() {
       // Simple timeout guard (in real use vm2 or worker)
       return Promise.race([
         Promise.resolve(fn()),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Execution timeout')), timeoutMs))
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Execution timeout")), timeoutMs),
+        ),
       ]);
-    }
+    },
   };
 }

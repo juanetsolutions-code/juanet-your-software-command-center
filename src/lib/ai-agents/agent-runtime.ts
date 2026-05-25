@@ -3,8 +3,8 @@
  * Handles execution lifecycle, tool calling, and multi-turn reasoning for agents.
  */
 
-import type { AgentConfig, AgentExecutionResult } from './agent-types';
-import { BaseAIAgent } from './agent-core';
+import type { AgentConfig, AgentExecutionResult } from "./agent-types";
+import { BaseAIAgent } from "./agent-core";
 
 export class AgentRuntime {
   private agents: Map<string, BaseAIAgent> = new Map();
@@ -18,7 +18,11 @@ export class AgentRuntime {
     return this.agents.get(agentId);
   }
 
-  async runAgent(agentId: string, task: string, context: Record<string, any> = {}): Promise<AgentExecutionResult> {
+  async runAgent(
+    agentId: string,
+    task: string,
+    context: Record<string, any> = {},
+  ): Promise<AgentExecutionResult> {
     const agent = this.agents.get(agentId);
     if (!agent) {
       return {
@@ -33,7 +37,7 @@ export class AgentRuntime {
     if (context.tenantId && context.tenantId !== config.tenantId) {
       return {
         success: false,
-        error: 'Tenant mismatch - agent cannot operate across tenants',
+        error: "Tenant mismatch - agent cannot operate across tenants",
         actionsTaken: [],
       };
     }
@@ -49,7 +53,7 @@ export class AgentRuntime {
 
       // If the agent returned planned tool calls, execute them via the tool system
       if (result.plannedTools && result.plannedTools.length > 0) {
-        const { executeToolCall } = await import('@/lib/ai-tools/tool-executor');
+        const { executeToolCall } = await import("@/lib/ai-tools/tool-executor");
         for (const toolCall of result.plannedTools) {
           const toolResult = await executeToolCall(toolCall as any, {
             tenantId: config.tenantId,
@@ -70,15 +74,15 @@ export class AgentRuntime {
 
     return {
       success: false,
-      error: 'Agent reached max iterations',
+      error: "Agent reached max iterations",
       actionsTaken,
     };
   }
 
   listAgentsForTenant(tenantId: string): string[] {
     return Array.from(this.agents.values())
-      .filter(a => a.getConfig().tenantId === tenantId)
-      .map(a => a.getConfig().id);
+      .filter((a) => a.getConfig().tenantId === tenantId)
+      .map((a) => a.getConfig().id);
   }
 }
 

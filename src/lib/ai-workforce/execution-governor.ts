@@ -48,7 +48,10 @@ export function endExecution(tenantId: string) {
   b.inFlight = Math.max(0, b.inFlight - 1);
 }
 
-export function setTenantLimits(tenantId: string, limits: Partial<Pick<TenantBudget, "maxConcurrent" | "maxCallsPerMinute">>) {
+export function setTenantLimits(
+  tenantId: string,
+  limits: Partial<Pick<TenantBudget, "maxConcurrent" | "maxCallsPerMinute">>,
+) {
   const b = getBudget(tenantId);
   Object.assign(b, limits);
 }

@@ -3,7 +3,7 @@
  * Supabase-ready persistent storage for events (currently in-memory with persistence hooks).
  */
 
-import type { BaseEvent } from './event-types';
+import type { BaseEvent } from "./event-types";
 
 const persistentStore: BaseEvent[] = [];
 
@@ -15,8 +15,7 @@ export async function persistEvent(event: BaseEvent): Promise<void> {
 
 export async function replayEvents(tenantId: string, fromTimestamp?: string): Promise<BaseEvent[]> {
   // Future: query from Supabase
-  return persistentStore.filter(e =>
-    e.tenantId === tenantId &&
-    (!fromTimestamp || e.timestamp >= fromTimestamp)
+  return persistentStore.filter(
+    (e) => e.tenantId === tenantId && (!fromTimestamp || e.timestamp >= fromTimestamp),
   );
 }

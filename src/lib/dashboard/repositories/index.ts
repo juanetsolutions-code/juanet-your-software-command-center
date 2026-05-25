@@ -7,3 +7,4 @@ export * from "./profiles";
 export * from "./organizations";
 export * from "./workspaces";
 export * from "./_shared";
+export * from "./base-repository";

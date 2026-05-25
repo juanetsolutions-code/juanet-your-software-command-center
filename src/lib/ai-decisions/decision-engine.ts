@@ -3,7 +3,7 @@
  * Core engine for AI to make structured, auditable business decisions.
  */
 
-import type { Decision, DecisionInput } from './decision-tree';
+import type { Decision, DecisionInput } from "./decision-tree";
 
 export class DecisionEngine {
   async makeDecision(input: DecisionInput): Promise<Decision> {
@@ -16,10 +16,10 @@ export class DecisionEngine {
       reasoningTrace: [
         `Analyzed context for tenant ${input.tenantId}`,
         `Evaluated ${input.contextKeys?.length || 0} signals`,
-        'Selected action based on highest utility',
+        "Selected action based on highest utility",
       ],
       metadata: {
-        model: 'stub-v1',
+        model: "stub-v1",
         timestamp: new Date().toISOString(),
       },
     };
@@ -28,10 +28,10 @@ export class DecisionEngine {
   }
 
   private determineAction(input: DecisionInput): string {
-    if (input.signals?.paymentOverdue) return 'trigger_dunning_workflow';
-    if (input.signals?.highSupportVolume) return 'escalate_to_human';
-    if (input.signals?.lowAdoption) return 'trigger_onboarding_automation';
-    return 'monitor';
+    if (input.signals?.paymentOverdue) return "trigger_dunning_workflow";
+    if (input.signals?.highSupportVolume) return "escalate_to_human";
+    if (input.signals?.lowAdoption) return "trigger_onboarding_automation";
+    return "monitor";
   }
 }
 

@@ -7,7 +7,11 @@ export interface VectorRecord {
 
 export interface VectorIndexProvider {
   upsert(records: VectorRecord[]): Promise<void>;
-  query(tenantId: string, vector: number[], topK: number): Promise<Array<{ id: string; score: number }>>;
+  query(
+    tenantId: string,
+    vector: number[],
+    topK: number,
+  ): Promise<Array<{ id: string; score: number }>>;
   remove(tenantId: string, ids: string[]): Promise<void>;
 }
 
@@ -31,7 +35,9 @@ class InMemoryVectorIndex implements VectorIndexProvider {
 
 function cosine(a: number[], b: number[]) {
   if (a.length !== b.length) return 0;
-  let dot = 0, na = 0, nb = 0;
+  let dot = 0,
+    na = 0,
+    nb = 0;
   for (let i = 0; i < a.length; i++) {
     dot += a[i] * b[i];
     na += a[i] * a[i];

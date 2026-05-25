@@ -3,23 +3,18 @@
  * Supabase-ready with mock fallback.
  */
 
-import type { MemoryEntry } from './memory-types';
+import type { MemoryEntry } from "./memory-types";
 
-const memoryStore: MemoryEntry[] = []; // In-memory for now
+const store: MemoryEntry[] = []; // In-memory for now (future Supabase)
 
-export async function storeMemory(entry: Omit<MemoryEntry, 'id' | 'timestamp'>): Promise<MemoryEntry> {
-  const full: MemoryEntry = {
-    ...entry,
-    id: `mem_${Date.now()}`,
-    timestamp: new Date().toISOString(),
-  };
-  memoryStore.push(full);
-  // Future: await supabase.from('ai_memory').insert(full);
-  return full;
+export class MemoryStore {
+  async save(entry: MemoryEntry): Promise<void> {
+    store.push(entry);
+  }
+
+  async getRecentForTenant(tenantId: string, limit = 20): Promise<MemoryEntry[]> {
+    return store.filter((m) => m.tenantId === tenantId).slice(-limit);
+  }
 }
 
-export async function getMemoriesByTenant(tenantId: string, limit = 50): Promise<MemoryEntry[]> {
-  return memoryStore
-    .filter(m => m.tenantId === tenantId)
-    .slice(-limit);
-}
+export const memoryStore = new MemoryStore();

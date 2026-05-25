@@ -3,7 +3,9 @@ export interface FallbackRoute<T> {
   call: () => Promise<T>;
 }
 
-export async function callWithFallbacks<T>(routes: FallbackRoute<T>[]): Promise<{ value: T; usedRoute: string }> {
+export async function callWithFallbacks<T>(
+  routes: FallbackRoute<T>[],
+): Promise<{ value: T; usedRoute: string }> {
   let lastErr: unknown;
   for (const route of routes) {
     try {

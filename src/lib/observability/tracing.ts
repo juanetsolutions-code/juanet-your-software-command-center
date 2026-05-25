@@ -25,7 +25,11 @@ function uuid() {
   return crypto.randomUUID();
 }
 
-export function startSpan(name: string, parent?: TraceSpan, attrs?: TraceSpan["attributes"]): TraceSpan {
+export function startSpan(
+  name: string,
+  parent?: TraceSpan,
+  attrs?: TraceSpan["attributes"],
+): TraceSpan {
   const span: TraceSpan = {
     traceId: parent?.traceId ?? uuid(),
     spanId: uuid(),
@@ -51,7 +55,11 @@ export function endSpan(span: TraceSpan, status: "ok" | "error" = "ok", error?: 
   });
 }
 
-export async function withSpan<T>(name: string, fn: (span: TraceSpan) => Promise<T>, parent?: TraceSpan): Promise<T> {
+export async function withSpan<T>(
+  name: string,
+  fn: (span: TraceSpan) => Promise<T>,
+  parent?: TraceSpan,
+): Promise<T> {
   const span = startSpan(name, parent);
   try {
     const result = await fn(span);

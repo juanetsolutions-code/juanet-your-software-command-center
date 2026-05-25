@@ -2,7 +2,7 @@ export const site = {
   name: "Juanet",
   tagline: "Building Software Infrastructure For Modern Businesses",
   description:
-    "Juanet helps businesses design, build, deploy, and scale modern software systems through custom development, SaaS products, automation, and enterprise infrastructure.",
+    "Juanet helps businesses design, build, deploy, manage, and scale modern software systems through custom development, SaaS products, automation, and enterprise infrastructure.",
 };
 
 export const marketingNav = [
@@ -25,8 +25,8 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "custom-software",
-    title: "Custom Software Development",
-    description: "Bespoke systems engineered around your operations, from idea to deployment.",
+    title: "Custom Software and Web Dev",
+    description: "Bespoke sites & systems engineered around your needs, from idea to deployment.",
     icon: "Code2",
   },
   {

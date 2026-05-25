@@ -1,4 +1,12 @@
-export type EdgeRegion = "auto" | "us-east" | "us-west" | "eu-west" | "eu-central" | "ap-southeast" | "ap-northeast" | "sa-east";
+export type EdgeRegion =
+  | "auto"
+  | "us-east"
+  | "us-west"
+  | "eu-west"
+  | "eu-central"
+  | "ap-southeast"
+  | "ap-northeast"
+  | "sa-east";
 
 export interface EdgeRouteRequest {
   tenantId: string;

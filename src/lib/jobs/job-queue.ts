@@ -14,7 +14,7 @@ export function enqueueJob(name: string, data: any, delayMs = 0) {
 
 export function dequeueDueJobs(): any[] {
   const now = Date.now();
-  const due = queue.filter(j => j.runAt <= now);
+  const due = queue.filter((j) => j.runAt <= now);
   // remove from queue
   for (let i = queue.length - 1; i >= 0; i--) {
     if (queue[i].runAt <= now) queue.splice(i, 1);

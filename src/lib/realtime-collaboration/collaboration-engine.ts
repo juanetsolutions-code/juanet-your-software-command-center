@@ -8,7 +8,11 @@ export interface CollaborationSession {
 
 const sessions = new Map<string, CollaborationSession>();
 
-export function startSession(resource: string, tenantId: string, initialUserId: string): CollaborationSession {
+export function startSession(
+  resource: string,
+  tenantId: string,
+  initialUserId: string,
+): CollaborationSession {
   const id = `collab_${resource}_${Date.now()}`;
   const session: CollaborationSession = {
     id,

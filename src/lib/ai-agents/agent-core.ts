@@ -4,7 +4,7 @@
  * Provides the fundamental structure for tenant-aware, tool-using agents.
  */
 
-import type { AgentConfig, AgentState, AgentExecutionResult, AgentToolCall } from './agent-types';
+import type { AgentConfig, AgentState, AgentExecutionResult, AgentToolCall } from "./agent-types";
 
 export abstract class BaseAIAgent {
   protected config: AgentConfig;
@@ -55,18 +55,18 @@ class GenericAIAgent extends BaseAIAgent {
 
     // Simple demonstration: plan to use queryMetrics for any task
     const planned: AgentToolCall[] = [];
-    if (this.config.allowedTools.includes('queryMetrics')) {
+    if (this.config.allowedTools.includes("queryMetrics")) {
       planned.push({
-        tool: 'queryMetrics',
-        parameters: { metricType: 'tenant_health' },
-        reason: 'Gather context before deciding',
+        tool: "queryMetrics",
+        parameters: { metricType: "tenant_health" },
+        reason: "Gather context before deciding",
       });
     }
 
     return {
       success: true,
       output: `Task executed by ${this.config.name}: ${task}`,
-      actionsTaken: ['analysis'],
+      actionsTaken: ["analysis"],
       plannedTools: planned,
       confidence: 0.85,
     };

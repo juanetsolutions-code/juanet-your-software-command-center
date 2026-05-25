@@ -10,7 +10,11 @@ export interface SyncResponse {
   resumeFrom: number;
 }
 
-export function negotiate(req: SyncHandshake, serverVersion: number, supported: string[]): SyncResponse {
+export function negotiate(
+  req: SyncHandshake,
+  serverVersion: number,
+  supported: string[],
+): SyncResponse {
   return {
     serverVersion,
     acceptedCapabilities: req.capabilities.filter((c) => supported.includes(c)),

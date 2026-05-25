@@ -4,7 +4,7 @@
 
 export interface RuleCondition {
   field: string;
-  operator: 'eq' | 'gt' | 'contains';
+  operator: "eq" | "gt" | "contains";
   value: any;
 }
 

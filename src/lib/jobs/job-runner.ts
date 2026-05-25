@@ -2,7 +2,7 @@
  * Job Runner Simulation
  */
 
-import { dequeueDueJobs } from './job-queue';
+import { dequeueDueJobs } from "./job-queue";
 
 export async function processJobs() {
   const due = dequeueDueJobs();

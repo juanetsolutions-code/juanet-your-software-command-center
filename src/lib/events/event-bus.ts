@@ -3,13 +3,13 @@
  * In-memory + persistent (Supabase-ready) event bus for internal communication.
  */
 
-import { EventEmitter } from 'events';
-import type { BaseEvent, DomainEventType } from './event-types';
+import { EventEmitter } from "events";
+import type { BaseEvent, DomainEventType } from "./event-types";
 
 const emitter = new EventEmitter();
 const eventLog: BaseEvent[] = []; // In-memory store for now (replace with Supabase later)
 
-export function emitEvent(event: Omit<BaseEvent, 'timestamp'>): void {
+export function emitEvent(event: Omit<BaseEvent, "timestamp">): void {
   const fullEvent: BaseEvent = {
     ...event,
     timestamp: new Date().toISOString(),
@@ -24,7 +24,7 @@ export function emitEvent(event: Omit<BaseEvent, 'timestamp'>): void {
 
 export function subscribe(
   eventType: DomainEventType | string,
-  handler: (event: BaseEvent) => void | Promise<void>
+  handler: (event: BaseEvent) => void | Promise<void>,
 ): () => void {
   const wrapped = async (event: BaseEvent) => {
     try {
@@ -43,7 +43,7 @@ export function subscribe(
 
 export function getEventHistory(tenantId?: string): BaseEvent[] {
   if (tenantId) {
-    return eventLog.filter(e => e.tenantId === tenantId);
+    return eventLog.filter((e) => e.tenantId === tenantId);
   }
   return [...eventLog];
 }
@@ -55,10 +55,7 @@ export function clearEventLog(): void {
 /**
  * AI Integration: Allow agents to subscribe to domain events safely.
  */
-export function subscribeForAI(
-  eventType: string,
-  handler: (event: BaseEvent) => void
-): () => void {
+export function subscribeForAI(eventType: string, handler: (event: BaseEvent) => void): () => void {
   return subscribe(eventType as any, handler);
 }
 
@@ -69,7 +66,7 @@ export function emitForAI(
   type: string,
   tenantId: string,
   payload: Record<string, any>,
-  userId?: string
+  userId?: string,
 ): void {
   emitEvent({ type, tenantId, userId, payload });
 }

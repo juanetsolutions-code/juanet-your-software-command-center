@@ -4,14 +4,9 @@
  * This is the base for all autonomous agents in Juanet.
  */
 
-export type AgentRole = 
-  | 'admin' 
-  | 'finance' 
-  | 'support' 
-  | 'ops' 
-  | 'custom';
+export type AgentRole = "admin" | "finance" | "support" | "ops" | "custom";
 
-export type AgentMode = 'stateless' | 'stateful';
+export type AgentMode = "stateless" | "stateful";
 
 export interface AgentConfig {
   id: string;
@@ -28,7 +23,7 @@ export interface AgentConfig {
 export interface AgentState {
   agentId: string;
   tenantId: string;
-  conversationHistory: Array<{ role: 'user' | 'assistant' | 'tool'; content: string }>;
+  conversationHistory: Array<{ role: "user" | "assistant" | "tool"; content: string }>;
   context: Record<string, any>;
   lastActivity: string;
 }
@@ -40,11 +35,11 @@ export interface AgentExecutionResult {
   error?: string;
   confidence?: number;
   reasoningTrace?: string[];
-  plannedTools?: AgentToolCall[];   // Agents can return tools to execute in the runtime loop
+  plannedTools?: AgentToolCall[]; // Agents can return tools to execute in the runtime loop
 }
 
 export interface AgentToolCall {
-  tool: string;           // align with ToolCall in ai-tools
+  tool: string; // align with ToolCall in ai-tools
   parameters: Record<string, any>;
   reason: string;
 }

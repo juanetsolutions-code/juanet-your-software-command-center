@@ -3,13 +3,13 @@
  * Tools allow agents to interact safely with the platform backend.
  */
 
-export type ToolName = 
-  | 'createInvoice'
-  | 'sendNotification'
-  | 'triggerWorkflow'
-  | 'queryMetrics'
-  | 'updateTenantRecord'
-  | 'scheduleJob';
+export type ToolName =
+  | "createInvoice"
+  | "sendNotification"
+  | "triggerWorkflow"
+  | "queryMetrics"
+  | "updateTenantRecord"
+  | "scheduleJob";
 
 export interface ToolDefinition {
   name: ToolName;

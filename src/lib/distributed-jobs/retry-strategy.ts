@@ -33,5 +33,9 @@ export async function withRetry<T>(
       if (attempt < cfg.maxAttempts) await new Promise((r) => setTimeout(r, delay));
     }
   }
-  return { success: false, attempts: cfg.maxAttempts, error: String((lastErr as Error)?.message ?? lastErr) };
+  return {
+    success: false,
+    attempts: cfg.maxAttempts,
+    error: String((lastErr as Error)?.message ?? lastErr),
+  };
 }

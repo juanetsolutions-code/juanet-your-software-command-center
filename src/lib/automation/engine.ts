@@ -5,10 +5,10 @@
  * Tenant-aware and safe execution.
  */
 
-import { AutomationContext } from './context';
-import { executeAction } from './executor';
-import { getRegisteredAutomations } from './registry';
-import type { AutomationDefinition } from './automation-types';
+import { AutomationContext } from "./context";
+import { executeAction } from "./executor";
+import { getRegisteredAutomations } from "./registry";
+import type { AutomationDefinition } from "./automation-types";
 
 export class AutomationEngine {
   private static instance: AutomationEngine;
@@ -25,11 +25,7 @@ export class AutomationEngine {
   /**
    * Trigger automations based on an event.
    */
-  public async trigger(
-    eventType: string,
-    payload: any,
-    context: AutomationContext
-  ): Promise<void> {
+  public async trigger(eventType: string, payload: any, context: AutomationContext): Promise<void> {
     const automations = getRegisteredAutomations();
 
     for (const automation of automations) {
@@ -45,12 +41,12 @@ export class AutomationEngine {
   }
 
   private matchesTrigger(
-    trigger: AutomationDefinition['trigger'],
+    trigger: AutomationDefinition["trigger"],
     eventType: string,
     payload: any,
-    context: AutomationContext
+    context: AutomationContext,
   ): boolean {
-    if (trigger.type === 'event' && trigger.eventType === eventType) {
+    if (trigger.type === "event" && trigger.eventType === eventType) {
       // Basic tenant isolation check
       if (trigger.tenantId && trigger.tenantId !== context.tenantId) {
         return false;
@@ -64,7 +60,7 @@ export class AutomationEngine {
   private async executeAutomation(
     automation: AutomationDefinition,
     payload: any,
-    context: AutomationContext
+    context: AutomationContext,
   ): Promise<void> {
     const execContext = { ...context, payload, automationId: automation.id };
 
@@ -75,7 +71,7 @@ export class AutomationEngine {
 
   public registerAutomation(automation: AutomationDefinition): void {
     // Delegates to registry
-    const { registerAutomation } = require('./registry');
+    const { registerAutomation } = require("./registry");
     registerAutomation(automation);
   }
 
@@ -84,7 +80,7 @@ export class AutomationEngine {
    * Allows AI agents to trigger workflows safely via the existing engine.
    */
   public async triggerFromAI(eventType: string, payload: any, tenantId: string): Promise<void> {
-    const context = { tenantId, triggeredBy: 'ai_agent' };
+    const context = { tenantId, triggeredBy: "ai_agent" };
     await this.trigger(eventType, payload, context as any);
   }
 }

@@ -2,9 +2,9 @@
  * Admin Assistant - Handles tenant admin, provisioning, policies.
  */
 
-import { BaseAIAgent } from '@/lib/ai-agents/agent-core';
-import type { AgentConfig, AgentExecutionResult } from '@/lib/ai-agents/agent-types';
-import { decisionEngine } from '@/lib/ai-decisions/decision-engine';
+import { BaseAIAgent } from "@/lib/ai-agents/agent-core";
+import type { AgentConfig, AgentExecutionResult } from "@/lib/ai-agents/agent-types";
+import { decisionEngine } from "@/lib/ai-decisions/decision-engine";
 
 export class AdminAssistant extends BaseAIAgent {
   async executeTask(task: string, context: Record<string, any>): Promise<AgentExecutionResult> {
@@ -20,5 +20,7 @@ export class AdminAssistant extends BaseAIAgent {
     };
   }
 
-  async planActions(task: string) { return []; }
+  async planActions(task: string) {
+    return [];
+  }
 }

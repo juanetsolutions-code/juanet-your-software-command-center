@@ -3,7 +3,10 @@ export interface BoundaryCheckResult {
   reason?: string;
 }
 
-export function checkTenantBoundary(callerTenantId: string, resourceTenantId: string): BoundaryCheckResult {
+export function checkTenantBoundary(
+  callerTenantId: string,
+  resourceTenantId: string,
+): BoundaryCheckResult {
   if (callerTenantId !== resourceTenantId) {
     return { allowed: false, reason: "cross_tenant_access_denied" };
   }

@@ -4,7 +4,7 @@
  * This is critical for safe autonomous operation.
  */
 
-import type { AgentConfig } from './agent-types';
+import type { AgentConfig } from "./agent-types";
 
 export interface AgentExecutionContext {
   tenantId: string;
@@ -16,7 +16,10 @@ export interface AgentExecutionContext {
   memorySnapshot?: Record<string, any>;
 }
 
-export function buildAgentContext(config: AgentConfig, overrides: Partial<AgentExecutionContext> = {}): AgentExecutionContext {
+export function buildAgentContext(
+  config: AgentConfig,
+  overrides: Partial<AgentExecutionContext> = {},
+): AgentExecutionContext {
   return {
     tenantId: config.tenantId,
     permissions: config.allowedTools, // Tools double as permission scope
@@ -25,6 +28,9 @@ export function buildAgentContext(config: AgentConfig, overrides: Partial<AgentE
   };
 }
 
-export function validateAgentContext(context: AgentExecutionContext, requiredPermission: string): boolean {
-  return context.permissions.includes(requiredPermission) || context.permissions.includes('*');
+export function validateAgentContext(
+  context: AgentExecutionContext,
+  requiredPermission: string,
+): boolean {
+  return context.permissions.includes(requiredPermission) || context.permissions.includes("*");
 }

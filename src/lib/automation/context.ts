@@ -16,7 +16,7 @@ export interface AutomationContext {
 
 export function createAutomationContext(
   tenantId: string,
-  overrides: Partial<AutomationContext> = {}
+  overrides: Partial<AutomationContext> = {},
 ): AutomationContext {
   return {
     tenantId,

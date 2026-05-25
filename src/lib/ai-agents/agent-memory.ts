@@ -3,7 +3,7 @@
  * Per-agent short-term memory. Full long-term memory lives in src/lib/ai-memory/
  */
 
-import type { AgentState } from './agent-types';
+import type { AgentState } from "./agent-types";
 
 const agentMemories = new Map<string, AgentState>();
 
