@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { CreditCard, Download } from "lucide-react";
 import { StatusBadge } from "@/components/app/StatusBadge";
 import { cn } from "@/lib/utils";
+import { EmptyState } from "@/components/states/EmptyState";
 import type { Currency, Invoice } from "@/lib/dashboard";
 
 function formatMoney(amount: number, currency: Currency) {
@@ -17,6 +18,17 @@ export interface InvoiceTableProps {
 }
 
 export function InvoiceTable({ invoices, payingId, onPay, onDownload }: InvoiceTableProps) {
+  if (invoices.length === 0) {
+    return (
+      <div className="py-10">
+        <EmptyState
+          title="No invoices found"
+          description="You have no invoices to display. They'll appear here when created."
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-auto -mx-5">
       <table className="w-full text-sm">

@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EmptyState } from "@/components/states/EmptyState";
 import type { Conversation } from "@/lib/dashboard";
 
 function initials(name: string) {
@@ -17,6 +18,17 @@ export interface ConversationListProps {
 }
 
 export function ConversationList({ conversations, activeId, onSelect }: ConversationListProps) {
+  if (conversations.length === 0) {
+    return (
+      <div className="p-4">
+        <EmptyState
+          title="No conversations yet"
+          description="Start a conversation with your project team."
+        />
+      </div>
+    );
+  }
+
   return (
     <aside className="border-b md:border-b-0 md:border-r border-white/10 flex flex-col min-h-0">
       <div className="p-3 border-b border-white/10">

@@ -52,11 +52,13 @@ supabase/migrations/001_initial_schema.sql
 ### Option A – Using Supabase CLI (Recommended)
 
 1. Install the CLI:
+
    ```bash
    npm install -g supabase
    ```
 
 2. Link your local project to Supabase:
+
    ```bash
    supabase link --project-ref YOUR-PROJECT-REF
    ```
@@ -139,6 +141,7 @@ CREATE POLICY "projects_select_own"
 ```
 
 This means:
+
 - Every `SELECT` automatically adds `WHERE user_id = auth.uid()`
 - A malicious or buggy query from the frontend can **never** see another user's data
 - Even if someone obtains the anon key, they can only access their own rows

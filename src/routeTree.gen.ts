@@ -23,6 +23,11 @@ import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messag
 import { Route as AuthSignupRouteImport } from './routes/auth.signup'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminIntegrationsRouteImport } from './routes/admin.integrations'
+import { Route as AdminHealthRouteImport } from './routes/admin.health'
+import { Route as AdminAiOperationsRouteImport } from './routes/admin.ai-operations'
 import { Route as MarketingShopRouteImport } from './routes/_marketing.shop'
 import { Route as MarketingServicesRouteImport } from './routes/_marketing.services'
 import { Route as MarketingProjectsRouteImport } from './routes/_marketing.projects'
@@ -99,6 +104,31 @@ const AuthForgotRoute = AuthForgotRouteImport.update({
   path: '/forgot',
   getParentRoute: () => AuthRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminIntegrationsRoute = AdminIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHealthRoute = AdminHealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAiOperationsRoute = AdminAiOperationsRouteImport.update({
+  id: '/ai-operations',
+  path: '/ai-operations',
+  getParentRoute: () => AdminRoute,
+} as any)
 const MarketingShopRoute = MarketingShopRouteImport.update({
   id: '/shop',
   path: '/shop',
@@ -141,6 +171,11 @@ export interface FileRoutesByFullPath {
   '/projects': typeof MarketingProjectsRoute
   '/services': typeof MarketingServicesRoute
   '/shop': typeof MarketingShopRoute
+  '/admin/ai-operations': typeof AdminAiOperationsRoute
+  '/admin/health': typeof AdminHealthRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -159,6 +194,11 @@ export interface FileRoutesByTo {
   '/projects': typeof MarketingProjectsRoute
   '/services': typeof MarketingServicesRoute
   '/shop': typeof MarketingShopRoute
+  '/admin/ai-operations': typeof AdminAiOperationsRoute
+  '/admin/health': typeof AdminHealthRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -182,6 +222,11 @@ export interface FileRoutesById {
   '/_marketing/projects': typeof MarketingProjectsRoute
   '/_marketing/services': typeof MarketingServicesRoute
   '/_marketing/shop': typeof MarketingShopRoute
+  '/admin/ai-operations': typeof AdminAiOperationsRoute
+  '/admin/health': typeof AdminHealthRoute
+  '/admin/integrations': typeof AdminIntegrationsRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/users': typeof AdminUsersRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -206,6 +251,11 @@ export interface FileRouteTypes {
     | '/projects'
     | '/services'
     | '/shop'
+    | '/admin/ai-operations'
+    | '/admin/health'
+    | '/admin/integrations'
+    | '/admin/services'
+    | '/admin/users'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/signup'
@@ -224,6 +274,11 @@ export interface FileRouteTypes {
     | '/projects'
     | '/services'
     | '/shop'
+    | '/admin/ai-operations'
+    | '/admin/health'
+    | '/admin/integrations'
+    | '/admin/services'
+    | '/admin/users'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/signup'
@@ -246,6 +301,11 @@ export interface FileRouteTypes {
     | '/_marketing/projects'
     | '/_marketing/services'
     | '/_marketing/shop'
+    | '/admin/ai-operations'
+    | '/admin/health'
+    | '/admin/integrations'
+    | '/admin/services'
+    | '/admin/users'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/signup'
@@ -365,6 +425,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/integrations': {
+      id: '/admin/integrations'
+      path: '/integrations'
+      fullPath: '/admin/integrations'
+      preLoaderRoute: typeof AdminIntegrationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/health': {
+      id: '/admin/health'
+      path: '/health'
+      fullPath: '/admin/health'
+      preLoaderRoute: typeof AdminHealthRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/ai-operations': {
+      id: '/admin/ai-operations'
+      path: '/ai-operations'
+      fullPath: '/admin/ai-operations'
+      preLoaderRoute: typeof AdminAiOperationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_marketing/shop': {
       id: '/_marketing/shop'
       path: '/shop'
@@ -435,10 +530,20 @@ const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
+  AdminAiOperationsRoute: typeof AdminAiOperationsRoute
+  AdminHealthRoute: typeof AdminHealthRoute
+  AdminIntegrationsRoute: typeof AdminIntegrationsRoute
+  AdminServicesRoute: typeof AdminServicesRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAiOperationsRoute: AdminAiOperationsRoute,
+  AdminHealthRoute: AdminHealthRoute,
+  AdminIntegrationsRoute: AdminIntegrationsRoute,
+  AdminServicesRoute: AdminServicesRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

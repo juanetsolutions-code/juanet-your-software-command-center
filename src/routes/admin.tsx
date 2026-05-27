@@ -10,6 +10,9 @@ import {
   CreditCard,
   FileText,
   Settings,
+  Activity,
+  Plug,
+  Brain,
 } from "lucide-react";
 import { AppShell, type NavItem } from "@/components/app/AppShell";
 import { requireRole } from "@/lib/auth";
@@ -18,6 +21,9 @@ const items: NavItem[] = [
   { label: "Overview", to: "/admin", icon: LayoutDashboard },
   { label: "Users", to: "/admin/users", icon: Users },
   { label: "Services", to: "/admin/services", icon: Briefcase },
+  { label: "Health", to: "/admin/health", icon: Activity },
+  { label: "Integrations", to: "/admin/integrations", icon: Plug },
+  { label: "AI Ops", to: "/admin/ai-operations", icon: Brain },
   { label: "Projects", to: "/admin/projects", icon: FolderKanban },
   { label: "Orders", to: "/admin/orders", icon: ShoppingBag },
   { label: "Shop", to: "/admin/shop", icon: Store },

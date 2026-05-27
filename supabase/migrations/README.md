@@ -11,10 +11,11 @@ YYYYMMDDHHMMSS_descriptive_name.sql
 ```
 
 Example:
+
 - `20260523102200_add_organization_plan_column.sql`
 - `20260524093015_create_audit_logs_table.sql`
 
-Legacy numbered files (001_*) are kept for historical reasons.
+Legacy numbered files (001\_\*) are kept for historical reasons.
 
 ## Structure & Best Practices
 

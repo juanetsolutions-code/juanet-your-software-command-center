@@ -6,12 +6,14 @@ integration without changing UI behavior or removing mock fallback.
 ## What was added
 
 ### 1. Centralized Supabase query helpers
+
 - `src/lib/supabase/safe-query.ts`
   - `runSafe`, `safeSelect`, `safeSelectFrom`, `safeInsert`, `safeUpdate`,
     `safeSingle`, `handleSupabaseError`
   - Repositories should migrate to these for uniform error handling.
 
 ### 2. Profile system
+
 - `src/lib/auth/profile.ts`
   - `resolveProfile(user)` — pulls `profiles` row, merges with auth user.
   - Cached per session; falls back to `user_metadata` if table/row missing.
@@ -21,6 +23,7 @@ integration without changing UI behavior or removing mock fallback.
     session is upgraded transparently after login / session restore.
 
 ### 3. Multi-tenant foundation
+
 - `src/lib/tenant/types.ts`
   - `Organization`, `OrganizationMembership`, `DbOrganization`,
     `DbOrganizationMember`.
@@ -31,6 +34,7 @@ integration without changing UI behavior or removing mock fallback.
     `organization_id` filter when present.
 
 ### 4. Schema v2 (production-ready foundation)
+
 - `src/lib/supabase/schema-v2.ts`
   - `TABLES_V2` adds `organizations`, `organization_members`.
   - `STATUS_ENUMS` consolidates project / request / invoice / payment /
