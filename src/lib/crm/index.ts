@@ -89,3 +89,5 @@ export * from "./events/crm-trigger-engine";
 export * from "./analytics/index";
 export * from "./state/index";
 export * from "./crm-insights-engine";
+export * from "./next-best-action-engine";
+export * from "./revenue-prediction";
