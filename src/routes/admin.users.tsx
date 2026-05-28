@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, Activity, RefreshCw, ArrowUpRight } from "lucide-react";
+import { Building2, Activity, RefreshCw, ArrowUpRight, CreditCard } from "lucide-react";
 import { StatCard } from "@/components/app/StatCard";
 
 export const Route = createFileRoute("/admin/users")({

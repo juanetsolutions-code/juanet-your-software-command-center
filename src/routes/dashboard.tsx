@@ -25,6 +25,12 @@ const items: NavItem[] = [
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: ({ location }) => requireRole("client", location.href),
+  head: () => ({
+    meta: [
+      { title: "Dashboard | Juanet" },
+      { name: "description", content: "Your project workspace and collaboration hub." },
+    ],
+  }),
   component: DashboardLayout,
 });
 

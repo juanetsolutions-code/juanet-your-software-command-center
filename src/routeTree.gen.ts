@@ -16,17 +16,33 @@ import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing.index'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardRequestsRouteImport } from './routes/dashboard.requests'
 import { Route as DashboardProjectsRouteImport } from './routes/dashboard.projects'
 import { Route as DashboardPaymentsRouteImport } from './routes/dashboard.payments'
+import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
 import { Route as DashboardMessagesRouteImport } from './routes/dashboard.messages'
+import { Route as DashboardLicensesRouteImport } from './routes/dashboard.licenses'
+import { Route as DashboardDownloadsRouteImport } from './routes/dashboard.downloads'
+import { Route as DashboardApiAccessRouteImport } from './routes/dashboard.api-access'
+import { Route as DashboardActivityRouteImport } from './routes/dashboard.activity'
 import { Route as AuthSignupRouteImport } from './routes/auth.signup'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminUsageMonitoringRouteImport } from './routes/admin.usage-monitoring'
+import { Route as AdminSupportQueueRouteImport } from './routes/admin.support-queue'
+import { Route as AdminShopRouteImport } from './routes/admin.shop'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
+import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
+import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AdminLicensesRouteImport } from './routes/admin.licenses'
 import { Route as AdminIntegrationsRouteImport } from './routes/admin.integrations'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
+import { Route as AdminCmsRouteImport } from './routes/admin.cms'
+import { Route as AdminAuditCenterRouteImport } from './routes/admin.audit-center'
 import { Route as AdminAiOperationsRouteImport } from './routes/admin.ai-operations'
 import { Route as MarketingShopRouteImport } from './routes/_marketing.shop'
 import { Route as MarketingServicesRouteImport } from './routes/_marketing.services'
@@ -34,6 +50,14 @@ import { Route as MarketingProjectsRouteImport } from './routes/_marketing.proje
 import { Route as MarketingPortfolioRouteImport } from './routes/_marketing.portfolio'
 import { Route as MarketingContactRouteImport } from './routes/_marketing.contact'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing.about'
+import { Route as DashboardCrmIndexRouteImport } from './routes/dashboard/crm/index'
+import { Route as AdminCrmIndexRouteImport } from './routes/admin/crm/index'
+import { Route as AdminCrmTasksRouteImport } from './routes/admin/crm/tasks'
+import { Route as AdminCrmPipelinesRouteImport } from './routes/admin/crm/pipelines'
+import { Route as AdminCrmLeadsRouteImport } from './routes/admin/crm/leads'
+import { Route as AdminCrmDealsRouteImport } from './routes/admin/crm/deals'
+import { Route as AdminCrmDashboardRouteImport } from './routes/admin/crm/dashboard'
+import { Route as AdminCrmContactsRouteImport } from './routes/admin/crm/contacts'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -69,6 +93,11 @@ const MarketingIndexRoute = MarketingIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MarketingRoute,
 } as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardRequestsRoute = DashboardRequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
@@ -84,9 +113,34 @@ const DashboardPaymentsRoute = DashboardPaymentsRouteImport.update({
   path: '/payments',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardMessagesRoute = DashboardMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardLicensesRoute = DashboardLicensesRouteImport.update({
+  id: '/licenses',
+  path: '/licenses',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardDownloadsRoute = DashboardDownloadsRouteImport.update({
+  id: '/downloads',
+  path: '/downloads',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardApiAccessRoute = DashboardApiAccessRouteImport.update({
+  id: '/api-access',
+  path: '/api-access',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardActivityRoute = DashboardActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => DashboardRoute,
 } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
@@ -109,9 +163,49 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUsageMonitoringRoute = AdminUsageMonitoringRouteImport.update({
+  id: '/usage-monitoring',
+  path: '/usage-monitoring',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSupportQueueRoute = AdminSupportQueueRouteImport.update({
+  id: '/support-queue',
+  path: '/support-queue',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminShopRoute = AdminShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProjectsRoute = AdminProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLicensesRoute = AdminLicensesRouteImport.update({
+  id: '/licenses',
+  path: '/licenses',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminIntegrationsRoute = AdminIntegrationsRouteImport.update({
@@ -122,6 +216,16 @@ const AdminIntegrationsRoute = AdminIntegrationsRouteImport.update({
 const AdminHealthRoute = AdminHealthRouteImport.update({
   id: '/health',
   path: '/health',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCmsRoute = AdminCmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuditCenterRoute = AdminAuditCenterRouteImport.update({
+  id: '/audit-center',
+  path: '/audit-center',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAiOperationsRoute = AdminAiOperationsRouteImport.update({
@@ -159,6 +263,46 @@ const MarketingAboutRoute = MarketingAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => MarketingRoute,
 } as any)
+const DashboardCrmIndexRoute = DashboardCrmIndexRouteImport.update({
+  id: '/crm/',
+  path: '/crm/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const AdminCrmIndexRoute = AdminCrmIndexRouteImport.update({
+  id: '/crm/',
+  path: '/crm/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCrmTasksRoute = AdminCrmTasksRouteImport.update({
+  id: '/crm/tasks',
+  path: '/crm/tasks',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCrmPipelinesRoute = AdminCrmPipelinesRouteImport.update({
+  id: '/crm/pipelines',
+  path: '/crm/pipelines',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCrmLeadsRoute = AdminCrmLeadsRouteImport.update({
+  id: '/crm/leads',
+  path: '/crm/leads',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCrmDealsRoute = AdminCrmDealsRouteImport.update({
+  id: '/crm/deals',
+  path: '/crm/deals',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCrmDashboardRoute = AdminCrmDashboardRouteImport.update({
+  id: '/crm/dashboard',
+  path: '/crm/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCrmContactsRoute = AdminCrmContactsRouteImport.update({
+  id: '/crm/contacts',
+  path: '/crm/contacts',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
@@ -172,19 +316,43 @@ export interface FileRoutesByFullPath {
   '/services': typeof MarketingServicesRoute
   '/shop': typeof MarketingShopRoute
   '/admin/ai-operations': typeof AdminAiOperationsRoute
+  '/admin/audit-center': typeof AdminAuditCenterRoute
+  '/admin/cms': typeof AdminCmsRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
+  '/admin/licenses': typeof AdminLicensesRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/projects': typeof AdminProjectsRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shop': typeof AdminShopRoute
+  '/admin/support-queue': typeof AdminSupportQueueRoute
+  '/admin/usage-monitoring': typeof AdminUsageMonitoringRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/dashboard/activity': typeof DashboardActivityRoute
+  '/dashboard/api-access': typeof DashboardApiAccessRoute
+  '/dashboard/downloads': typeof DashboardDownloadsRoute
+  '/dashboard/licenses': typeof DashboardLicensesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/payments': typeof DashboardPaymentsRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/admin/crm/contacts': typeof AdminCrmContactsRoute
+  '/admin/crm/dashboard': typeof AdminCrmDashboardRoute
+  '/admin/crm/deals': typeof AdminCrmDealsRoute
+  '/admin/crm/leads': typeof AdminCrmLeadsRoute
+  '/admin/crm/pipelines': typeof AdminCrmPipelinesRoute
+  '/admin/crm/tasks': typeof AdminCrmTasksRoute
+  '/admin/crm/': typeof AdminCrmIndexRoute
+  '/dashboard/crm/': typeof DashboardCrmIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteWithChildren
@@ -195,20 +363,44 @@ export interface FileRoutesByTo {
   '/services': typeof MarketingServicesRoute
   '/shop': typeof MarketingShopRoute
   '/admin/ai-operations': typeof AdminAiOperationsRoute
+  '/admin/audit-center': typeof AdminAuditCenterRoute
+  '/admin/cms': typeof AdminCmsRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
+  '/admin/licenses': typeof AdminLicensesRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/projects': typeof AdminProjectsRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shop': typeof AdminShopRoute
+  '/admin/support-queue': typeof AdminSupportQueueRoute
+  '/admin/usage-monitoring': typeof AdminUsageMonitoringRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/dashboard/activity': typeof DashboardActivityRoute
+  '/dashboard/api-access': typeof DashboardApiAccessRoute
+  '/dashboard/downloads': typeof DashboardDownloadsRoute
+  '/dashboard/licenses': typeof DashboardLicensesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/payments': typeof DashboardPaymentsRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/': typeof MarketingIndexRoute
   '/admin': typeof AdminIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/admin/crm/contacts': typeof AdminCrmContactsRoute
+  '/admin/crm/dashboard': typeof AdminCrmDashboardRoute
+  '/admin/crm/deals': typeof AdminCrmDealsRoute
+  '/admin/crm/leads': typeof AdminCrmLeadsRoute
+  '/admin/crm/pipelines': typeof AdminCrmPipelinesRoute
+  '/admin/crm/tasks': typeof AdminCrmTasksRoute
+  '/admin/crm': typeof AdminCrmIndexRoute
+  '/dashboard/crm': typeof DashboardCrmIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -223,20 +415,44 @@ export interface FileRoutesById {
   '/_marketing/services': typeof MarketingServicesRoute
   '/_marketing/shop': typeof MarketingShopRoute
   '/admin/ai-operations': typeof AdminAiOperationsRoute
+  '/admin/audit-center': typeof AdminAuditCenterRoute
+  '/admin/cms': typeof AdminCmsRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
+  '/admin/licenses': typeof AdminLicensesRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/projects': typeof AdminProjectsRoute
   '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/shop': typeof AdminShopRoute
+  '/admin/support-queue': typeof AdminSupportQueueRoute
+  '/admin/usage-monitoring': typeof AdminUsageMonitoringRoute
   '/admin/users': typeof AdminUsersRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/dashboard/activity': typeof DashboardActivityRoute
+  '/dashboard/api-access': typeof DashboardApiAccessRoute
+  '/dashboard/downloads': typeof DashboardDownloadsRoute
+  '/dashboard/licenses': typeof DashboardLicensesRoute
   '/dashboard/messages': typeof DashboardMessagesRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/payments': typeof DashboardPaymentsRoute
   '/dashboard/projects': typeof DashboardProjectsRoute
   '/dashboard/requests': typeof DashboardRequestsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/admin/crm/contacts': typeof AdminCrmContactsRoute
+  '/admin/crm/dashboard': typeof AdminCrmDashboardRoute
+  '/admin/crm/deals': typeof AdminCrmDealsRoute
+  '/admin/crm/leads': typeof AdminCrmLeadsRoute
+  '/admin/crm/pipelines': typeof AdminCrmPipelinesRoute
+  '/admin/crm/tasks': typeof AdminCrmTasksRoute
+  '/admin/crm/': typeof AdminCrmIndexRoute
+  '/dashboard/crm/': typeof DashboardCrmIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -252,19 +468,43 @@ export interface FileRouteTypes {
     | '/services'
     | '/shop'
     | '/admin/ai-operations'
+    | '/admin/audit-center'
+    | '/admin/cms'
     | '/admin/health'
     | '/admin/integrations'
+    | '/admin/licenses'
+    | '/admin/orders'
+    | '/admin/payments'
+    | '/admin/projects'
     | '/admin/services'
+    | '/admin/settings'
+    | '/admin/shop'
+    | '/admin/support-queue'
+    | '/admin/usage-monitoring'
     | '/admin/users'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/signup'
+    | '/dashboard/activity'
+    | '/dashboard/api-access'
+    | '/dashboard/downloads'
+    | '/dashboard/licenses'
     | '/dashboard/messages'
+    | '/dashboard/notifications'
     | '/dashboard/payments'
     | '/dashboard/projects'
     | '/dashboard/requests'
+    | '/dashboard/settings'
     | '/admin/'
     | '/dashboard/'
+    | '/admin/crm/contacts'
+    | '/admin/crm/dashboard'
+    | '/admin/crm/deals'
+    | '/admin/crm/leads'
+    | '/admin/crm/pipelines'
+    | '/admin/crm/tasks'
+    | '/admin/crm/'
+    | '/dashboard/crm/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -275,20 +515,44 @@ export interface FileRouteTypes {
     | '/services'
     | '/shop'
     | '/admin/ai-operations'
+    | '/admin/audit-center'
+    | '/admin/cms'
     | '/admin/health'
     | '/admin/integrations'
+    | '/admin/licenses'
+    | '/admin/orders'
+    | '/admin/payments'
+    | '/admin/projects'
     | '/admin/services'
+    | '/admin/settings'
+    | '/admin/shop'
+    | '/admin/support-queue'
+    | '/admin/usage-monitoring'
     | '/admin/users'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/signup'
+    | '/dashboard/activity'
+    | '/dashboard/api-access'
+    | '/dashboard/downloads'
+    | '/dashboard/licenses'
     | '/dashboard/messages'
+    | '/dashboard/notifications'
     | '/dashboard/payments'
     | '/dashboard/projects'
     | '/dashboard/requests'
+    | '/dashboard/settings'
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/admin/crm/contacts'
+    | '/admin/crm/dashboard'
+    | '/admin/crm/deals'
+    | '/admin/crm/leads'
+    | '/admin/crm/pipelines'
+    | '/admin/crm/tasks'
+    | '/admin/crm'
+    | '/dashboard/crm'
   id:
     | '__root__'
     | '/_marketing'
@@ -302,20 +566,44 @@ export interface FileRouteTypes {
     | '/_marketing/services'
     | '/_marketing/shop'
     | '/admin/ai-operations'
+    | '/admin/audit-center'
+    | '/admin/cms'
     | '/admin/health'
     | '/admin/integrations'
+    | '/admin/licenses'
+    | '/admin/orders'
+    | '/admin/payments'
+    | '/admin/projects'
     | '/admin/services'
+    | '/admin/settings'
+    | '/admin/shop'
+    | '/admin/support-queue'
+    | '/admin/usage-monitoring'
     | '/admin/users'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/signup'
+    | '/dashboard/activity'
+    | '/dashboard/api-access'
+    | '/dashboard/downloads'
+    | '/dashboard/licenses'
     | '/dashboard/messages'
+    | '/dashboard/notifications'
     | '/dashboard/payments'
     | '/dashboard/projects'
     | '/dashboard/requests'
+    | '/dashboard/settings'
     | '/_marketing/'
     | '/admin/'
     | '/dashboard/'
+    | '/admin/crm/contacts'
+    | '/admin/crm/dashboard'
+    | '/admin/crm/deals'
+    | '/admin/crm/leads'
+    | '/admin/crm/pipelines'
+    | '/admin/crm/tasks'
+    | '/admin/crm/'
+    | '/dashboard/crm/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -376,6 +664,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingIndexRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/requests': {
       id: '/dashboard/requests'
       path: '/requests'
@@ -397,11 +692,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPaymentsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/notifications': {
+      id: '/dashboard/notifications'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof DashboardNotificationsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/messages': {
       id: '/dashboard/messages'
       path: '/messages'
       fullPath: '/dashboard/messages'
       preLoaderRoute: typeof DashboardMessagesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/licenses': {
+      id: '/dashboard/licenses'
+      path: '/licenses'
+      fullPath: '/dashboard/licenses'
+      preLoaderRoute: typeof DashboardLicensesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/downloads': {
+      id: '/dashboard/downloads'
+      path: '/downloads'
+      fullPath: '/dashboard/downloads'
+      preLoaderRoute: typeof DashboardDownloadsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/api-access': {
+      id: '/dashboard/api-access'
+      path: '/api-access'
+      fullPath: '/dashboard/api-access'
+      preLoaderRoute: typeof DashboardApiAccessRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/activity': {
+      id: '/dashboard/activity'
+      path: '/activity'
+      fullPath: '/dashboard/activity'
+      preLoaderRoute: typeof DashboardActivityRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/auth/signup': {
@@ -432,11 +762,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/usage-monitoring': {
+      id: '/admin/usage-monitoring'
+      path: '/usage-monitoring'
+      fullPath: '/admin/usage-monitoring'
+      preLoaderRoute: typeof AdminUsageMonitoringRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/support-queue': {
+      id: '/admin/support-queue'
+      path: '/support-queue'
+      fullPath: '/admin/support-queue'
+      preLoaderRoute: typeof AdminSupportQueueRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/shop': {
+      id: '/admin/shop'
+      path: '/shop'
+      fullPath: '/admin/shop'
+      preLoaderRoute: typeof AdminShopRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/services': {
       id: '/admin/services'
       path: '/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/projects': {
+      id: '/admin/projects'
+      path: '/projects'
+      fullPath: '/admin/projects'
+      preLoaderRoute: typeof AdminProjectsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/licenses': {
+      id: '/admin/licenses'
+      path: '/licenses'
+      fullPath: '/admin/licenses'
+      preLoaderRoute: typeof AdminLicensesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/integrations': {
@@ -451,6 +837,20 @@ declare module '@tanstack/react-router' {
       path: '/health'
       fullPath: '/admin/health'
       preLoaderRoute: typeof AdminHealthRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/cms': {
+      id: '/admin/cms'
+      path: '/cms'
+      fullPath: '/admin/cms'
+      preLoaderRoute: typeof AdminCmsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/audit-center': {
+      id: '/admin/audit-center'
+      path: '/audit-center'
+      fullPath: '/admin/audit-center'
+      preLoaderRoute: typeof AdminAuditCenterRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/ai-operations': {
@@ -502,6 +902,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingAboutRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/dashboard/crm/': {
+      id: '/dashboard/crm/'
+      path: '/crm'
+      fullPath: '/dashboard/crm/'
+      preLoaderRoute: typeof DashboardCrmIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/admin/crm/': {
+      id: '/admin/crm/'
+      path: '/crm'
+      fullPath: '/admin/crm/'
+      preLoaderRoute: typeof AdminCrmIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/crm/tasks': {
+      id: '/admin/crm/tasks'
+      path: '/crm/tasks'
+      fullPath: '/admin/crm/tasks'
+      preLoaderRoute: typeof AdminCrmTasksRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/crm/pipelines': {
+      id: '/admin/crm/pipelines'
+      path: '/crm/pipelines'
+      fullPath: '/admin/crm/pipelines'
+      preLoaderRoute: typeof AdminCrmPipelinesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/crm/leads': {
+      id: '/admin/crm/leads'
+      path: '/crm/leads'
+      fullPath: '/admin/crm/leads'
+      preLoaderRoute: typeof AdminCrmLeadsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/crm/deals': {
+      id: '/admin/crm/deals'
+      path: '/crm/deals'
+      fullPath: '/admin/crm/deals'
+      preLoaderRoute: typeof AdminCrmDealsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/crm/dashboard': {
+      id: '/admin/crm/dashboard'
+      path: '/crm/dashboard'
+      fullPath: '/admin/crm/dashboard'
+      preLoaderRoute: typeof AdminCrmDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/crm/contacts': {
+      id: '/admin/crm/contacts'
+      path: '/crm/contacts'
+      fullPath: '/admin/crm/contacts'
+      preLoaderRoute: typeof AdminCrmContactsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
@@ -531,20 +987,54 @@ const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminAiOperationsRoute: typeof AdminAiOperationsRoute
+  AdminAuditCenterRoute: typeof AdminAuditCenterRoute
+  AdminCmsRoute: typeof AdminCmsRoute
   AdminHealthRoute: typeof AdminHealthRoute
   AdminIntegrationsRoute: typeof AdminIntegrationsRoute
+  AdminLicensesRoute: typeof AdminLicensesRoute
+  AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
+  AdminProjectsRoute: typeof AdminProjectsRoute
   AdminServicesRoute: typeof AdminServicesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminShopRoute: typeof AdminShopRoute
+  AdminSupportQueueRoute: typeof AdminSupportQueueRoute
+  AdminUsageMonitoringRoute: typeof AdminUsageMonitoringRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminCrmContactsRoute: typeof AdminCrmContactsRoute
+  AdminCrmDashboardRoute: typeof AdminCrmDashboardRoute
+  AdminCrmDealsRoute: typeof AdminCrmDealsRoute
+  AdminCrmLeadsRoute: typeof AdminCrmLeadsRoute
+  AdminCrmPipelinesRoute: typeof AdminCrmPipelinesRoute
+  AdminCrmTasksRoute: typeof AdminCrmTasksRoute
+  AdminCrmIndexRoute: typeof AdminCrmIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAiOperationsRoute: AdminAiOperationsRoute,
+  AdminAuditCenterRoute: AdminAuditCenterRoute,
+  AdminCmsRoute: AdminCmsRoute,
   AdminHealthRoute: AdminHealthRoute,
   AdminIntegrationsRoute: AdminIntegrationsRoute,
+  AdminLicensesRoute: AdminLicensesRoute,
+  AdminOrdersRoute: AdminOrdersRoute,
+  AdminPaymentsRoute: AdminPaymentsRoute,
+  AdminProjectsRoute: AdminProjectsRoute,
   AdminServicesRoute: AdminServicesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminShopRoute: AdminShopRoute,
+  AdminSupportQueueRoute: AdminSupportQueueRoute,
+  AdminUsageMonitoringRoute: AdminUsageMonitoringRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminCrmContactsRoute: AdminCrmContactsRoute,
+  AdminCrmDashboardRoute: AdminCrmDashboardRoute,
+  AdminCrmDealsRoute: AdminCrmDealsRoute,
+  AdminCrmLeadsRoute: AdminCrmLeadsRoute,
+  AdminCrmPipelinesRoute: AdminCrmPipelinesRoute,
+  AdminCrmTasksRoute: AdminCrmTasksRoute,
+  AdminCrmIndexRoute: AdminCrmIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -564,19 +1054,33 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface DashboardRouteChildren {
+  DashboardActivityRoute: typeof DashboardActivityRoute
+  DashboardApiAccessRoute: typeof DashboardApiAccessRoute
+  DashboardDownloadsRoute: typeof DashboardDownloadsRoute
+  DashboardLicensesRoute: typeof DashboardLicensesRoute
   DashboardMessagesRoute: typeof DashboardMessagesRoute
+  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
   DashboardPaymentsRoute: typeof DashboardPaymentsRoute
   DashboardProjectsRoute: typeof DashboardProjectsRoute
   DashboardRequestsRoute: typeof DashboardRequestsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardCrmIndexRoute: typeof DashboardCrmIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardActivityRoute: DashboardActivityRoute,
+  DashboardApiAccessRoute: DashboardApiAccessRoute,
+  DashboardDownloadsRoute: DashboardDownloadsRoute,
+  DashboardLicensesRoute: DashboardLicensesRoute,
   DashboardMessagesRoute: DashboardMessagesRoute,
+  DashboardNotificationsRoute: DashboardNotificationsRoute,
   DashboardPaymentsRoute: DashboardPaymentsRoute,
   DashboardProjectsRoute: DashboardProjectsRoute,
   DashboardRequestsRoute: DashboardRequestsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardCrmIndexRoute: DashboardCrmIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(

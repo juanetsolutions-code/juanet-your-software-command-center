@@ -9,7 +9,7 @@ import {
   LogOut,
   User as UserIcon,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { useAuth } from "@/lib/auth";
@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CommandPalette } from "@/components/command-center/CommandPalette";
 
 export type NavItem = { label: string; to: string; icon: LucideIcon };
 
@@ -34,6 +35,7 @@ export function AppShell({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(true);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -122,11 +124,18 @@ export function AppShell({
             </div>
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                placeholder="Search projects, files, people..."
-                className="w-full h-9 pl-9 pr-3 rounded-md bg-white/5 border border-border/60 text-sm placeholder:text-muted-foreground/60 outline-none focus:border-brand-blue/60"
-              />
+              <button
+                onClick={() => setPaletteOpen(true)}
+                className="w-full h-9 pl-9 pr-3 rounded-md bg-white/5 border border-border/60 text-sm placeholder:text-muted-foreground/60 outline-none text-left flex items-center hover:bg-white/10 transition-colors"
+              >
+                <span className="text-muted-foreground">Search projects, files, people...</span>
+                <span className="ml-auto text-[10px] text-muted-foreground px-1.5 py-0.5 rounded bg-white/5">
+                  ⌘K
+                </span>
+              </button>
             </div>
+
+            <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
             <button className="relative h-9 w-9 grid place-items-center rounded-md hover:bg-white/5">
               <Bell className="h-4 w-4" />
               <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-brand-cyan" />

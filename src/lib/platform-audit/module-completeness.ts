@@ -54,7 +54,17 @@ export const MODULE_CHECKLISTS: ModuleChecklist[] = [
   {
     module: "marketing",
     routes: ["index", "services", "projects", "portfolio", "shop", "about", "contact"],
-    components: ["Hero", "ServicesGrid", "OngoingProjects", "PortfolioGrid", "MarketplacePreview", "CTA", "Navbar", "Section", "Footer"],
+    components: [
+      "Hero",
+      "ServicesGrid",
+      "OngoingProjects",
+      "PortfolioGrid",
+      "MarketplacePreview",
+      "CTA",
+      "Navbar",
+      "Section",
+      "Footer",
+    ],
     hooks: [],
     services: [],
     completeness: 80,
