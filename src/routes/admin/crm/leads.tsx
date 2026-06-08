@@ -280,8 +280,9 @@ function AdminLeadsPage() {
                     <ScoreBadge score={lead.score} />
                   </td>
                   <td className="py-3 px-4 text-muted-foreground">
-                    {lead.nextFollowUp ? new Date(lead.nextFollowUp).toLocaleDateString() : "—"}
+                    {(lead as any).nextFollowUp ? new Date((lead as any).nextFollowUp).toLocaleDateString() : "—"}
                   </td>
+
                   <td className="py-3 px-4">
                     <button className="p-1 hover:bg-white/10 rounded">
                       <MoreHorizontal className="h-4 w-4" />
