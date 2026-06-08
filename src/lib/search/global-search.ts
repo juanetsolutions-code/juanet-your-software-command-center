@@ -32,7 +32,7 @@ export function search(query: SearchQuery): SearchResult[] {
     const filtered = moduleResults.filter(
       (r) =>
         r.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (r.description?.toLowerCase().includes(searchTerm.toLowerCase) ?? false),
+        (r.description?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false),
     );
     allResults.push(
       ...filtered.map((r) => ({ ...r, relevance: calculateRelevance(r, searchTerm) })),
@@ -45,6 +45,6 @@ export function search(query: SearchQuery): SearchResult[] {
 function calculateRelevance(result: SearchResult, query: string): number {
   const titleMatch = result.title.toLowerCase().includes(query.toLowerCase()) ? 10 : 0;
   const descMatch =
-    (result.description?.toLowerCase().includes(query.toLowerCase) ?? false) ? 5 : 0;
+    (result.description?.toLowerCase().includes(query.toLowerCase()) ?? false) ? 5 : 0;
   return titleMatch + descMatch + (result.module === "projects" ? 2 : 0);
 }
