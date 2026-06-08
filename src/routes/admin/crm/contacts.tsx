@@ -205,7 +205,7 @@ function AdminContactsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
-              {contacts.map((contact) => (
+              {contacts.map((contact: any) => (
                 <tr key={contact.id} className="hover:bg-white/[0.03]">
                   <td className="py-3 font-medium">
                     {contact.firstName} {contact.lastName}
