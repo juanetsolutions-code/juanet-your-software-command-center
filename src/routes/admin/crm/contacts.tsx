@@ -149,19 +149,20 @@ function AdminContactsPage() {
   const [showAddDialog, setShowAddDialog] = useState(false);
 
   const {
-    data: contactsResult = { contacts: [] },
+    data: contactsResult = { contacts: [], total: 0, hasMore: false },
     isLoading,
     refetch,
   } = useQuery({
     queryKey: ["contacts", org?.id],
-    queryFn: () => {
-      if (!org) return { contacts: [] };
+    queryFn: async () => {
+      if (!org) return { contacts: [], total: 0, hasMore: false };
       return crmService.contacts.query({ tenantId: org.id });
     },
     enabled: !!org,
   });
 
   const contacts = contactsResult.contacts;
+
 
   return (
     <div className="space-y-6">
