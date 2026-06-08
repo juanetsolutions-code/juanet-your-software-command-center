@@ -63,7 +63,7 @@ function ContactForm({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-<ContactForm open={showAddDialog} onOpenChange={setShowAddDialog} onSuccess={refetch} />
+
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
