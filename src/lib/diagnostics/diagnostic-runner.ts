@@ -22,7 +22,10 @@ class DiagnosticRunner {
   private snapshotHistory: SystemSnapshot[] = [];
   private contextMap: Map<string, DiagnosticContext> = new Map();
 
-  async generateSnapshot(health: HealthSnapshot, additional?: Partial<SystemSnapshot>): Promise<SystemSnapshot> {
+  async generateSnapshot(
+    health: HealthSnapshot,
+    additional?: Partial<SystemSnapshot>,
+  ): Promise<SystemSnapshot> {
     const snapshot: SystemSnapshot = {
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV ?? "mock",
@@ -91,14 +94,14 @@ export function startDiagnostics(requestId: string, tenantId?: string): Diagnost
 export function recordDiagnosticOperation(
   requestId: string,
   name: string,
-  status: "success" | "error"
+  status: "success" | "error",
 ): void {
   diagnosticRunner.recordOperation(requestId, name, status);
 }
 
 export function generateDiagnosticSnapshot(
   health: HealthSnapshot,
-  additional?: Partial<SystemSnapshot>
+  additional?: Partial<SystemSnapshot>,
 ): Promise<SystemSnapshot> {
   return diagnosticRunner.generateSnapshot(health, additional);
 }

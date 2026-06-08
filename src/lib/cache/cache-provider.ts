@@ -21,9 +21,9 @@ class CacheProvider {
 
   get<T = unknown>(key: string): T | undefined {
     const entry = this.store.get(key);
-    
+
     if (!entry) return undefined;
-    
+
     if (Date.now() > entry.expiresAt) {
       this.store.delete(key);
       return undefined;

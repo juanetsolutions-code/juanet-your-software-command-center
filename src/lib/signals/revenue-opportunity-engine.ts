@@ -20,10 +20,10 @@ export class RevenueOpportunityEngine {
 
   async scanForOpportunities(tenantId: string): Promise<RevenueOpportunity[]> {
     const opportunities: RevenueOpportunity[] = [];
-    
-    opportunities.push(...await this.scanUsageOpportunities(tenantId));
-    opportunities.push(...await this.scanIntentOpportunities(tenantId));
-    
+
+    opportunities.push(...(await this.scanUsageOpportunities(tenantId)));
+    opportunities.push(...(await this.scanIntentOpportunities(tenantId)));
+
     return opportunities;
   }
 
@@ -36,7 +36,7 @@ export class RevenueOpportunityEngine {
   private async scanIntentOpportunities(tenantId: string): Promise<RevenueOpportunity[]> {
     const { leadService } = await import("@/lib/crm/services/lead-service");
     const leads = await leadService.list(tenantId);
-    
+
     return leads
       .filter((lead) => (lead.score ?? 0) >= 70)
       .map((lead) => ({
@@ -50,26 +50,30 @@ export class RevenueOpportunityEngine {
 
   async convertToTasks(opportunities: RevenueOpportunity[]): Promise<number> {
     let tasksCreated = 0;
-    
+
     for (const opportunity of opportunities) {
       await this.emitOpportunity(opportunity);
-      
-      salesAgent.evaluate({
-        tenantId: opportunity.tenantId,
-        signals: [{
-          id: `sig_${Date.now()}`,
-          type: "high_intent",
-          entityType: opportunity.type === "conversion" ? "lead" : "deal",
-          entityId: opportunity.entityId,
-          severity: "info",
-          message: `Revenue opportunity: ${opportunity.type}`,
-          detectedAt: new Date().toISOString(),
-        }],
-      }).catch(console.error);
-      
+
+      salesAgent
+        .evaluate({
+          tenantId: opportunity.tenantId,
+          signals: [
+            {
+              id: `sig_${Date.now()}`,
+              type: "high_intent",
+              entityType: opportunity.type === "conversion" ? "lead" : "deal",
+              entityId: opportunity.entityId,
+              severity: "info",
+              message: `Revenue opportunity: ${opportunity.type}`,
+              detectedAt: new Date().toISOString(),
+            },
+          ],
+        })
+        .catch(console.error);
+
       tasksCreated++;
     }
-    
+
     return tasksCreated;
   }
 

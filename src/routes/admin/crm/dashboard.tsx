@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { 
-  UserPlus, 
-  TrendingUp, 
-  Briefcase, 
-  Users, 
+import {
+  UserPlus,
+  TrendingUp,
+  Briefcase,
+  Users,
   Calendar,
   DollarSign,
   Target,
@@ -35,47 +35,47 @@ function AdminCrmDashboard() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard 
-          label="Total Leads" 
-          value="142" 
-          delta="28 this month" 
-          icon={UserPlus} 
-          accent="from-brand-cyan to-brand-blue" 
+        <StatCard
+          label="Total Leads"
+          value="142"
+          delta="28 this month"
+          icon={UserPlus}
+          accent="from-brand-cyan to-brand-blue"
         />
-        <StatCard 
-          label="Active Deals" 
-          value="32" 
-          delta="4 closing soon" 
-          icon={Briefcase} 
-          accent="from-brand-blue to-brand-violet" 
+        <StatCard
+          label="Active Deals"
+          value="32"
+          delta="4 closing soon"
+          icon={Briefcase}
+          accent="from-brand-blue to-brand-violet"
         />
-        <StatCard 
-          label="Pipeline Value" 
-          value="$8.2M" 
-          delta="Forecast" 
-          icon={DollarSign} 
-          accent="from-brand-violet to-brand-cyan" 
+        <StatCard
+          label="Pipeline Value"
+          value="$8.2M"
+          delta="Forecast"
+          icon={DollarSign}
+          accent="from-brand-violet to-brand-cyan"
         />
-        <StatCard 
-          label="Win Rate" 
-          value="24%" 
-          delta="+4% vs last quarter" 
-          icon={Target} 
-          accent="from-brand-cyan to-brand-blue" 
+        <StatCard
+          label="Win Rate"
+          value="24%"
+          delta="+4% vs last quarter"
+          icon={Target}
+          accent="from-brand-cyan to-brand-blue"
         />
-        <StatCard 
-          label="Revenue" 
-          value="$2.4M" 
-          delta="This quarter" 
-          icon={TrendingUp} 
-          accent="from-brand-pink to-brand-rose" 
+        <StatCard
+          label="Revenue"
+          value="$2.4M"
+          delta="This quarter"
+          icon={TrendingUp}
+          accent="from-brand-pink to-brand-rose"
         />
-        <StatCard 
-          label="Conversion" 
-          value="18%" 
-          delta="Lead to deal" 
-          icon={Activity} 
-          accent="from-brand-rose to-brand-cyan" 
+        <StatCard
+          label="Conversion"
+          value="18%"
+          delta="Lead to deal"
+          icon={Activity}
+          accent="from-brand-rose to-brand-cyan"
         />
       </div>
 

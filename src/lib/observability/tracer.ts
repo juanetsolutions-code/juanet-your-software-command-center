@@ -102,7 +102,11 @@ export function endTrace(span: Span, status?: SpanStatus, error?: Error): void {
   tracer.endSpan(span, status, error);
 }
 
-export function addTraceEvent(span: Span, name: string, attributes?: Record<string, unknown>): void {
+export function addTraceEvent(
+  span: Span,
+  name: string,
+  attributes?: Record<string, unknown>,
+): void {
   tracer.addEvent(span, name, attributes);
 }
 

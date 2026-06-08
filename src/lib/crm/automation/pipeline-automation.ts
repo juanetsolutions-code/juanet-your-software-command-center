@@ -29,7 +29,8 @@ export class PipelineAutomation {
 
   private isStale(deal: Deal): boolean {
     if (!deal.updatedAt) return false;
-    const daysSinceUpdate = (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24);
+    const daysSinceUpdate =
+      (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24);
     return daysSinceUpdate > 7;
   }
 

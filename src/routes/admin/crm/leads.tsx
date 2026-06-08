@@ -1,6 +1,18 @@
-import { createFileRoute, Link, useRouterState } from "@tanstack/react-router";
-import { UserPlus, Search, Plus, MoreHorizontal, Tag, Calendar, User, Check, X } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { UserPlus, Search, Plus, MoreHorizontal, Calendar } from "lucide-react";
 import { EmptyState } from "@/components/states/EmptyState";
+import { useState, type FormEvent } from "react";
+import { leadService } from "@/lib/crm/services/lead-service";
+import { getCurrentOrganization } from "@/lib/tenant/context";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/admin/crm/leads")({
   component: AdminLeadsPage,
@@ -12,30 +24,8 @@ export const Route = createFileRoute("/admin/crm/leads")({
   }),
 });
 
-type LeadItem = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  source: string;
-  status: "new" | "qualified" | "contacted" | "converted" | "rejected";
-  score: number;
-  assignedTo?: string;
-  lastContacted?: string;
-  nextFollowUp?: string;
-  tags: string[];
-};
-
-const mockLeads: LeadItem[] = [
-  { id: "l1", firstName: "Alex", lastName: "Johnson", email: "alex@example.com", company: "TechCorp", source: "website", status: "new", score: 85, tags: ["hot"] },
-  { id: "l2", firstName: "Maria", lastName: "Garcia", email: "maria@company.com", company: "DesignCo", source: "referral", status: "contacted", score: 62, tags: [] },
-  { id: "l3", firstName: "James", lastName: "Wilson", email: "james@biz.com", company: "BizGroup", source: "social", status: "qualified", score: 45, tags: ["warm"] },
-];
-
-function StatusBadge({ status }: { status: LeadItem["status"] }) {
-  const colors = {
+function StatusBadge({ status }: { status: string }) {
+  const colors: Record<string, string> = {
     new: "bg-blue-500/15 text-blue-400",
     contacted: "bg-amber-500/15 text-amber-400",
     qualified: "bg-green-500/15 text-green-400",
@@ -43,19 +33,189 @@ function StatusBadge({ status }: { status: LeadItem["status"] }) {
     rejected: "bg-gray-500/15 text-gray-400",
   };
   return (
-    <span className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full ${colors[status]}`}>
+    <span
+      className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full ${colors[status] || colors.new}`}
+    >
       {status}
     </span>
   );
 }
 
-function ScoreBadge({ score }: { score: number }) {
-  const color = score >= 80 ? "text-green-400" : score >= 50 ? "text-amber-400" : "text-gray-400";
-  return <span className={`text-xs font-medium ${color}`}>{score}</span>;
+function ScoreBadge({ score }: { score?: number }) {
+  const numericScore = score ?? 0;
+  const color =
+    numericScore >= 80 ? "text-green-400" : numericScore >= 50 ? "text-amber-400" : "text-gray-400";
+  return <span className={`text-xs font-medium ${color}`}>{numericScore}</span>;
+}
+
+function LeadForm({
+  open,
+  onOpenChange,
+  onSuccess,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSuccess: () => void;
+}) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [company, setCompany] = useState("");
+  const [source, setSource] = useState<
+    "website" | "referral" | "social" | "email" | "call" | "event" | "other"
+  >("website");
+  const org = getCurrentOrganization();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (data: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone?: string;
+      company?: string;
+      source: string;
+    }) => {
+      if (!org) throw new Error("No organization context");
+      return leadService.create(data as any, org.id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      onOpenChange(false);
+      onSuccess();
+    },
+  });
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!firstName || !lastName || !email) return;
+    mutation.mutate({ firstName, lastName, email, phone, company, source });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <button className="h-10 px-4 inline-flex items-center gap-2 rounded-lg text-sm bg-brand-cyan text-brand-navy font-medium hover:bg-brand-cyan/90">
+          <Plus className="h-4 w-4" /> Add lead
+        </button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add New Lead</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">First Name</label>
+              <input
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full h-10 px-3 rounded-md bg-white/5 border border-border/60 text-sm outline-none focus:border-brand-cyan/50 mt-1"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Last Name</label>
+              <input
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full h-10 px-3 rounded-md bg-white/5 border border-border/60 text-sm outline-none focus:border-brand-cyan/50 mt-1"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Email</label>
+            <input
+              required
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full h-10 px-3 rounded-md bg-white/5 border border-border/60 text-sm outline-none focus:border-brand-cyan/50 mt-1"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Phone</label>
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full h-10 px-3 rounded-md bg-white/5 border border-border/60 text-sm outline-none focus:border-brand-cyan/50 mt-1"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Company</label>
+            <input
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className="w-full h-10 px-3 rounded-md bg-white/5 border border-border/60 text-sm outline-none focus:border-brand-cyan/50 mt-1"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Source</label>
+            <select
+              value={source}
+              onChange={(e) => setSource(e.target.value as any)}
+              className="w-full h-10 px-3 rounded-md bg-white/5 border border-border/60 text-sm outline-none focus:border-brand-cyan/50 mt-1"
+            >
+              <option value="website">Website</option>
+              <option value="referral">Referral</option>
+              <option value="social">Social</option>
+              <option value="email">Email</option>
+              <option value="call">Call</option>
+              <option value="event">Event</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <DialogFooter>
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="h-10 px-4 rounded-lg text-sm border border-white/10 bg-white/5 hover:bg-white/10"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="h-10 px-4 rounded-lg text-sm bg-brand-cyan text-brand-navy font-medium hover:bg-brand-cyan/90 disabled:opacity-50"
+            >
+              {mutation.isPending ? "Creating..." : "Create Lead"}
+            </button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
 }
 
 function AdminLeadsPage() {
-  const leads = mockLeads;
+  const org = getCurrentOrganization();
+  const queryClient = useQueryClient();
+  const [showAddDialog, setShowAddDialog] = useState(false);
+
+  const {
+    data: leads = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["leads", org?.id],
+    queryFn: () => {
+      if (!org) return Promise.resolve([]);
+      return leadService.list(org.id);
+    },
+    enabled: !!org,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <span className="text-muted-foreground">Loading leads...</span>
+      </div>
+    );
+  }
+
+  const leadsArray = leads ?? [];
 
   return (
     <div className="space-y-6">
@@ -81,16 +241,11 @@ function AdminLeadsPage() {
             <option>Contacted</option>
             <option>Qualified</option>
           </select>
-          <Link
-            to="/admin/crm/leads"
-            className="h-10 px-4 inline-flex items-center gap-2 rounded-lg text-sm bg-brand-cyan text-brand-navy font-medium hover:bg-brand-cyan/90"
-          >
-            <Plus className="h-4 w-4" /> Add lead
-          </Link>
+          <LeadForm open={showAddDialog} onOpenChange={setShowAddDialog} onSuccess={refetch} />
         </div>
       </header>
 
-      {leads.length === 0 ? (
+      {leadsArray.length === 0 && !isLoading ? (
         <EmptyState
           icon={<UserPlus className="h-10 w-10" />}
           title="No leads yet"
@@ -111,13 +266,19 @@ function AdminLeadsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
-              {leads.map((lead) => (
+              {leadsArray.map((lead) => (
                 <tr key={lead.id} className="hover:bg-white/[0.03]">
-                  <td className="py-3 px-4 font-medium">{lead.firstName} {lead.lastName}</td>
+                  <td className="py-3 px-4 font-medium">
+                    {lead.firstName} {lead.lastName}
+                  </td>
                   <td className="py-3 px-4 text-muted-foreground">{lead.company || "—"}</td>
                   <td className="py-3 px-4 text-muted-foreground capitalize">{lead.source}</td>
-                  <td className="py-3 px-4"><StatusBadge status={lead.status} /></td>
-                  <td className="py-3 px-4"><ScoreBadge score={lead.score} /></td>
+                  <td className="py-3 px-4">
+                    <StatusBadge status={lead.status} />
+                  </td>
+                  <td className="py-3 px-4">
+                    <ScoreBadge score={lead.score} />
+                  </td>
                   <td className="py-3 px-4 text-muted-foreground">
                     {lead.nextFollowUp ? new Date(lead.nextFollowUp).toLocaleDateString() : "—"}
                   </td>

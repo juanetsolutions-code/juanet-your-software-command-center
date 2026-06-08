@@ -10,17 +10,17 @@ registerEventHandler({
   eventType: "crm.signal_detected",
   handler: async (event: DomainEvent) => {
     const { tenantId, signal } = event.payload as { tenantId: string; signal: Signal };
-    
+
     if (!signal || !tenantId) return;
-    
+
     const actions = await salesAgent.evaluate({ tenantId, signals: [signal] });
-    
+
     for (const decision of actions) {
       const { action } = decision;
-      
+
       if (!action.requiresApproval) {
         const result = await actionRouter.route(decision, { tenantId });
-        
+
         if (result.success) {
           salesMemory.store({
             id: action.id,
@@ -42,17 +42,17 @@ registerEventHandler({
   id: "deal-updated-agent-trigger",
   eventType: "deal.updated",
   handler: async (event: DomainEvent) => {
-    const { tenantId, dealId, changes } = event.payload as { 
-      tenantId: string; 
-      dealId: string; 
-      changes: Record<string, unknown> 
+    const { tenantId, dealId, changes } = event.payload as {
+      tenantId: string;
+      dealId: string;
+      changes: Record<string, unknown>;
     };
-    
+
     if (!tenantId || !dealId) return;
-    
+
     const level = salesAgent.getAutonomyLevel(tenantId);
     if (level === "off") return;
-    
+
     if (typeof changes.stage === "string") {
       const signal = {
         id: `sig_${Date.now()}`,
@@ -63,7 +63,7 @@ registerEventHandler({
         message: `Deal stage changed to ${changes.stage}`,
         detectedAt: new Date().toISOString(),
       };
-      
+
       const actions = await salesAgent.evaluate({ tenantId, signals: [signal] });
       for (const decision of actions) {
         if (!decision.action.requiresApproval) {

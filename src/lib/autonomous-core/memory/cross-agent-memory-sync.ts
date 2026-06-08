@@ -6,7 +6,7 @@ export class CrossAgentMemorySync {
 
   sync(tenantId: string): void {
     const agents = agentRegistry.getByTenant(tenantId);
-    
+
     for (const agent of agents) {
       const agentMemory = (agent as any).memory;
       if (agentMemory) {
@@ -31,7 +31,7 @@ export class CrossAgentMemorySync {
   getContext(tenantId: string): Record<string, unknown> {
     const context: Record<string, unknown> = {};
     const decisions = this.memory.get(tenantId, "decision", "*");
-    
+
     for (const entry of decisions) {
       context[entry.key] = entry.value;
     }

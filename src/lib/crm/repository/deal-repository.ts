@@ -43,7 +43,7 @@ export class DealRepository {
     const total = results.length;
     const limit = params.limit ?? 50;
     const offset = params.offset ?? 0;
-    
+
     results = results.slice(offset, offset + limit);
 
     return {
@@ -77,7 +77,7 @@ export class DealRepository {
     if (pipelineId) {
       deals = deals.filter((d) => d.pipelineId === pipelineId);
     }
-    
+
     const counts: Record<string, number> = {};
     for (const deal of deals) {
       counts[deal.stage] = (counts[deal.stage] ?? 0) + 1;
@@ -90,12 +90,12 @@ export class DealRepository {
     if (pipelineId) {
       deals = deals.filter((d) => d.pipelineId === pipelineId);
     }
-    
+
     deals = deals.filter((d) => d.stage !== "closed_won" && d.stage !== "closed_lost");
-    
+
     return deals.reduce((sum, deal) => {
       const probability = deal.probability ?? 0;
-      return sum + (deal.value * probability / 100);
+      return sum + (deal.value * probability) / 100;
     }, 0);
   }
 

@@ -23,17 +23,19 @@ export class CrmEventBus {
         const level = salesAgent.getAutonomyLevel(tenantId);
         if (level === "off") return;
 
-        const decisions = await salesAgent.evaluate({ 
-          tenantId, 
-          signals: [{
-            id: `sig_${Date.now()}`,
-            type: "deal_stuck",
-            entityType: "deal",
-            entityId: dealId,
-            severity: "info",
-            message: "Deal updated - checking progression",
-            detectedAt: new Date().toISOString(),
-          }] 
+        const decisions = await salesAgent.evaluate({
+          tenantId,
+          signals: [
+            {
+              id: `sig_${Date.now()}`,
+              type: "deal_stuck",
+              entityType: "deal",
+              entityId: dealId,
+              severity: "info",
+              message: "Deal updated - checking progression",
+              detectedAt: new Date().toISOString(),
+            },
+          ],
         });
 
         if (decisions.length > 0) {
@@ -61,18 +63,22 @@ export class CrmEventBus {
         const lead = await leadService.getById(leadId, tenantId);
         if (!lead) return;
 
-        salesAgent.evaluate({ 
-          tenantId, 
-          signals: [{
-            id: `sig_${Date.now()}`,
-            type: "high_intent",
-            entityType: "lead",
-            entityId: leadId,
-            severity: "info",
-            message: "New lead detected",
-            detectedAt: new Date().toISOString(),
-          }] 
-        }).catch(console.error);
+        salesAgent
+          .evaluate({
+            tenantId,
+            signals: [
+              {
+                id: `sig_${Date.now()}`,
+                type: "high_intent",
+                entityType: "lead",
+                entityId: leadId,
+                severity: "info",
+                message: "New lead detected",
+                detectedAt: new Date().toISOString(),
+              },
+            ],
+          })
+          .catch(console.error);
       },
       priority: 5,
       tenantScoped: true,

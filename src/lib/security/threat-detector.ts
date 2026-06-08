@@ -35,7 +35,7 @@ class ThreatDetector {
     const events = tenantId ? this.events.filter((e) => e.tenantId === tenantId) : this.events;
     const now = Date.now();
     const windowEvents = events.filter(
-      (e) => now - new Date(e.timestamp).getTime() < this.windowSize
+      (e) => now - new Date(e.timestamp).getTime() < this.windowSize,
     );
 
     const failedLogins = windowEvents.filter((e) => !e.success).length;
@@ -76,7 +76,7 @@ class ThreatDetector {
 
     for (const pattern of this.patterns) {
       const windowEvents = events.filter(
-        (e) => now - new Date(e.timestamp).getTime() < pattern.windowSeconds * 1000
+        (e) => now - new Date(e.timestamp).getTime() < pattern.windowSeconds * 1000,
       );
 
       if (windowEvents.length > pattern.threshold) {

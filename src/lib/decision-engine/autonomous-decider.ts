@@ -8,13 +8,16 @@ export type DecisionContext = {
 };
 
 export class AutonomousDecider {
-  decide(action: AgentTask, context: DecisionContext): { shouldAct: boolean; requiresApproval: boolean } {
+  decide(
+    action: AgentTask,
+    context: DecisionContext,
+  ): { shouldAct: boolean; requiresApproval: boolean } {
     if (context.autonomyLevel === "off") {
       return { shouldAct: false, requiresApproval: false };
     }
 
     const requiresApproval = this.needsApproval(action, context);
-    
+
     if (context.autonomyLevel === "assist") {
       return { shouldAct: false, requiresApproval: false };
     }
@@ -28,7 +31,7 @@ export class AutonomousDecider {
   private needsApproval(action: AgentTask, context: DecisionContext): boolean {
     const highRiskTypes = ["send_reminder", "update_stage", "assign_lead"];
     const requires = highRiskTypes.includes(action.type);
-    
+
     return requires && context.riskTolerance !== "high";
   }
 

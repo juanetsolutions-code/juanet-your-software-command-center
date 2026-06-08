@@ -28,12 +28,12 @@ export class SalesMemory {
   getPatterns(tenantId: string): Record<string, number> {
     const patterns: Record<string, number> = {};
     const outcomes = this.query(tenantId, "deal_outcome");
-    
+
     for (const entry of outcomes) {
       const key = `${entry.data.outcome_type ?? "unknown"}:${entry.outcome}`;
       patterns[key] = (patterns[key] ?? 0) + 1;
     }
-    
+
     return patterns;
   }
 

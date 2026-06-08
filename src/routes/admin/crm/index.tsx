@@ -42,10 +42,34 @@ function AdminCrmPage() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total leads" value="142" delta="28 new this month" icon={UserPlus} accent="from-brand-cyan to-brand-blue" />
-        <StatCard label="Deals" value="$2.4M" delta="Across 32 deals" icon={TrendingUp} accent="from-brand-blue to-brand-violet" />
-        <StatCard label="Conversion rate" value="24%" delta="+4% from last month" icon={Briefcase} accent="from-brand-violet to-brand-cyan" />
-        <StatCard label="Pipeline" value="$8.2M" delta="Forecast value" icon={Users} accent="from-brand-cyan to-brand-blue" />
+        <StatCard
+          label="Total leads"
+          value="142"
+          delta="28 new this month"
+          icon={UserPlus}
+          accent="from-brand-cyan to-brand-blue"
+        />
+        <StatCard
+          label="Deals"
+          value="$2.4M"
+          delta="Across 32 deals"
+          icon={TrendingUp}
+          accent="from-brand-blue to-brand-violet"
+        />
+        <StatCard
+          label="Conversion rate"
+          value="24%"
+          delta="+4% from last month"
+          icon={Briefcase}
+          accent="from-brand-violet to-brand-cyan"
+        />
+        <StatCard
+          label="Pipeline"
+          value="$8.2M"
+          delta="Forecast value"
+          icon={Users}
+          accent="from-brand-cyan to-brand-blue"
+        />
       </div>
     </div>
   );

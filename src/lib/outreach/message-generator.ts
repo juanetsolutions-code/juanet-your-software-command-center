@@ -11,7 +11,7 @@ export class MessageGenerator {
   generate(lead: Lead, context?: string): GeneratedMessage {
     const industry = this.detectIndustry(lead);
     const tone = this.determineTone(lead);
-    
+
     return {
       subject: this.createSubject(lead, industry, context),
       content: this.createContent(lead, industry, context),
@@ -22,11 +22,11 @@ export class MessageGenerator {
 
   private detectIndustry(lead: Lead): string {
     const company = lead.company?.toLowerCase() ?? "";
-    
+
     if (company.includes("tech") || company.includes("software")) return "tech";
     if (company.includes("finance") || company.includes("bank")) return "finance";
     if (company.includes("health") || company.includes("medical")) return "healthcare";
-    
+
     return "general";
   }
 
@@ -42,12 +42,12 @@ export class MessageGenerator {
       healthcare: ["Streamline your healthcare operations", "Juanet for patient data management"],
       general: ["Quick question about Juanet", "Unlock more value from Juanet"],
     };
-    
+
     const options = templates[industry] ?? templates.general;
     return options[Math.floor(Math.random() * options.length)];
   }
 
   private createContent(lead: Lead, industry: string, context?: string): string {
-    return `Hi ${lead.firstName},\n\nI've been following ${lead.company ? `${lead.company}'s progress` : 'your activity'} on Juanet and wanted to reach out.\n\n${context ?? 'We have some exciting updates that might help you get even more value from our platform.'}\n\nWould you have time for a quick call this week?\n\nBest,\nThe Juanet Team`;
+    return `Hi ${lead.firstName},\n\nI've been following ${lead.company ? `${lead.company}'s progress` : "your activity"} on Juanet and wanted to reach out.\n\n${context ?? "We have some exciting updates that might help you get even more value from our platform."}\n\nWould you have time for a quick call this week?\n\nBest,\nThe Juanet Team`;
   }
 }

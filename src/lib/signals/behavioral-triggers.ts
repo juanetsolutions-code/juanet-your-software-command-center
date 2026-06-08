@@ -22,7 +22,7 @@ export class BehavioralTriggers {
         value: loginCount,
         timestamp: new Date().toISOString(),
       };
-      
+
       this.emitTrigger(trigger);
       return trigger;
     }
@@ -39,7 +39,7 @@ export class BehavioralTriggers {
         value: teamSize,
         timestamp: new Date().toISOString(),
       };
-      
+
       this.emitTrigger(trigger);
       return trigger;
     }

@@ -10,8 +10,12 @@ export type SalesSummary = {
 
 export class DailySalesSummary {
   async generate(tenantId: string): Promise<SalesSummary> {
-    const leads = await import("@/lib/crm/services/lead-service").then(m => m.leadService.list(tenantId));
-    const deals = await import("@/lib/crm/services/deal-service").then(m => m.dealService.list(tenantId));
+    const leads = await import("@/lib/crm/services/lead-service").then((m) =>
+      m.leadService.list(tenantId),
+    );
+    const deals = await import("@/lib/crm/services/deal-service").then((m) =>
+      m.dealService.list(tenantId),
+    );
 
     const hotLeads = leads.filter((l) => (l.score ?? 0) >= 70).slice(0, 5);
     const topDeals = deals
@@ -20,7 +24,7 @@ export class DailySalesSummary {
       .slice(0, 5);
 
     const revenueForecast = topDeals.reduce((sum, deal) => {
-      return sum + (deal.value * (deal.probability ?? 50) / 100);
+      return sum + (deal.value * (deal.probability ?? 50)) / 100;
     }, 0);
 
     return {

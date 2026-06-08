@@ -48,20 +48,24 @@ export class TaskService {
   async findByEntity(
     tenantId: string,
     entityType: "lead" | "contact" | "deal" | "account",
-    entityId: string
+    entityId: string,
   ): Promise<CrmTask[]> {
     return Array.from(this.tasks.values()).filter(
-      (t) => t.tenantId === tenantId && t.entityType === entityType && t.entityId === entityId
+      (t) => t.tenantId === tenantId && t.entityType === entityType && t.entityId === entityId,
     );
   }
 
   async findByAssignee(tenantId: string, userId: string): Promise<CrmTask[]> {
     return Array.from(this.tasks.values()).filter(
-      (t) => t.tenantId === tenantId && t.assignedTo === userId && t.status === "pending"
+      (t) => t.tenantId === tenantId && t.assignedTo === userId && t.status === "pending",
     );
   }
 
-  async update(id: string, tenantId: string, updates: Partial<CrmTask>): Promise<CrmTask | undefined> {
+  async update(
+    id: string,
+    tenantId: string,
+    updates: Partial<CrmTask>,
+  ): Promise<CrmTask | undefined> {
     const task = await this.findById(id, tenantId);
     if (!task) return undefined;
     const updated = { ...task, ...updates };
@@ -70,7 +74,10 @@ export class TaskService {
   }
 
   async complete(id: string, tenantId: string): Promise<CrmTask | undefined> {
-    return this.update(id, tenantId, { status: "completed", completedAt: new Date().toISOString() });
+    return this.update(id, tenantId, {
+      status: "completed",
+      completedAt: new Date().toISOString(),
+    });
   }
 
   async delete(id: string, tenantId: string): Promise<boolean> {
@@ -83,8 +90,16 @@ export class TaskService {
     const now = new Date();
     const future = new Date(now.getTime() + hours * 60 * 60 * 1000);
     return Array.from(this.tasks.values()).filter(
-      (t) => t.tenantId === tenantId && t.status === "pending" && t.dueDate && new Date(t.dueDate) <= future
+      (t) =>
+        t.tenantId === tenantId &&
+        t.status === "pending" &&
+        t.dueDate &&
+        new Date(t.dueDate) <= future,
     );
+  }
+
+  getAll(): CrmTask[] {
+    return Array.from(this.tasks.values());
   }
 
   private generateId(): string {

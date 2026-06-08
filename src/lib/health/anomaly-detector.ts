@@ -46,7 +46,8 @@ class AnomalyDetector {
     const healthScores = healthHistory.map((h) => h.score);
     if (healthScores.length > 0) {
       const mean = healthScores.reduce((a, b) => a + b, 0) / healthScores.length;
-      const variance = healthScores.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / healthScores.length;
+      const variance =
+        healthScores.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / healthScores.length;
       const stdDev = Math.sqrt(variance);
 
       const lastScore = healthScores[healthScores.length - 1];

@@ -10,14 +10,14 @@ export type Forecast = {
 export class ForecastEngine {
   generate(deals: Deal[], period: "30d" | "60d" | "90d"): Forecast {
     const activeDeals = deals.filter((d) => d.stage !== "closed_won" && d.stage !== "closed_lost");
-    
+
     const totalValue = activeDeals.reduce((sum, d) => {
       const prob = d.probability || 50;
-      return sum + (d.value * prob / 100);
+      return sum + (d.value * prob) / 100;
     }, 0);
-    
+
     const confidence = activeDeals.length > 10 ? "high" : activeDeals.length > 5 ? "medium" : "low";
-    
+
     return {
       period,
       predictedRevenue: totalValue,
@@ -27,9 +27,7 @@ export class ForecastEngine {
   }
 
   generateHistorical(deals: Deal[]): number {
-    return deals
-      .filter((d) => d.stage === "closed_won")
-      .reduce((sum, d) => sum + d.value, 0);
+    return deals.filter((d) => d.stage === "closed_won").reduce((sum, d) => sum + d.value, 0);
   }
 }
 

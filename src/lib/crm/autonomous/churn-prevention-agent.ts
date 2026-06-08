@@ -11,7 +11,7 @@ export type ChurnRisk = {
 export class ChurnPreventionAgent {
   async assessChurnRisk(tenantId: string): Promise<ChurnRisk[]> {
     const deals = await dealService.list(tenantId);
-    
+
     return deals
       .filter((d) => d.stage !== "closed_won" && d.stage !== "closed_lost")
       .map((deal) => this.calculateChurnRisk(deal));
@@ -22,7 +22,9 @@ export class ChurnPreventionAgent {
     let risk: "low" | "medium" | "high" = "low";
 
     if (deal.updatedAt) {
-      const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.floor(
+        (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+      );
       if (days > 30) {
         risk = "high";
         reasons.push("No activity for 30+ days");

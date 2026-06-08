@@ -13,9 +13,11 @@ export type Anomaly = {
 
 export class AnomalySignals {
   detectPipelineTrend(deals: Deal[], baseline: number): Anomaly | null {
-    const active = deals.filter(d => d.stage !== "closed_won" && d.stage !== "closed_lost").length;
+    const active = deals.filter(
+      (d) => d.stage !== "closed_won" && d.stage !== "closed_lost",
+    ).length;
     const deviation = Math.abs(active - baseline) / (baseline || 1);
-    
+
     if (deviation > 0.3) {
       return {
         id: `anom_${Date.now()}`,
@@ -27,7 +29,7 @@ export class AnomalySignals {
         detectedAt: new Date().toISOString(),
       };
     }
-    
+
     return null;
   }
 }

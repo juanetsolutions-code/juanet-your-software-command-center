@@ -37,7 +37,7 @@ export class SalesMemoryStore {
   getSuccessRate(tenantId: string): number {
     const records = this.getByTenant(tenantId);
     if (records.length === 0) return 0;
-    
+
     const successful = records.filter((r) => r.outcome === "success").length;
     return successful / records.length;
   }

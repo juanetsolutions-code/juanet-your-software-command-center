@@ -6,14 +6,21 @@ export function calculateRetryDelay(attempt: number, policy: WebhookRetryPolicy)
   return Math.min(exponentialDelay, policy.maxDelayMs);
 }
 
-export function shouldRetry(attempt: number, policy: WebhookRetryPolicy, statusOverride?: number): boolean {
-  return attempt < policy.maxAttempts && (!statusOverride || statusOverride >= 500 || statusOverride === 429);
+export function shouldRetry(
+  attempt: number,
+  policy: WebhookRetryPolicy,
+  statusOverride?: number,
+): boolean {
+  return (
+    attempt < policy.maxAttempts &&
+    (!statusOverride || statusOverride >= 500 || statusOverride === 429)
+  );
 }
 
 export async function executeDelivery(
   endpoint: WebhookEndpoint,
   delivery: WebhookDelivery,
-  policy: WebhookRetryPolicy
+  policy: WebhookRetryPolicy,
 ): Promise<Result> {
   try {
     const response = await fetch(endpoint.url, {
@@ -64,10 +71,13 @@ export function verifySignature(secret: string, signature: string, payload: stri
   return expected === signature;
 }
 
-export type Result = 
+export type Result =
   | { success: true; status: number }
   | { success: false; status?: number; error?: string; retry: boolean };
 
-export function getRetryPolicy(attempt: number, customPolicies?: Record<string, WebhookRetryPolicy>): WebhookRetryPolicy | null {
+export function getRetryPolicy(
+  attempt: number,
+  customPolicies?: Record<string, WebhookRetryPolicy>,
+): WebhookRetryPolicy | null {
   return customPolicies?.[`attempt-${attempt}`] ?? null;
 }

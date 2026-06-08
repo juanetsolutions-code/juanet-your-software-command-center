@@ -15,12 +15,15 @@ export class EventPriorityResolver {
   }
 
   private groupByTenant(events: SystemEvent[]): Record<string, SystemEvent[]> {
-    return events.reduce((acc, event) => {
-      const key = event.tenantId ?? "system";
-      acc[key] = acc[key] ?? [];
-      acc[key].push(event);
-      return acc;
-    }, {} as Record<string, SystemEvent[]>);
+    return events.reduce(
+      (acc, event) => {
+        const key = event.tenantId ?? "system";
+        acc[key] = acc[key] ?? [];
+        acc[key].push(event);
+        return acc;
+      },
+      {} as Record<string, SystemEvent[]>,
+    );
   }
 
   private deduplicate(events: SystemEvent[]): SystemEvent[] {

@@ -30,9 +30,9 @@ export class DecisionArbiter {
   async arbitrate(tenantId: string): Promise<ActionProposal[]> {
     const proposals = this.proposals.get(tenantId) ?? [];
     const sorted = proposals.sort((a, b) => b.priority - a.priority);
-    
+
     this.proposals.delete(tenantId);
-    
+
     return this.resolveConflicts(sorted);
   }
 

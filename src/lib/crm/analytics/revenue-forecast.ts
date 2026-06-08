@@ -10,13 +10,16 @@ export type RevenueForecast = {
 };
 
 export class RevenueForecastEngine {
-  async forecast(tenantId: string, period: "month" | "quarter" = "month"): Promise<RevenueForecast> {
+  async forecast(
+    tenantId: string,
+    period: "month" | "quarter" = "month",
+  ): Promise<RevenueForecast> {
     const deals = await dealService.list(tenantId);
     const activeDeals = deals.filter((d) => d.stage !== "closed_won" && d.stage !== "closed_lost");
 
     const totalWeightedValue = activeDeals.reduce((sum, deal) => {
       const probability = deal.probability ?? 0;
-      return sum + (deal.value * probability / 100);
+      return sum + (deal.value * probability) / 100;
     }, 0);
 
     const confidence = this.calculateConfidence(activeDeals.length);
@@ -30,6 +33,6 @@ export class RevenueForecastEngine {
   }
 
   private calculateConfidence(dealCount: number): number {
-    return Math.min(0.95, 0.5 + (dealCount * 0.05));
+    return Math.min(0.95, 0.5 + dealCount * 0.05);
   }
 }

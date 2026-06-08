@@ -14,7 +14,7 @@ export class GlobalMemoryStore {
   set(entry: GlobalMemoryEntry): void {
     const key = `${entry.tenantId}:${entry.type}:${entry.key}`;
     const existing = this.store.get(key) ?? [];
-    
+
     existing.push(entry);
     this.store.set(key, existing.slice(-100));
   }
@@ -32,7 +32,9 @@ export class GlobalMemoryStore {
   cleanup(): void {
     const now = Date.now();
     for (const [key, entries] of this.store.entries()) {
-      const filtered = entries.filter((e) => !e.expiresAt || e.expiresAt > new Date(now).toISOString());
+      const filtered = entries.filter(
+        (e) => !e.expiresAt || e.expiresAt > new Date(now).toISOString(),
+      );
       if (filtered.length === 0) {
         this.store.delete(key);
       } else {

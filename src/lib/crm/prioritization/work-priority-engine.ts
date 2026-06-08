@@ -12,7 +12,9 @@ export type WorkItem = {
 };
 
 export class WorkPriorityEngine {
-  prioritize(items: Array<{ type: "lead"; entity: Lead } | { type: "deal"; entity: Deal }>): WorkItem[] {
+  prioritize(
+    items: Array<{ type: "lead"; entity: Lead } | { type: "deal"; entity: Deal }>,
+  ): WorkItem[] {
     return items
       .map((item) => ({
         id: item.entity.id,
@@ -30,7 +32,9 @@ export class WorkPriorityEngine {
     return items.sort((a, b) => b.score - a.score).slice(0, limit);
   }
 
-  private calculateScore(item: { type: "lead"; entity: Lead } | { type: "deal"; entity: Deal }): number {
+  private calculateScore(
+    item: { type: "lead"; entity: Lead } | { type: "deal"; entity: Deal },
+  ): number {
     if (item.type === "lead") {
       let score = 50;
       const lead = item.entity;
@@ -38,12 +42,12 @@ export class WorkPriorityEngine {
       if (lead.assignedTo) score += 10;
       return Math.min(100, score);
     }
-    
+
     if (item.type === "deal") {
       const deal = item.entity;
       return deal.probability ?? 50;
     }
-    
+
     return 50;
   }
 

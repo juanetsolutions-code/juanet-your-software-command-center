@@ -42,7 +42,7 @@ export class PipelineStateMachine {
   }
 
   private calculateConfidence(deal: Deal): number {
-    const days = deal.updatedAt 
+    const days = deal.updatedAt
       ? Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24))
       : 0;
 

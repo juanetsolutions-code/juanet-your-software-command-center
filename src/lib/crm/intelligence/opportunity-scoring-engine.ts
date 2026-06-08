@@ -27,24 +27,24 @@ export class OpportunityScoringEngine {
   score(lead: Lead): OpportunityScore {
     let score = 50;
     const reasons: string[] = [];
-    
+
     if (lead.company) {
       score += this.weights.company;
       reasons.push("Has company info");
     }
-    
+
     if (lead.title) {
       score += this.weights.title;
       reasons.push("Has title");
     }
-    
+
     if (lead.score && lead.score > 70) {
       score += this.weights.engagement;
       reasons.push("High behavioral score");
     }
-    
+
     const tier = score >= 85 ? "A" : score >= 65 ? "B" : "C";
-    
+
     return {
       leadId: lead.id,
       score,

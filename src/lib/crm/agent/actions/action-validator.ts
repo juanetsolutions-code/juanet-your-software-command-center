@@ -8,17 +8,24 @@ export type ValidationResult = {
 };
 
 export class ActionValidator {
-  validate(action: AgentAction, context: { tenantId: string; userRole?: string }): ValidationResult {
-    if (action.type === "update_stage" && context.userRole !== "admin" && context.userRole !== "superadmin") {
+  validate(
+    action: AgentAction,
+    context: { tenantId: string; userRole?: string },
+  ): ValidationResult {
+    if (
+      action.type === "update_stage" &&
+      context.userRole !== "admin" &&
+      context.userRole !== "superadmin"
+    ) {
       if (context.userRole !== "client") {
         return { valid: false, reason: "Deal stage change requires admin role" };
       }
     }
-    
+
     if (action.type === "assign_lead" && !context.userRole) {
       return { valid: false, reason: "Assign action requires authenticated user" };
     }
-    
+
     return { valid: true };
   }
 

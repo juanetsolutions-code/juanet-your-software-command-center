@@ -10,7 +10,7 @@ export type StageTransition = {
 
 export class StageTransitionLogic {
   evaluate(deal: Deal, signals: Signal[]): StageTransition | null {
-    const daysInactive = deal.updatedAt 
+    const daysInactive = deal.updatedAt
       ? Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24))
       : 0;
 
@@ -18,7 +18,7 @@ export class StageTransitionLogic {
       return { from: "lead", to: "qualified", condition: "high_probability", confidence: 0.8 };
     }
 
-    if (deal.stage === "qualified" && signals.some(s => s.type === "high_intent")) {
+    if (deal.stage === "qualified" && signals.some((s) => s.type === "high_intent")) {
       return { from: "qualified", to: "contacted", condition: "intent_signal", confidence: 0.9 };
     }
 

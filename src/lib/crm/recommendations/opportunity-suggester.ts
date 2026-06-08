@@ -14,7 +14,7 @@ export type Opportunity = {
 export class OpportunitySuggester {
   suggest(lead: Lead, deals: Deal[]): Opportunity[] {
     const opportunities: Opportunity[] = [];
-    
+
     if (lead.score && lead.score > 80 && lead.status !== "converted") {
       opportunities.push({
         id: `opp_${lead.id}_referral`,
@@ -26,13 +26,13 @@ export class OpportunitySuggester {
         reason: "High-scoring lead may provide referrals",
       });
     }
-    
+
     return opportunities;
   }
 
   suggestForDeal(deal: Deal): Opportunity[] {
     const opportunities: Opportunity[] = [];
-    
+
     if (deal.stage === "closed_won") {
       opportunities.push({
         id: `opp_${deal.id}_upsell`,
@@ -44,7 +44,7 @@ export class OpportunitySuggester {
         reason: "Recent win - potential for additional services",
       });
     }
-    
+
     return opportunities;
   }
 }

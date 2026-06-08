@@ -3,7 +3,12 @@ import { PipelineHealthAnalyzer } from "./analytics/pipeline-health";
 import { LeadsPriorityEngine } from "./leads/lead-priority-engine";
 
 export type CrmInsight = {
-  type: "deal_stalled" | "deal_hot" | "pipeline_bottleneck" | "revenue_forecast" | "upgrade_opportunity";
+  type:
+    | "deal_stalled"
+    | "deal_hot"
+    | "pipeline_bottleneck"
+    | "revenue_forecast"
+    | "upgrade_opportunity";
   entityType: "deal" | "lead" | "pipeline";
   entityId?: string;
   tenantId: string;
@@ -20,8 +25,8 @@ export class CrmInsightsEngine {
   async generateInsights(tenantId: string): Promise<CrmInsight[]> {
     const insights: CrmInsight[] = [];
 
-    insights.push(...await this.getDealInsights(tenantId));
-    insights.push(...await this.getPipelineInsights(tenantId));
+    insights.push(...(await this.getDealInsights(tenantId)));
+    insights.push(...(await this.getPipelineInsights(tenantId)));
 
     return insights;
   }
@@ -36,7 +41,9 @@ export class CrmInsightsEngine {
         const score = this.dealScorer.score(deal);
 
         if (!deal.updatedAt) return null;
-        const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+        const days = Math.floor(
+          (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+        );
 
         if (days > 12) {
           return {

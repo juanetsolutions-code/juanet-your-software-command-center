@@ -15,7 +15,7 @@ export class ActionExecutor {
   async execute(action: AgentAction, tenantId: string, userId?: string): Promise<ActionResult> {
     try {
       let result: Record<string, unknown> = {};
-      
+
       switch (action.type) {
         case "create_task":
           result = await this.executeCreateTask(action, tenantId, userId);
@@ -33,9 +33,9 @@ export class ActionExecutor {
           result = await this.executeGenerateNote(action, tenantId, userId);
           break;
       }
-      
+
       this.logAction(action, tenantId, "executed", result);
-      
+
       return { success: true, actionId: action.id, result };
     } catch (error) {
       return { success: false, actionId: action.id, error: String(error) };
@@ -52,9 +52,9 @@ export class ActionExecutor {
       priority: action.priority,
       assignedTo: userId,
     });
-    
+
     rollbackEngine.register(action.id, { taskId: task.id, type: "task" });
-    
+
     return { taskId: task.id };
   }
 
@@ -66,31 +66,31 @@ export class ActionExecutor {
   private async executeUpdateStage(action: AgentAction, tenantId: string) {
     const dealId = action.payload.dealId as string;
     const stage = action.payload.stage as string;
-    
+
     const deal = await dealService.getById(dealId, tenantId);
     if (!deal) throw new Error(`Deal ${dealId} not found`);
-    
-    rollbackEngine.register(action.id, { 
-      type: "deal_stage", 
-      dealId, 
-      previousStage: deal.stage 
+
+    rollbackEngine.register(action.id, {
+      type: "deal_stage",
+      dealId,
+      previousStage: deal.stage,
     });
-    
+
     await dealService.update(dealId, tenantId, { stage });
-    
+
     return { updated: true };
   }
 
   private async executeAssignLead(action: AgentAction, tenantId: string, userId?: string) {
     const leadId = action.payload.leadId as string;
     const assignTo = action.payload.assignTo as string;
-    
-    rollbackEngine.register(action.id, { 
-      type: "lead_assign", 
+
+    rollbackEngine.register(action.id, {
+      type: "lead_assign",
       leadId,
-      previousAssignee: userId 
+      previousAssignee: userId,
     });
-    
+
     return { assigned: true };
   }
 
@@ -99,7 +99,12 @@ export class ActionExecutor {
     return { noteId: `note_${Date.now()}` };
   }
 
-  private logAction(action: AgentAction, tenantId: string, status: string, result: Record<string, unknown>) {
+  private logAction(
+    action: AgentAction,
+    tenantId: string,
+    status: string,
+    result: Record<string, unknown>,
+  ) {
     emitEvent({
       id: `evt_${Date.now()}`,
       type: "crm.agent_action",

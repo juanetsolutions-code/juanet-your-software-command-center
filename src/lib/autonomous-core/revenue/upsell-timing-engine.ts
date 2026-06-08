@@ -15,7 +15,7 @@ export class UpsellTimingEngine {
   }
 
   private calculateUpsellProbability(deal: Deal): number {
-    const daysOld = deal.createdAt 
+    const daysOld = deal.createdAt
       ? Math.floor((Date.now() - new Date(deal.createdAt).getTime()) / (1000 * 60 * 60 * 24))
       : 0;
 

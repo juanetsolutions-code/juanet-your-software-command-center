@@ -26,7 +26,7 @@ export class SignalEngine {
         detectedAt: new Date().toISOString(),
       };
     }
-    
+
     return null;
   }
 
@@ -44,7 +44,7 @@ export class SignalEngine {
         detectedAt: new Date().toISOString(),
       };
     }
-    
+
     return null;
   }
 

@@ -21,7 +21,7 @@ export class AutonomousBusinessSystem {
     if (this.initialized) return;
 
     autonomousOrchestrator.initialize();
-    
+
     agentRegistry.register(leadHunterAgent);
     agentRegistry.register(leadQualifierAgent);
     agentRegistry.register(followupAgent);
@@ -30,7 +30,10 @@ export class AutonomousBusinessSystem {
     this.initialized = true;
   }
 
-  async initializeTenant(tenantId: string, autonomyLevel: "off" | "assist" | "semi_auto" | "auto" = "assist"): Promise<void> {
+  async initializeTenant(
+    tenantId: string,
+    autonomyLevel: "off" | "assist" | "semi_auto" | "auto" = "assist",
+  ): Promise<void> {
     salesAgent.setAutonomyLevel(tenantId, autonomyLevel);
   }
 
@@ -41,7 +44,7 @@ export class AutonomousBusinessSystem {
     insights: number;
   }> {
     const result = await autonomousOrchestrator.runTenantCycle(tenantId);
-    
+
     return {
       signals: result?.signals ?? 0,
       actions: result?.actionsTriggered ?? 0,
@@ -55,7 +58,9 @@ export class AutonomousBusinessSystem {
     return {
       initialized: this.initialized,
       activeTenants: 0,
-      registeredAgents: orchestratorStatus.activeAgents ? ["lead-hunter", "lead-qualifier", "followup", "conversion"] : [],
+      registeredAgents: orchestratorStatus.activeAgents
+        ? ["lead-hunter", "lead-qualifier", "followup", "conversion"]
+        : [],
       agentCount: orchestratorStatus.activeAgents,
       cycleCount: orchestratorStatus.cycleCount,
     };

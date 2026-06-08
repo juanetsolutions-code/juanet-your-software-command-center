@@ -39,12 +39,16 @@ export class LeadService {
     return lead;
   }
 
-  async update(leadId: string, updates: LeadUpdateParams, tenantId: string): Promise<Lead | undefined> {
+  async update(
+    leadId: string,
+    updates: LeadUpdateParams,
+    tenantId: string,
+  ): Promise<Lead | undefined> {
     const lead = await this.repository.findById(leadId, tenantId);
     if (!lead) return undefined;
 
     const updated = await this.repository.update(leadId, tenantId, updates);
-    
+
     if (updated) {
       emitEvent({
         id: `evt_${Date.now()}`,
@@ -73,7 +77,7 @@ export class LeadService {
     if (!lead) return;
 
     await this.repository.update(leadId, tenantId, { status: "converted" });
-    
+
     await crmService.contacts.create({
       tenantId,
       firstName: lead.firstName,

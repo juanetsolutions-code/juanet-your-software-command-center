@@ -1,4 +1,10 @@
-import { logContext, type LogContext, type LogEntry, type LogLevel, generateCorrelationId } from "./log-context";
+import {
+  logContext,
+  type LogContext,
+  type LogEntry,
+  type LogLevel,
+  generateCorrelationId,
+} from "./log-context";
 
 export class Logger {
   private environment: "development" | "production" | "mock";
@@ -35,7 +41,7 @@ export class Logger {
   private createEntry(level: LogLevel, message: string, context: LogContext = {}): LogEntry {
     const baseContext = logContext.get();
     const mergedContext = { ...baseContext, ...context };
-    
+
     return {
       id: generateCorrelationId(),
       timestamp: new Date().toISOString(),

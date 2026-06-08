@@ -15,7 +15,12 @@ export const Route = createFileRoute("/admin/crm/pipelines")({
 
 function AdminPipelinesPage() {
   const org = getCurrentOrganization();
-  const pipelines: Array<{ id: string; name: string; description: string; stages: Array<{ name: string; probability: number }> }> = [];
+  const pipelines: Array<{
+    id: string;
+    name: string;
+    description: string;
+    stages: Array<{ name: string; probability: number }>;
+  }> = [];
 
   return (
     <div className="space-y-6">

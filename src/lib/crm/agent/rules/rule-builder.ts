@@ -1,11 +1,7 @@
 import type { AutopilotRule } from "./autopilot-rules-engine";
 
 export class RuleBuilder {
-  create(
-    tenantId: string,
-    name: string,
-    trigger: AutopilotRule["trigger"]
-  ): AutopilotRule {
+  create(tenantId: string, name: string, trigger: AutopilotRule["trigger"]): AutopilotRule {
     return {
       id: `rule_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
       tenantId,

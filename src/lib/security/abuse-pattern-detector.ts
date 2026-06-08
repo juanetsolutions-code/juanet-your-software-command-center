@@ -24,7 +24,7 @@ class AbusePatternDetector {
       if (tenantId && config.tenantId && config.tenantId !== tenantId) continue;
 
       const counter = this.getOrCreateCounter(key);
-      
+
       if (now > counter.resetTime) {
         counter.count = 0;
         counter.resetTime = now + config.windowSeconds * 1000;

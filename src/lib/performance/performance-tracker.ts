@@ -21,7 +21,7 @@ class PerformanceTracker {
   measure(name: string, endName?: string): PerformanceMetric | undefined {
     const startMarker = this.markers.get(name);
     const endMarker = endName ? this.markers.get(endName) : undefined;
-    
+
     const endTime = endMarker ? endMarker.startTime : performance.now();
     const duration = endTime - startMarker.startTime;
 

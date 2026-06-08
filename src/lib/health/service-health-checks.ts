@@ -30,16 +30,16 @@ class ServiceHealthChecker {
       const timeoutPromise = new Promise<HealthStatus>((_, reject) => {
         setTimeout(() => reject(new Error("Timeout")), service.timeoutMs);
       });
-      
+
       const status = await Promise.race([service.check(), timeoutPromise]);
-      
+
       const result: HealthCheckResult = {
         status,
         component: name,
         durationMs: Date.now() - start,
         timestamp: new Date().toISOString(),
       };
-      
+
       this.lastResults.set(name, result);
       return result;
     } catch (error) {
@@ -50,7 +50,7 @@ class ServiceHealthChecker {
         durationMs: Date.now() - start,
         timestamp: new Date().toISOString(),
       };
-      
+
       this.lastResults.set(name, result);
       return result;
     }
@@ -70,7 +70,7 @@ export const serviceHealth = new ServiceHealthChecker();
 export function registerServiceHealth(
   name: string,
   check: () => Promise<HealthStatus>,
-  timeoutMs?: number
+  timeoutMs?: number,
 ): void {
   serviceHealth.register(name, check, timeoutMs);
 }

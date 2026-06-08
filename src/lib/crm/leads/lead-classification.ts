@@ -19,9 +19,9 @@ export class LeadClassifier {
     }
 
     if (score >= 50) {
-      return { tier: "warm", confidence: 0.70, reason: "moderate_interest" };
+      return { tier: "warm", confidence: 0.7, reason: "moderate_interest" };
     }
 
-    return { tier: "cold", confidence: 0.50, reason: "low_engagement" };
+    return { tier: "cold", confidence: 0.5, reason: "low_engagement" };
   }
 }

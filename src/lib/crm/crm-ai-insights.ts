@@ -15,16 +15,16 @@ export type CrmInsight = {
 export class CrmAiInsights {
   async generate(tenantId: string): Promise<CrmInsight[]> {
     const insights: CrmInsight[] = [];
-    
-    insights.push(...await this.getLeadInsights(tenantId));
-    insights.push(...await this.getDealInsights(tenantId));
-    
+
+    insights.push(...(await this.getLeadInsights(tenantId)));
+    insights.push(...(await this.getDealInsights(tenantId)));
+
     return insights.sort((a, b) => b.confidence - a.confidence);
   }
 
   private async getLeadInsights(tenantId: string): Promise<CrmInsight[]> {
     const leads = await leadService.list(tenantId);
-    
+
     return leads
       .filter((lead) => (lead.score ?? 0) >= 70)
       .map((lead) => ({
@@ -40,7 +40,7 @@ export class CrmAiInsights {
 
   private async getDealInsights(tenantId: string): Promise<CrmInsight[]> {
     const deals = await dealService.list(tenantId);
-    
+
     return deals
       .filter((deal) => {
         if (!deal.updatedAt) return false;

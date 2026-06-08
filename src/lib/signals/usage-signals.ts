@@ -18,16 +18,20 @@ export class UsageSignals {
         value: apiCalls,
         timestamp: new Date().toISOString(),
       };
-      
+
       this.emitSignal(signal);
       return signal;
     }
     return null;
   }
 
-  detectAccountInactive(accountId: string, tenantId: string, lastActive: string): UsageSignal | null {
+  detectAccountInactive(
+    accountId: string,
+    tenantId: string,
+    lastActive: string,
+  ): UsageSignal | null {
     const days = Math.floor((Date.now() - new Date(lastActive).getTime()) / (1000 * 60 * 60 * 24));
-    
+
     if (days > 30) {
       const signal = {
         type: "account_inactive" as const,
@@ -36,7 +40,7 @@ export class UsageSignals {
         value: days,
         timestamp: new Date().toISOString(),
       };
-      
+
       this.emitSignal(signal);
       return signal;
     }

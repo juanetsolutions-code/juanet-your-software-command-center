@@ -17,13 +17,15 @@ export class ExecutionPolicyEngine {
   }
 
   getPolicy(tenantId: string): ExecutionPolicy {
-    return this.policies.get(tenantId) ?? {
-      tenantId,
-      maxActionsPerHour: 50,
-      maxActionsPerDay: 200,
-      allowedTypes: ["*"],
-      quietHours: { start: 22, end: 6 },
-    };
+    return (
+      this.policies.get(tenantId) ?? {
+        tenantId,
+        maxActionsPerHour: 50,
+        maxActionsPerDay: 200,
+        allowedTypes: ["*"],
+        quietHours: { start: 22, end: 6 },
+      }
+    );
   }
 
   canExecute(task: AgentTask): boolean {
@@ -64,7 +66,10 @@ export class ExecutionPolicyEngine {
       dayCounter.resetAt = now + 86400000;
     }
 
-    if (hourCounter.count >= policy.maxActionsPerHour || dayCounter.count >= policy.maxActionsPerDay) {
+    if (
+      hourCounter.count >= policy.maxActionsPerHour ||
+      dayCounter.count >= policy.maxActionsPerDay
+    ) {
       return false;
     }
 

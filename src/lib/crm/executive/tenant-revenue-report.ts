@@ -13,10 +13,13 @@ export type TenantRevenueReport = {
 
 export class TenantRevenueReport {
   generate(tenantId: string, leads: Lead[], deals: Deal[]): TenantRevenueReport {
-    const revenue = deals.filter(d => d.stage === "closed_won").reduce((sum, d) => sum + d.value, 0);
-    const forecast = deals.filter(d => d.stage !== "closed_won" && d.stage !== "closed_lost")
-      .reduce((sum, d) => sum + (d.value * d.probability / 100), 0);
-    
+    const revenue = deals
+      .filter((d) => d.stage === "closed_won")
+      .reduce((sum, d) => sum + d.value, 0);
+    const forecast = deals
+      .filter((d) => d.stage !== "closed_won" && d.stage !== "closed_lost")
+      .reduce((sum, d) => sum + (d.value * d.probability) / 100, 0);
+
     return {
       tenantId,
       period: "current_quarter",

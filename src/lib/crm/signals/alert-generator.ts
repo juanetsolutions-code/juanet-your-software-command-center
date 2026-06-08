@@ -21,7 +21,7 @@ export class AlertGenerator {
       message: signal.message,
       channel: "in_app",
     };
-    
+
     emitEvent({
       id: `evt_${Date.now()}`,
       type: `crm.alert.${signal.type}`,
@@ -30,7 +30,7 @@ export class AlertGenerator {
       payload: { alertId: alert.id, signalId: signal.id, entityId: signal.entityId },
       version: "1.0",
     });
-    
+
     return alert;
   }
 }

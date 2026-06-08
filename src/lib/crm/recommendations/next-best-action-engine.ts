@@ -12,7 +12,7 @@ export type Recommendation = {
 export class NextBestActionEngine {
   getForLead(lead: Lead): Recommendation[] {
     const recommendations: Recommendation[] = [];
-    
+
     if (lead.status === "new") {
       recommendations.push({
         type: "call",
@@ -22,7 +22,7 @@ export class NextBestActionEngine {
         estimatedImpact: "Medium",
       });
     }
-    
+
     if (lead.score && lead.score > 80) {
       recommendations.unshift({
         type: "call",
@@ -32,9 +32,11 @@ export class NextBestActionEngine {
         estimatedImpact: "High",
       });
     }
-    
+
     if (lead.lastContactedAt) {
-      const days = Math.floor((Date.now() - new Date(lead.lastContactedAt).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.floor(
+        (Date.now() - new Date(lead.lastContactedAt).getTime()) / (1000 * 60 * 60 * 24),
+      );
       if (days > 2) {
         recommendations.push({
           type: "follow_up",
@@ -45,13 +47,13 @@ export class NextBestActionEngine {
         });
       }
     }
-    
+
     return recommendations;
   }
 
   getForDeal(deal: Deal): Recommendation[] {
     const recommendations: Recommendation[] = [];
-    
+
     if (deal.stage === "proposal") {
       recommendations.push({
         type: "follow_up",
@@ -61,7 +63,7 @@ export class NextBestActionEngine {
         estimatedImpact: "High",
       });
     }
-    
+
     if (deal.probability && deal.probability > 75) {
       recommendations.push({
         type: "discount",
@@ -71,7 +73,7 @@ export class NextBestActionEngine {
         estimatedImpact: "High",
       });
     }
-    
+
     return recommendations;
   }
 }

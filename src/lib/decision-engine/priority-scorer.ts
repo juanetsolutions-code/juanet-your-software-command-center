@@ -17,7 +17,9 @@ export class PriorityScorer {
     }
 
     if (lead.lastContactedAt) {
-      const hours = Math.floor((Date.now() - new Date(lead.lastContactedAt).getTime()) / (1000 * 60 * 60));
+      const hours = Math.floor(
+        (Date.now() - new Date(lead.lastContactedAt).getTime()) / (1000 * 60 * 60),
+      );
       factors.recency = Math.max(0, 100 - hours);
       score += factors.recency * 0.3;
     } else {
@@ -45,7 +47,9 @@ export class PriorityScorer {
     score += factors.value;
 
     if (deal.updatedAt) {
-      const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.floor(
+        (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+      );
       factors.staleness = days > 7 ? 40 : days > 3 ? 20 : 0;
       score += factors.staleness;
     }

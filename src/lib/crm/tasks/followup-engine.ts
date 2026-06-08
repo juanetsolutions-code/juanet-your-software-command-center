@@ -37,7 +37,7 @@ export class FollowupEngine {
     tenantId: string,
     entityType: "lead" | "contact" | "deal",
     entityId: string,
-    assignedTo?: string
+    assignedTo?: string,
   ): Promise<CrmTask | undefined> {
     const rule = this.rules.find((r) => r.entityType === entityType && r.trigger === "created");
     if (!rule) return undefined;
@@ -51,7 +51,14 @@ export class FollowupEngine {
       entityType,
       entityId,
       title: rule.taskTemplate.title,
-      type: rule.taskTemplate.type as "call" | "email" | "meeting" | "note" | "task" | "demo" | "proposal",
+      type: rule.taskTemplate.type as
+        | "call"
+        | "email"
+        | "meeting"
+        | "note"
+        | "task"
+        | "demo"
+        | "proposal",
       priority: rule.taskTemplate.priority,
       assignedTo,
       dueDate,

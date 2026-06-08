@@ -24,7 +24,11 @@ export class ConversationTracker {
     return conv;
   }
 
-  end(id: string, outcome?: "connected" | "voicemail" | "no_answer", summary?: string): Conversation | undefined {
+  end(
+    id: string,
+    outcome?: "connected" | "voicemail" | "no_answer",
+    summary?: string,
+  ): Conversation | undefined {
     const conv = this.conversations.get(id);
     if (!conv) return undefined;
     conv.endTime = new Date().toISOString();

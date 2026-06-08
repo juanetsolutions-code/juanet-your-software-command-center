@@ -55,11 +55,11 @@ export class EventFusionEngine {
 
     const buffer = this.eventBuffer.get(event.tenantId) ?? [];
     buffer.push(event);
-    
+
     if (buffer.length > 100) {
       buffer.shift();
     }
-    
+
     this.eventBuffer.set(event.tenantId, buffer);
   }
 

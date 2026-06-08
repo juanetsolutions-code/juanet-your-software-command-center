@@ -11,17 +11,17 @@ export class PipelineAnalytics {
   assessHealth(deals: Deal[], pipeline: Pipeline): PipelineHealth {
     const issues: string[] = [];
     const recommendations: string[] = [];
-    
+
     const stageValues = this.getStageValueDistribution(deals, pipeline);
     const stalledDeals = this.getStalledDeals(deals);
-    
+
     if (stalledDeals.length > 3) {
       issues.push(`${stalledDeals.length} deals haven't progressed in 7+ days`);
       recommendations.push("Review stalled deals with sales team");
     }
-    
+
     const score = Math.max(0, 100 - issues.length * 25);
-    
+
     return { score, issues, recommendations };
   }
 
@@ -39,14 +39,18 @@ export class PipelineAnalytics {
     const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
     return deals.filter((d) => {
       if (!d.updatedAt) return false;
-      return new Date(d.updatedAt).getTime() < cutoff && d.stage !== "closed_won" && d.stage !== "closed_lost";
+      return (
+        new Date(d.updatedAt).getTime() < cutoff &&
+        d.stage !== "closed_won" &&
+        d.stage !== "closed_lost"
+      );
     });
   }
 
   forecastRevenue(deals: Deal[]): number {
     return deals
       .filter((d) => d.stage !== "closed_won" && d.stage !== "closed_lost")
-      .reduce((sum, deal) => sum + (deal.value * (deal.probability || 0) / 100), 0);
+      .reduce((sum, deal) => sum + (deal.value * (deal.probability || 0)) / 100, 0);
   }
 }
 

@@ -10,7 +10,7 @@ export type PipelineMetrics = {
 export class PipelineOptimizer {
   async optimize(tenantId: string): Promise<PipelineMetrics> {
     const deals = await dealService.list(tenantId);
-    
+
     const metrics: PipelineMetrics = {
       stageCounts: {},
       conversionRate: 0,
@@ -25,7 +25,7 @@ export class PipelineOptimizer {
     const totalDeals = deals.length;
     const wonDeals = deals.filter((d) => d.stage === "closed_won").length;
     metrics.conversionRate = totalDeals > 0 ? wonDeals / totalDeals : 0;
-    
+
     metrics.avgDealValue = deals.reduce((sum, d) => sum + d.value, 0) / totalDeals;
 
     const now = Date.now();
@@ -46,8 +46,9 @@ export class PipelineOptimizer {
     }
 
     const avgConversion = Object.values(metrics.stageCounts).reduce((a, b) => a + b, 0);
-    const conversionRate = avgConversion > 0 ? (metrics.stageCounts["closed_won"] ?? 0) / avgConversion : 0;
-    
+    const conversionRate =
+      avgConversion > 0 ? (metrics.stageCounts["closed_won"] ?? 0) / avgConversion : 0;
+
     if (conversionRate < 0.1) {
       suggestions.push("Low conversion rate - review lead qualification process");
     }

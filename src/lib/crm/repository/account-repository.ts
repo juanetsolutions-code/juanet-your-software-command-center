@@ -38,17 +38,18 @@ export class AccountRepository {
 
     if (params.filter?.search) {
       const searchLower = params.filter.search.toLowerCase();
-      results = results.filter((account) =>
-        account.name.toLowerCase().includes(searchLower) ||
-        account.industry?.toLowerCase().includes(searchLower) ||
-        account.website?.toLowerCase().includes(searchLower)
+      results = results.filter(
+        (account) =>
+          account.name.toLowerCase().includes(searchLower) ||
+          account.industry?.toLowerCase().includes(searchLower) ||
+          account.website?.toLowerCase().includes(searchLower),
       );
     }
 
     const total = results.length;
     const limit = params.limit ?? 50;
     const offset = params.offset ?? 0;
-    
+
     results = results.slice(offset, offset + limit);
 
     return {
@@ -58,7 +59,11 @@ export class AccountRepository {
     };
   }
 
-  async update(id: string, tenantId: string, updates: Partial<Account>): Promise<Account | undefined> {
+  async update(
+    id: string,
+    tenantId: string,
+    updates: Partial<Account>,
+  ): Promise<Account | undefined> {
     const existing = await this.findById(id, tenantId);
     if (!existing) return undefined;
 

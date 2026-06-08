@@ -31,7 +31,9 @@ export class DealScoreModelEngine {
     }
 
     if (deal.updatedAt) {
-      const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.floor(
+        (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+      );
       if (days > 14) {
         factors.stale = -20;
         probability -= 20;

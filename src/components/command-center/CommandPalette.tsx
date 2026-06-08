@@ -57,9 +57,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 bg-transparent text-lg placeholder:text-muted-foreground outline-none"
           />
-          <div className="text-xs text-muted-foreground px-2 py-1 rounded bg-white/5">
-            ESC
-          </div>
+          <div className="text-xs text-muted-foreground px-2 py-1 rounded bg-white/5">ESC</div>
         </div>
 
         {results.length > 0 && (

@@ -24,9 +24,7 @@ export class SalesPlaybookEngine {
 
   getPlaybook(stage: Deal["stage"]): string[] {
     const playbook = this.playbooks[0];
-    return playbook.actions
-      .filter(a => a.stage === stage)
-      .map(a => `${a.timing}: ${a.action}`);
+    return playbook.actions.filter((a) => a.stage === stage).map((a) => `${a.timing}: ${a.action}`);
   }
 
   getAllPlaybooks(): Playbook[] {

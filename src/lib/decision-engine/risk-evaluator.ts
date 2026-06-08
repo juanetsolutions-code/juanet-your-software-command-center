@@ -11,9 +11,9 @@ export class RiskEvaluator {
     const factors: string[] = [];
     let riskScore = 0;
 
-    const volumeLimits = tenantPolicies?.dailyActionLimit as number ?? 100;
+    const volumeLimits = (tenantPolicies?.dailyActionLimit as number) ?? 100;
     const timeOfDay = new Date().getHours();
-    
+
     if (timeOfDay >= 22 || timeOfDay <= 6) {
       factors.push("off_hours");
       riskScore += 20;

@@ -72,7 +72,12 @@ class BottleneckDetector {
 
 export const bottleneckDetector = new BottleneckDetector();
 
-export function recordLatencyData(name: string, durationMs: number, success?: boolean, tenantId?: string): void {
+export function recordLatencyData(
+  name: string,
+  durationMs: number,
+  success?: boolean,
+  tenantId?: string,
+): void {
   bottleneckDetector.record(name, durationMs, success, tenantId);
 }
 

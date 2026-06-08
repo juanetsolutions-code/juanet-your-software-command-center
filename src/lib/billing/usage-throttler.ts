@@ -99,7 +99,7 @@ export function defineTenantQuota(
   tenantId: string,
   resource: string,
   limit: number,
-  windowSeconds?: number
+  windowSeconds?: number,
 ): void {
   quotaChecker.defineQuota(tenantId, resource, limit, windowSeconds);
 }

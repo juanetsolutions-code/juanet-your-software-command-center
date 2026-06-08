@@ -2,7 +2,12 @@ import type { DomainEvent } from "../event-bus/event-bus";
 
 export type SecurityEvent = {
   id: string;
-  type: "auth-success" | "auth-failure" | "rate-limit-hit" | "suspicious-activity" | "policy-violation";
+  type:
+    | "auth-success"
+    | "auth-failure"
+    | "rate-limit-hit"
+    | "suspicious-activity"
+    | "policy-violation";
   tenantId?: string;
   userId?: string;
   ip?: string;
@@ -29,7 +34,9 @@ class SecurityEventDetector {
   analyze(tenantId?: string): SecurityScore {
     const now = Date.now();
     const relevant = this.events.filter(
-      (e) => (!tenantId || e.tenantId === tenantId) && now - new Date(e.timestamp).getTime() < this.windowMs
+      (e) =>
+        (!tenantId || e.tenantId === tenantId) &&
+        now - new Date(e.timestamp).getTime() < this.windowMs,
     );
 
     let score = 0;
@@ -60,9 +67,7 @@ class SecurityEventDetector {
   }
 
   getEvents(tenantId?: string): SecurityEvent[] {
-    return tenantId
-      ? this.events.filter((e) => e.tenantId === tenantId)
-      : [...this.events];
+    return tenantId ? this.events.filter((e) => e.tenantId === tenantId) : [...this.events];
   }
 
   private prune(): void {

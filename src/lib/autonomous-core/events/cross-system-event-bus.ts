@@ -35,11 +35,26 @@ export class CrossSystemEventBus {
   }
 
   private identifySourceByEvent(event: DomainEvent): string {
-    if (event.type.startsWith("deal.") || event.type.startsWith("lead.") || event.type.startsWith("contact.")) return "crm";
+    if (
+      event.type.startsWith("deal.") ||
+      event.type.startsWith("lead.") ||
+      event.type.startsWith("contact.")
+    )
+      return "crm";
     if (event.type.startsWith("agent.")) return "agents";
-    if (event.type.includes("signal") || event.type.includes("intent") || event.type.includes("usage")) return "signals";
+    if (
+      event.type.includes("signal") ||
+      event.type.includes("intent") ||
+      event.type.includes("usage")
+    )
+      return "signals";
     if (event.type.startsWith("automation.")) return "automation";
-    if (event.type.startsWith("billing.") || event.type.includes("subscription") || event.type.includes("payment")) return "billing";
+    if (
+      event.type.startsWith("billing.") ||
+      event.type.includes("subscription") ||
+      event.type.includes("payment")
+    )
+      return "billing";
     return "system";
   }
 

@@ -9,7 +9,11 @@ export class StageManager {
     };
   }
 
-  updateStageProbability(pipeline: Pipeline, stageId: string, probability: number): Stage | undefined {
+  updateStageProbability(
+    pipeline: Pipeline,
+    stageId: string,
+    probability: number,
+  ): Stage | undefined {
     const stage = pipeline.stages.find((s) => s.id === stageId);
     if (stage) {
       stage.probability = probability;
@@ -22,7 +26,7 @@ export class StageManager {
     if (!stage) return pipeline;
 
     stage.position = newPosition;
-    
+
     for (const s of pipeline.stages) {
       if (s.id !== stageId && s.position >= newPosition) {
         s.position += 1;
@@ -33,7 +37,8 @@ export class StageManager {
   }
 
   calculateProbabilityForPipeline(pipeline: Pipeline, deal: { value: number }): number {
-    const avgProbability = pipeline.stages.reduce((sum, s) => sum + s.probability, 0) / pipeline.stages.length;
+    const avgProbability =
+      pipeline.stages.reduce((sum, s) => sum + s.probability, 0) / pipeline.stages.length;
     return avgProbability;
   }
 

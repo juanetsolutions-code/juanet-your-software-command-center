@@ -67,8 +67,30 @@ export type PipelineTemplate = {
 };
 
 export const CRM_COLUMNS = {
-  leads: ["id", "tenantId", "firstName", "lastName", "email", "source", "status", "score", "createdAt", "updatedAt"],
+  leads: [
+    "id",
+    "tenantId",
+    "firstName",
+    "lastName",
+    "email",
+    "source",
+    "status",
+    "score",
+    "createdAt",
+    "updatedAt",
+  ],
   contacts: ["id", "tenantId", "firstName", "lastName", "email", "type", "createdAt", "updatedAt"],
   accounts: ["id", "tenantId", "name", "type", "industry", "website", "createdAt", "updatedAt"],
-  deals: ["id", "tenantId", "name", "value", "stage", "probability", "priority", "pipelineId", "createdAt", "updatedAt"],
+  deals: [
+    "id",
+    "tenantId",
+    "name",
+    "value",
+    "stage",
+    "probability",
+    "priority",
+    "pipelineId",
+    "createdAt",
+    "updatedAt",
+  ],
 } as const;

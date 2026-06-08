@@ -7,7 +7,11 @@ import { salesAgent } from "@/lib/crm/agent/sales-agent-orchestrator";
 import { emitEvent } from "@/lib/event-bus";
 
 export class CrmActions {
-  async createTaskForLead(lead: Lead, title: string, priority: "low" | "medium" | "high" | "urgent" = "medium"): Promise<string> {
+  async createTaskForLead(
+    lead: Lead,
+    title: string,
+    priority: "low" | "medium" | "high" | "urgent" = "medium",
+  ): Promise<string> {
     const task = await taskService.create({
       tenantId: lead.tenantId,
       entityType: "lead",
@@ -29,7 +33,11 @@ export class CrmActions {
     return task.id;
   }
 
-  async createTaskForDeal(deal: Deal, title: string, priority: "low" | "medium" | "high" | "urgent" = "high"): Promise<string> {
+  async createTaskForDeal(
+    deal: Deal,
+    title: string,
+    priority: "low" | "medium" | "high" | "urgent" = "high",
+  ): Promise<string> {
     const task = await taskService.create({
       tenantId: deal.tenantId,
       entityType: "deal",

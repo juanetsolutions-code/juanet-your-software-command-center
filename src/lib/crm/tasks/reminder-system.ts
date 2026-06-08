@@ -13,7 +13,12 @@ export type Reminder = {
 export class ReminderSystem {
   private reminders: Map<string, Reminder> = new Map();
 
-  async schedule(taskId: string, tenantId: string, minutesBefore: number, channel: "email" | "in_app"): Promise<Reminder> {
+  async schedule(
+    taskId: string,
+    tenantId: string,
+    minutesBefore: number,
+    channel: "email" | "in_app",
+  ): Promise<Reminder> {
     const scheduledAt = new Date(Date.now() + minutesBefore * 60 * 1000).toISOString();
     const reminder: Reminder = {
       id: `rem_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
@@ -29,7 +34,7 @@ export class ReminderSystem {
   async getPending(tenantId: string): Promise<Reminder[]> {
     const now = new Date().toISOString();
     return Array.from(this.reminders.values()).filter(
-      (r) => r.tenantId === tenantId && r.scheduledAt <= now && !r.deliveredAt
+      (r) => r.tenantId === tenantId && r.scheduledAt <= now && !r.deliveredAt,
     );
   }
 

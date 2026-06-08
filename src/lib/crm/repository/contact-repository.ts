@@ -38,18 +38,19 @@ export class ContactRepository {
 
     if (params.filter?.search) {
       const searchLower = params.filter.search.toLowerCase();
-      results = results.filter((contact) =>
-        contact.firstName.toLowerCase().includes(searchLower) ||
-        contact.lastName.toLowerCase().includes(searchLower) ||
-        contact.email.toLowerCase().includes(searchLower) ||
-        contact.company?.toLowerCase().includes(searchLower)
+      results = results.filter(
+        (contact) =>
+          contact.firstName.toLowerCase().includes(searchLower) ||
+          contact.lastName.toLowerCase().includes(searchLower) ||
+          contact.email.toLowerCase().includes(searchLower) ||
+          contact.company?.toLowerCase().includes(searchLower),
       );
     }
 
     const total = results.length;
     const limit = params.limit ?? 50;
     const offset = params.offset ?? 0;
-    
+
     results = results.slice(offset, offset + limit);
 
     return {
@@ -59,7 +60,11 @@ export class ContactRepository {
     };
   }
 
-  async update(id: string, tenantId: string, updates: Partial<Contact>): Promise<Contact | undefined> {
+  async update(
+    id: string,
+    tenantId: string,
+    updates: Partial<Contact>,
+  ): Promise<Contact | undefined> {
     const existing = await this.findById(id, tenantId);
     if (!existing) return undefined;
 

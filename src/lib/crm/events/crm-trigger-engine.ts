@@ -15,7 +15,9 @@ export class CrmTriggerEngine {
 
     if (!deal.updatedAt) return events;
 
-    const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+    const days = Math.floor(
+      (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+    );
 
     if (days > 14 && deal.stage !== "closed_won" && deal.stage !== "closed_lost") {
       events.push({

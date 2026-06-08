@@ -32,7 +32,9 @@ export class DealProgressionRules {
         trigger: "inactivity_detected",
         condition: (deal) => {
           if (!deal.updatedAt) return false;
-          const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+          const days = Math.floor(
+            (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+          );
           return days > 30 && deal.stage === "negotiation";
         },
         action: "regress_to_contacted",

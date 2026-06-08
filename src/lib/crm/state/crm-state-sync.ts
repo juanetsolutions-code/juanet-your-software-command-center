@@ -12,8 +12,12 @@ export class CrmStateSync {
   private snapshots: Map<string, CrmStateSnapshot> = new Map();
 
   async syncTenant(tenantId: string): Promise<CrmStateSnapshot> {
-    const leads = await import("../services/lead-service").then(m => m.leadService.list(tenantId));
-    const deals = await import("../services/deal-service").then(m => m.dealService.list(tenantId));
+    const leads = await import("../services/lead-service").then((m) =>
+      m.leadService.list(tenantId),
+    );
+    const deals = await import("../services/deal-service").then((m) =>
+      m.dealService.list(tenantId),
+    );
 
     const snapshot: CrmStateSnapshot = {
       leads: {},

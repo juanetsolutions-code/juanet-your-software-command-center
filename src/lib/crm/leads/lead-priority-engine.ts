@@ -14,25 +14,31 @@ export class LeadPriorityEngine {
   private classifier = new LeadClassifier();
 
   prioritize(leads: Lead[]): PriorityEntry[] {
-    return leads.map((lead) => {
-      const score = this.scorer.score(lead);
-      const classification = this.classifier.classify(lead);
-      
-      return {
-        leadId: lead.id,
-        priority: score.score,
-        tier: classification.tier,
-        nextAction: this.getNextAction(classification.tier, lead),
-      };
-    }).sort((a, b) => b.priority - a.priority);
+    return leads
+      .map((lead) => {
+        const score = this.scorer.score(lead);
+        const classification = this.classifier.classify(lead);
+
+        return {
+          leadId: lead.id,
+          priority: score.score,
+          tier: classification.tier,
+          nextAction: this.getNextAction(classification.tier, lead),
+        };
+      })
+      .sort((a, b) => b.priority - a.priority);
   }
 
   private getNextAction(tier: string, lead: Lead): string {
     switch (tier) {
-      case "ready": return "immediate_call";
-      case "hot": return "next_morning_followup";
-      case "warm": return "nurture_sequence";
-      default: return "monitor";
+      case "ready":
+        return "immediate_call";
+      case "hot":
+        return "next_morning_followup";
+      case "warm":
+        return "nurture_sequence";
+      default:
+        return "monitor";
     }
   }
 

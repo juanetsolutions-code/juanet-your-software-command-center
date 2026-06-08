@@ -41,7 +41,11 @@ class WebhookRegistry {
     return this.configs.get(endpointId);
   }
 
-  setDefaultRetryPolicy(policy: { maxRetries: number; backoffMs: number; exponential: boolean }): void {
+  setDefaultRetryPolicy(policy: {
+    maxRetries: number;
+    backoffMs: number;
+    exponential: boolean;
+  }): void {
     for (const id of this.endpoints.keys()) {
       const existing = this.configs.get(id);
       if (!existing) {

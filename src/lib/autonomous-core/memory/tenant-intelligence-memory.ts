@@ -21,7 +21,7 @@ export class TenantIntelligenceMemory {
   getSuccessRate(tenantId: string, pattern: string): number {
     const entries = this.patterns.get(tenantId) ?? [];
     const patternEntries = entries.filter((e) => e.key === pattern);
-    
+
     if (patternEntries.length === 0) return 0;
 
     const successes = patternEntries.filter((e) => (e.value as any)?.success === true).length;

@@ -29,8 +29,10 @@ export class CrmQueryEngine {
     const results: Record<string, number> = {};
 
     for (const agg of aggregations) {
-      const values = items.map((item) => (item as Record<string, unknown>)[agg.field]).filter((v): v is number => typeof v === "number");
-      
+      const values = items
+        .map((item) => (item as Record<string, unknown>)[agg.field])
+        .filter((v): v is number => typeof v === "number");
+
       switch (agg.operation) {
         case "count":
           results[`${agg.field}_count`] = values.length;
@@ -39,7 +41,8 @@ export class CrmQueryEngine {
           results[`${agg.field}_sum`] = values.reduce((sum, v) => sum + v, 0);
           break;
         case "avg":
-          results[`${agg.field}_avg`] = values.length > 0 ? values.reduce((sum, v) => sum + v, 0) / values.length : 0;
+          results[`${agg.field}_avg`] =
+            values.length > 0 ? values.reduce((sum, v) => sum + v, 0) / values.length : 0;
           break;
         case "min":
           results[`${agg.field}_min`] = Math.min(...values);
@@ -55,12 +58,12 @@ export class CrmQueryEngine {
 
   async paginate<T>(items: T[], options: CrmQueryOptions): Promise<CrmQueryResult<T>> {
     let results = [...items];
-    
+
     if (options.sort) {
       results = results.sort((a, b) => {
         const aVal = (a as Record<string, unknown>)[options.sort!.field];
         const bVal = (b as Record<string, unknown>)[options.sort!.field];
-        
+
         if (aVal < bVal) return options.sort!.direction === "asc" ? -1 : 1;
         if (aVal > bVal) return options.sort!.direction === "asc" ? 1 : -1;
         return 0;
@@ -70,7 +73,7 @@ export class CrmQueryEngine {
     const total = results.length;
     const limit = options.limit ?? 50;
     const offset = options.offset ?? 0;
-    
+
     results = results.slice(offset, offset + limit);
 
     return {

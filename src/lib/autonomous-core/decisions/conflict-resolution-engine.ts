@@ -15,11 +15,14 @@ export class ConflictResolutionEngine {
   }
 
   private groupByType(proposals: ActionProposal[]): Record<string, ActionProposal[]> {
-    return proposals.reduce((acc, p) => {
-      acc[p.component] = acc[p.component] ?? [];
-      acc[p.component].push(p);
-      return acc;
-    }, {} as Record<string, ActionProposal[]>);
+    return proposals.reduce(
+      (acc, p) => {
+        acc[p.component] = acc[p.component] ?? [];
+        acc[p.component].push(p);
+        return acc;
+      },
+      {} as Record<string, ActionProposal[]>,
+    );
   }
 
   private selectBest(proposals: ActionProposal[]): ActionProposal {

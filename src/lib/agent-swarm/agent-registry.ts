@@ -7,13 +7,13 @@ export class AgentRegistry {
 
   register(agent: BaseAgent, tenantId?: string): void {
     this.agents.set(agent.id, { ...agent, tenantId });
-    
+
     if (tenantId) {
       const tenantSet = this.tenantAgents.get(tenantId) ?? new Set();
       tenantSet.add(agent.id);
       this.tenantAgents.set(tenantId, tenantSet);
     }
-    
+
     emitEvent({
       id: `evt_${Date.now()}`,
       type: "agent.registered",
@@ -27,14 +27,14 @@ export class AgentRegistry {
   unregister(agentId: string): boolean {
     const agent = this.agents.get(agentId);
     if (!agent) return false;
-    
+
     this.agents.delete(agentId);
-    
+
     if (agent.tenantId) {
       const tenantSet = this.tenantAgents.get(agent.tenantId);
       tenantSet?.delete(agentId);
     }
-    
+
     return true;
   }
 

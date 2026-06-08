@@ -38,7 +38,7 @@ class CachePerformance {
 
   getSlowKeys(thresholdMs: number): string[] {
     const keyLatencies = new Map<string, number>();
-    
+
     for (const hit of this.hits) {
       const current = keyLatencies.get(hit.key) ?? 0;
       keyLatencies.set(hit.key, Math.max(current, hit.durationMs));

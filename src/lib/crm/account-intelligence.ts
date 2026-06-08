@@ -24,7 +24,7 @@ export class AccountIntelligence {
 
     const mockLogins = 10;
     const mockFeatures = 5;
-    
+
     if (mockLogins > 20 && mockFeatures > 10) {
       status = "healthy";
       score = 85;

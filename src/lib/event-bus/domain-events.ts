@@ -1,6 +1,6 @@
 import type { DomainEvent } from "./event-bus";
 
-export type DomainEventType = 
+export type DomainEventType =
   | "tenant.lifecycle"
   | "user.authentication"
   | "billing.usage"

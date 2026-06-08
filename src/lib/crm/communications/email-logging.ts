@@ -32,7 +32,7 @@ export class EmailLogging {
 
   getByContact(tenantId: string, contactId: string): Communication[] {
     return Array.from(this.emails.values()).filter(
-      (e) => e.tenantId === tenantId && e.contactId === contactId
+      (e) => e.tenantId === tenantId && e.contactId === contactId,
     );
   }
 }

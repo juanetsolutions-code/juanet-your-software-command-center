@@ -12,11 +12,11 @@ export function validateLead(lead: Partial<Lead>): ValidationResult {
   if (!lead.firstName?.trim()) errors.push("First name is required");
   if (!lead.lastName?.trim()) errors.push("Last name is required");
   if (!lead.email?.trim()) errors.push("Email is required");
-  
+
   if (lead.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email)) {
     errors.push("Invalid email format");
   }
-  
+
   if (lead.phone && !/^[\d\s\-\+\(\)]+$/.test(lead.phone)) {
     errors.push("Invalid phone format");
   }
@@ -91,7 +91,14 @@ export function isValidLeadSource(source: string): source is LeadSource {
 }
 
 export function isValidDealStage(stage: string): stage is DealStage {
-  return ["prospecting", "qualification", "proposal", "negotiation", "closed_won", "closed_lost"].includes(stage);
+  return [
+    "prospecting",
+    "qualification",
+    "proposal",
+    "negotiation",
+    "closed_won",
+    "closed_lost",
+  ].includes(stage);
 }
 
 export function isValidDealPriority(priority: string): priority is DealPriority {

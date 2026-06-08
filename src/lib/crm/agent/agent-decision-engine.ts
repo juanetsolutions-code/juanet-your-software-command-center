@@ -12,15 +12,15 @@ export type DecisionContext = {
 export class AgentDecisionEngine {
   shouldAct(context: DecisionContext, action: AgentAction): boolean {
     if (context.autonomyLevel === "off") return false;
-    
+
     if (context.autonomyLevel === "assist") {
       return false;
     }
-    
+
     if (context.autonomyLevel === "semi_auto" && action.requiresApproval) {
       return false;
     }
-    
+
     return true;
   }
 

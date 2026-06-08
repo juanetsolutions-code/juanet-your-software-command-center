@@ -13,7 +13,9 @@ export class LeadScoringEngine {
     const factors: Record<string, number> = {};
 
     if (lead.lastContactedAt) {
-      const hours = Math.floor((Date.now() - new Date(lead.lastContactedAt).getTime()) / (1000 * 60 * 60));
+      const hours = Math.floor(
+        (Date.now() - new Date(lead.lastContactedAt).getTime()) / (1000 * 60 * 60),
+      );
       factors.recency = Math.max(0, 100 - hours);
       score += factors.recency * 0.3;
     }

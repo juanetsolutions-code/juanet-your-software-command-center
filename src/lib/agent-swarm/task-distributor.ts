@@ -7,7 +7,7 @@ export class TaskDistributor {
 
   distribute(task: AgentTask, preferredTypes?: AgentType[]): string | null {
     const matchingAgents = this.findMatchingAgents(task, preferredTypes);
-    
+
     if (matchingAgents.length === 0) {
       this.enqueueTask(task);
       return null;
@@ -25,9 +25,9 @@ export class TaskDistributor {
   }
 
   private findMatchingAgents(task: AgentTask, preferredTypes?: AgentType[]): BaseAgent[] {
-    const registry = import("./agent-registry").then(m => m.agentRegistry);
+    const registry = import("./agent-registry").then((m) => m.agentRegistry);
     if (!preferredTypes) return [];
-    
+
     return preferredTypes.flatMap((type) => {
       // Will be populated dynamically
       return [];
@@ -35,13 +35,15 @@ export class TaskDistributor {
   }
 
   private selectBestAgent(agents: BaseAgent[], priority: number): BaseAgent | null {
-    return agents
-      .filter((agent) => agent.status !== "shutdown")
-      .sort((a, b) => {
-        const loadA = (a as any).processedTasks ?? 0;
-        const loadB = (b as any).processedTasks ?? 0;
-        return loadA - loadB;
-      })[0] ?? null;
+    return (
+      agents
+        .filter((agent) => agent.status !== "shutdown")
+        .sort((a, b) => {
+          const loadA = (a as any).processedTasks ?? 0;
+          const loadB = (b as any).processedTasks ?? 0;
+          return loadA - loadB;
+        })[0] ?? null
+    );
   }
 
   private enqueueTask(task: AgentTask): void {
@@ -71,7 +73,14 @@ export class TaskDistributor {
 
 export const taskDistributor = new TaskDistributor();
 
-function emitEvent(event: { id: string; type: string; tenantId?: string; timestamp: string; payload: Record<string, unknown>; version: string }): void {
+function emitEvent(event: {
+  id: string;
+  type: string;
+  tenantId?: string;
+  timestamp: string;
+  payload: Record<string, unknown>;
+  version: string;
+}): void {
   import("@/lib/event-bus").then(({ eventBus }) => {
     eventBus.emit(event);
   });

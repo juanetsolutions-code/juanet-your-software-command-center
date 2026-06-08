@@ -8,6 +8,7 @@ import {
   Download,
   KeyRound,
   Settings,
+  UserPlus,
 } from "lucide-react";
 import { AppShell, type NavItem } from "@/components/app/AppShell";
 import { requireRole } from "@/lib/auth";
@@ -20,6 +21,7 @@ const items: NavItem[] = [
   { label: "Payments", to: "/dashboard/payments", icon: CreditCard },
   { label: "Downloads", to: "/dashboard/downloads", icon: Download },
   { label: "Licenses", to: "/dashboard/licenses", icon: KeyRound },
+  { label: "CRM", to: "/dashboard/crm", icon: UserPlus },
   { label: "Settings", to: "/dashboard/settings", icon: Settings },
 ];
 

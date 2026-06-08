@@ -12,13 +12,13 @@ export class ChannelRouter {
       { channel: "email", priority: lead.phone ? 1 : 2 },
       { channel: "in_app", priority: lead.phone ? 2 : 1 },
     ];
-    
+
     return preferences.sort((a, b) => a.priority - b.priority)[0];
   }
 
   route(lead: Lead, message: GeneratedMessage): Promise<void> {
     const channel = this.selectChannel(lead, message);
-    
+
     switch (channel.channel) {
       case "email":
         return this.sendEmail(lead, message);

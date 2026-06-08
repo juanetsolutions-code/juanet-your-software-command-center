@@ -20,8 +20,10 @@ export class ProactiveSalesEngine {
 
   async nudgedeal(deal: Deal): Promise<boolean> {
     if (!deal.updatedAt) return false;
-    
-    const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+
+    const days = Math.floor(
+      (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+    );
     if (days > 7 && deal.stage !== "closed_won" && deal.stage !== "closed_lost") {
       await taskService.create({
         tenantId: deal.tenantId,

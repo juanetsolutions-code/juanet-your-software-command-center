@@ -5,22 +5,19 @@ import { runWithRetry } from "../../jobs";
 import { emitEvent } from "@/lib/event-bus";
 
 async function handleCrmAgentJob(job: Job): Promise<AgentEvaluationResult> {
-  const { tenantId, userId, userRole } = job.payload as { 
-    tenantId: string; 
-    userId?: string; 
-    userRole?: string; 
+  const { tenantId, userId, userRole } = job.payload as {
+    tenantId: string;
+    userId?: string;
+    userRole?: string;
   };
 
   if (!tenantId) {
     throw new Error("tenantId required for CRM agent job");
   }
 
-  const result = await runWithRetry(
-    `crm-autonomous-scan-${tenantId}`,
-    async () => {
-      return await salesAgent.scanAndAct(tenantId, userId, userRole);
-    }
-  );
+  const result = await runWithRetry(`crm-autonomous-scan-${tenantId}`, async () => {
+    return await salesAgent.scanAndAct(tenantId, userId, userRole);
+  });
 
   if (!result.success) {
     throw new Error(`CRM agent scan failed: ${result.error}`);

@@ -29,7 +29,10 @@ export class PipelineRepository {
     return pipelines.find((p) => p.name.toLowerCase().includes("default"));
   }
 
-  async addStage(pipelineId: string, stageData: Omit<Pipeline["stages"][0], "id">): Promise<Pipeline | undefined> {
+  async addStage(
+    pipelineId: string,
+    stageData: Omit<Pipeline["stages"][0], "id">,
+  ): Promise<Pipeline | undefined> {
     const pipeline = this.pipelines.get(pipelineId);
     if (!pipeline) return undefined;
 
@@ -37,7 +40,7 @@ export class PipelineRepository {
       ...stageData,
       id: this.generateStageId(),
     };
-    
+
     pipeline.stages.push(stage);
     return pipeline;
   }

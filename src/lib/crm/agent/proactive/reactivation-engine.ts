@@ -13,7 +13,7 @@ export class ReactivationEngine {
       type: "email",
       priority: "medium",
     });
-    
+
     await taskService.create({
       tenantId: lead.tenantId,
       entityType: "lead",
@@ -22,7 +22,7 @@ export class ReactivationEngine {
       type: "call",
       priority: "high",
     });
-    
+
     await taskService.create({
       tenantId: lead.tenantId,
       entityType: "lead",

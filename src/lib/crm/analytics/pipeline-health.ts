@@ -21,11 +21,14 @@ export class PipelineHealthAnalyzer {
     const wonDeals = deals.filter((d) => d.stage === "closed_won").length;
     const conversionRate = deals.length > 0 ? wonDeals / deals.length : 0;
 
-    const avgAge = deals.reduce((sum, deal) => {
-      if (!deal.createdAt) return sum;
-      const days = Math.floor((Date.now() - new Date(deal.createdAt).getTime()) / (1000 * 60 * 60 * 24));
-      return sum + days;
-    }, 0) / deals.length;
+    const avgAge =
+      deals.reduce((sum, deal) => {
+        if (!deal.createdAt) return sum;
+        const days = Math.floor(
+          (Date.now() - new Date(deal.createdAt).getTime()) / (1000 * 60 * 60 * 24),
+        );
+        return sum + days;
+      }, 0) / deals.length;
 
     const bottlenecks = this.identifyBottlenecks(stageDistribution, deals);
 
@@ -39,12 +42,17 @@ export class PipelineHealthAnalyzer {
     };
   }
 
-  private identifyBottlenecks(stages: Record<string, number>, deals: { stage: string; updatedAt?: string }[]): string[] {
+  private identifyBottlenecks(
+    stages: Record<string, number>,
+    deals: { stage: string; updatedAt?: string }[],
+  ): string[] {
     const bottlenecks: string[] = [];
 
     const stalledNegotiation = deals.filter((d) => {
       if (!d.updatedAt) return false;
-      const days = Math.floor((Date.now() - new Date(d.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.floor(
+        (Date.now() - new Date(d.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+      );
       return d.stage === "negotiation" && days > 14;
     });
 
@@ -54,7 +62,9 @@ export class PipelineHealthAnalyzer {
 
     const stalledQualified = deals.filter((d) => {
       if (!d.updatedAt) return false;
-      const days = Math.floor((Date.now() - new Date(d.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.floor(
+        (Date.now() - new Date(d.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+      );
       return d.stage === "qualified" && days > 7;
     });
 

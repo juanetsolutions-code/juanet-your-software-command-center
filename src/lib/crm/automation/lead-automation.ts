@@ -28,9 +28,7 @@ export class LeadAutomation {
   }
 
   async processNewLead(lead: Lead): Promise<void> {
-    const matchingRules = this.rules.filter(
-      (r) => r.isActive && r.trigger === "created"
-    );
+    const matchingRules = this.rules.filter((r) => r.isActive && r.trigger === "created");
 
     for (const rule of matchingRules) {
       await this.executeActions(rule.actions, { lead });
@@ -50,7 +48,10 @@ export class LeadAutomation {
     }
   }
 
-  private async executeActions(actions: LeadAutomationRule["actions"], context: Record<string, unknown>): Promise<void> {
+  private async executeActions(
+    actions: LeadAutomationRule["actions"],
+    context: Record<string, unknown>,
+  ): Promise<void> {
     for (const action of actions) {
       switch (action.type) {
         case "create_task":
@@ -66,19 +67,28 @@ export class LeadAutomation {
     }
   }
 
-  private async createTaskAction(payload: Record<string, unknown>, context: Record<string, unknown>): Promise<void> {
+  private async createTaskAction(
+    payload: Record<string, unknown>,
+    context: Record<string, unknown>,
+  ): Promise<void> {
     const lead = context.lead as Lead;
     // Task creation hook
     console.log(`[Automation] Creating task for lead ${lead.id}: ${payload.title}`);
   }
 
-  private async assignAction(payload: Record<string, unknown>, context: Record<string, unknown>): Promise<void> {
+  private async assignAction(
+    payload: Record<string, unknown>,
+    context: Record<string, unknown>,
+  ): Promise<void> {
     const lead = context.lead as Lead;
     // Assignment hook
     console.log(`[Automation] Assigning lead ${lead.id} to ${payload.userId}`);
   }
 
-  private async notifyAction(payload: Record<string, unknown>, context: Record<string, unknown>): Promise<void> {
+  private async notifyAction(
+    payload: Record<string, unknown>,
+    context: Record<string, unknown>,
+  ): Promise<void> {
     // Notification hook
     console.log(`[Automation] Sending notification: ${payload.message}`);
   }

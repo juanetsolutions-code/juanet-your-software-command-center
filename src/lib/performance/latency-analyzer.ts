@@ -28,15 +28,22 @@ class LatencyAnalyzer {
     this.pruneRecords();
   }
 
-  getLatency(operation: string, tenantId?: string): {
-    p50: number;
-    p90: number;
-    p95: number;
-    p99: number;
-    avg: number;
-    count: number;
-  } | undefined {
-    const records = this.records.filter((r) => r.operation === operation && (!tenantId || r.tenantId === tenantId));
+  getLatency(
+    operation: string,
+    tenantId?: string,
+  ):
+    | {
+        p50: number;
+        p90: number;
+        p95: number;
+        p99: number;
+        avg: number;
+        count: number;
+      }
+    | undefined {
+    const records = this.records.filter(
+      (r) => r.operation === operation && (!tenantId || r.tenantId === tenantId),
+    );
     if (records.length === 0) return undefined;
 
     const sorted = [...records].sort((a, b) => a.durationMs - b.durationMs);
@@ -54,7 +61,7 @@ class LatencyAnalyzer {
 
   getDegradedOperations(thresholdMs: number): string[] {
     const operationAvgs = new Map<string, number>();
-    
+
     for (const record of this.records) {
       const current = operationAvgs.get(record.operation) ?? 0;
       operationAvgs.set(record.operation, current + record.durationMs);
@@ -89,7 +96,7 @@ export function recordLatency(
   operation: string,
   durationMs: number,
   success?: boolean,
-  tenantId?: string
+  tenantId?: string,
 ): void {
   latencyAnalyzer.record(operation, durationMs, success, tenantId);
 }

@@ -46,8 +46,8 @@ class DeadLetterQueue {
   }
 
   getAll(): Job[] {
-    return Array.from(this.jobs.values()).sort((a, b) => 
-      new Date(b.failedAt ?? 0).getTime() - new Date(a.failedAt ?? 0).getTime()
+    return Array.from(this.jobs.values()).sort(
+      (a, b) => new Date(b.failedAt ?? 0).getTime() - new Date(a.failedAt ?? 0).getTime(),
     );
   }
 

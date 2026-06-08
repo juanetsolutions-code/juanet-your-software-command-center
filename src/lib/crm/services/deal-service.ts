@@ -40,7 +40,11 @@ export class DealService {
     return deal;
   }
 
-  async update(dealId: string, updates: DealUpdateParams, tenantId: string): Promise<Deal | undefined> {
+  async update(
+    dealId: string,
+    updates: DealUpdateParams,
+    tenantId: string,
+  ): Promise<Deal | undefined> {
     const deal = await this.repository.findById(dealId, tenantId);
     if (!deal) return undefined;
 

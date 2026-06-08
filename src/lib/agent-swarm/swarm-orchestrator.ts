@@ -52,12 +52,14 @@ export class SwarmOrchestrator {
     });
   }
 
-  async runTenantCycle(tenantId: string): Promise<{ tasksCompleted: number; tasksCreated: number }> {
+  async runTenantCycle(
+    tenantId: string,
+  ): Promise<{ tasksCompleted: number; tasksCreated: number }> {
     const tasksCompleted = 0;
     const tasksCreated = 0;
 
     this.state.lastCycle = new Date().toISOString();
-    
+
     return { tasksCompleted, tasksCreated };
   }
 }

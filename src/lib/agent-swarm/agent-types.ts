@@ -34,20 +34,24 @@ export type AgentInfo = {
 export abstract class BaseAgent {
   abstract readonly id: string;
   abstract readonly type: AgentType;
-  
-  get status(): AgentStatus { return this._status; }
+
+  get status(): AgentStatus {
+    return this._status;
+  }
   protected _status: AgentStatus = "idle";
-  
-  get capabilities(): AgentCapability[] { return []; }
-  
+
+  get capabilities(): AgentCapability[] {
+    return [];
+  }
+
   onEvent?(event: DomainEvent): Promise<void>;
   onTask?(task: AgentTask): Promise<void>;
   shutdown?(): Promise<void>;
-  
+
   protected setStatus(status: AgentStatus): void {
     this._status = status;
   }
-  
+
   protected async heartbeat(): Promise<void> {
     // Emit heartbeat event
   }

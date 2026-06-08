@@ -20,13 +20,11 @@ export class EventDispatcher {
 
   async dispatch(event: DomainEvent): Promise<void> {
     const matchingHandlers = Array.from(this.handlers.values()).filter(
-      (h) => h.eventType === event.type
+      (h) => h.eventType === event.type,
     );
 
     if (this.config.enableParallel && matchingHandlers.length > 1) {
-      await Promise.all(
-        matchingHandlers.map((h) => this.executeHandler(h, event))
-      );
+      await Promise.all(matchingHandlers.map((h) => this.executeHandler(h, event)));
     } else {
       for (const handler of matchingHandlers) {
         await this.executeHandler(handler, event);

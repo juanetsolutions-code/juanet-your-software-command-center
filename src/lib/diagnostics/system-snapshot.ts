@@ -35,7 +35,7 @@ class SystemSnapshotGenerator {
 
   async export(format: "json" | "zip"): Promise<string | Buffer> {
     const snapshot = await this.create("quick");
-    
+
     if (format === "json") {
       return JSON.stringify(snapshot, null, 2);
     }
@@ -55,7 +55,10 @@ class SystemSnapshotGenerator {
 
 export const systemSnapshot = new SystemSnapshotGenerator();
 
-export async function createSystemSnapshot(type: "full" | "quick" | "tenant", tenantId?: string): Promise<SystemSnapshot> {
+export async function createSystemSnapshot(
+  type: "full" | "quick" | "tenant",
+  tenantId?: string,
+): Promise<SystemSnapshot> {
   return systemSnapshot.create(type, tenantId);
 }
 

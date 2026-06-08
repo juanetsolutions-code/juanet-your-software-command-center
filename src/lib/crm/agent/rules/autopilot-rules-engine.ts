@@ -24,14 +24,14 @@ export class AutopilotRulesEngine {
   evaluate(lead: Lead): AutopilotRule[] {
     return Array.from(this.rules.values()).filter((rule) => {
       if (!rule.enabled) return false;
-      
+
       switch (rule.trigger) {
         case "high_score_lead":
           return (lead.score ?? 0) >= 80;
         case "lead_inactive":
           return lead.status === "new" && !lead.lastContactedAt;
       }
-      
+
       return false;
     });
   }
@@ -39,14 +39,16 @@ export class AutopilotRulesEngine {
   evaluateDeal(deal: Deal): AutopilotRule[] {
     return Array.from(this.rules.values()).filter((rule) => {
       if (!rule.enabled) return false;
-      
+
       switch (rule.trigger) {
         case "deal_stuck":
           if (!deal.updatedAt) return false;
-          const days = Math.floor((Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24));
+          const days = Math.floor(
+            (Date.now() - new Date(deal.updatedAt).getTime()) / (1000 * 60 * 60 * 24),
+          );
           return days > 5 && deal.stage !== "closed_won" && deal.stage !== "closed_lost";
       }
-      
+
       return false;
     });
   }

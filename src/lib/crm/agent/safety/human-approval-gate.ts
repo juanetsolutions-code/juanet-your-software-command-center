@@ -19,7 +19,7 @@ export class HumanApprovalGate {
       createdAt: new Date().toISOString(),
       status: "pending",
     };
-    
+
     this.requests.set(action.id, req);
     return req;
   }
@@ -27,7 +27,7 @@ export class HumanApprovalGate {
   approve(actionId: string, approver: string): boolean {
     const req = this.requests.get(actionId);
     if (!req) return false;
-    
+
     req.status = "approved";
     return true;
   }
@@ -35,15 +35,13 @@ export class HumanApprovalGate {
   reject(actionId: string, reason: string): boolean {
     const req = this.requests.get(actionId);
     if (!req) return false;
-    
+
     req.status = "rejected";
     return true;
   }
 
   getPending(tenantId?: string): ApprovalRequest[] {
-    return Array.from(this.requests.values()).filter(
-      (r) => r.status === "pending"
-    );
+    return Array.from(this.requests.values()).filter((r) => r.status === "pending");
   }
 }
 

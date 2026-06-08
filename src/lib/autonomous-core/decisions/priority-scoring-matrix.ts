@@ -9,10 +9,10 @@ export class PriorityScoringMatrix {
   score(matrix: PriorityMatrix): number {
     let score = 0;
 
-    score += (matrix.revenueImpact * 0.4);
-    score += (matrix.urgency * 0.3);
-    score -= (matrix.tenantRisk * 0.2);
-    score -= (matrix.complianceRisk * 0.1);
+    score += matrix.revenueImpact * 0.4;
+    score += matrix.urgency * 0.3;
+    score -= matrix.tenantRisk * 0.2;
+    score -= matrix.complianceRisk * 0.1;
 
     return Math.max(0, Math.min(100, Math.round(score)));
   }

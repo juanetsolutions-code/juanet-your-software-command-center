@@ -30,14 +30,17 @@ export type EventTypes = {
   "project.status-changed": { projectId: string; tenantId: string; status: string };
 
   // System events
-  "system.health-check": { status: "healthy" | "degraded" | "unhealthy"; details?: Record<string, unknown> };
+  "system.health-check": {
+    status: "healthy" | "degraded" | "unhealthy";
+    details?: Record<string, unknown>;
+  };
   "system.alert": { level: "info" | "warning" | "error"; message: string };
 };
 
 export function createEvent<T extends keyof EventTypes>(
   type: T,
   payload: EventTypes[T] & { tenantId?: string },
-  options?: { metadata?: Record<string, unknown> }
+  options?: { metadata?: Record<string, unknown> },
 ): DomainEvent {
   return {
     id: generateEventId(),

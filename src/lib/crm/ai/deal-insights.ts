@@ -18,9 +18,11 @@ export class DealInsights {
     else if (probability > 75) riskLevel = "low";
 
     const nextSteps: string[] = [];
-    const currentStage = pipeline.stages.find((s) => s.id === deal.stage || s.name.toLowerCase() === deal.stage.toLowerCase());
+    const currentStage = pipeline.stages.find(
+      (s) => s.id === deal.stage || s.name.toLowerCase() === deal.stage.toLowerCase(),
+    );
     const nextStage = pipeline.stages.find((s) => s.position === (currentStage?.position ?? 0) + 1);
-    
+
     if (nextStage) {
       nextSteps.push(`Move to ${nextStage.name}`);
     }
@@ -38,7 +40,7 @@ export class DealInsights {
       probabilityScore: probability,
       riskLevel,
       nextSteps,
-      forecastImpact: deal.value * probability / 100,
+      forecastImpact: (deal.value * probability) / 100,
     };
   }
 

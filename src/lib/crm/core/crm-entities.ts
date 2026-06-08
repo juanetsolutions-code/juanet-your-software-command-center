@@ -1,4 +1,12 @@
-import type { LeadStatus, LeadSource, ContactType, AccountType, DealStage, DealPriority, ActivityType } from "./crm-types";
+import type {
+  LeadStatus,
+  LeadSource,
+  ContactType,
+  AccountType,
+  DealStage,
+  DealPriority,
+  ActivityType,
+} from "./crm-types";
 
 export type Lead = {
   id: string;

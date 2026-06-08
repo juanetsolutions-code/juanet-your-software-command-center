@@ -16,7 +16,7 @@ export class CrmWorkflowEngine {
   }> {
     const dealsProgressed = await this.dealProgressor.progressDeals(tenantId);
     const chutePrevented = await this.churnPrevention.prevent(tenantId);
-    
+
     const metrics = await this.pipelineOptimizer.optimize(tenantId);
     const optimizations = this.pipelineOptimizer.suggestOptimizations(metrics);
 

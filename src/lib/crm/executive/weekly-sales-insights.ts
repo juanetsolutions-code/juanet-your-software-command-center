@@ -12,12 +12,13 @@ export type WeeklyInsights = {
 
 export class WeeklySalesInsights {
   generate(tenantId: string, leads: Lead[], deals: Deal[]): WeeklyInsights {
-    const converted = leads.filter(l => l.status === "converted").length;
+    const converted = leads.filter((l) => l.status === "converted").length;
     const rate = leads.length > 0 ? converted / leads.length : 0;
-    
-    const wonDeals = deals.filter(d => d.stage === "closed_won");
-    const avg = wonDeals.length > 0 ? wonDeals.reduce((s, d) => s + d.value, 0) / wonDeals.length : 0;
-    
+
+    const wonDeals = deals.filter((d) => d.stage === "closed_won");
+    const avg =
+      wonDeals.length > 0 ? wonDeals.reduce((s, d) => s + d.value, 0) / wonDeals.length : 0;
+
     return {
       weekStart: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       tenantId,

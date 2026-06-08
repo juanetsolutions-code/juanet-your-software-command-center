@@ -23,7 +23,7 @@ export class RollbackEngine {
 
     // Execute rollback logic based on action type
     console.log(`Rolling back action ${actionId}`, record.rollbackData);
-    
+
     this.rollbacks.delete(actionId);
     return true;
   }
