@@ -1,3 +1,7 @@
+/**
+ * Supabase-backed task service. Stores tasks as crm_activities with type='task'.
+ */
+import { supabase } from "@/lib/supabase/client";
 import type { ActivityType } from "../core/crm-types";
 
 export type CrmTask = {
@@ -11,99 +15,88 @@ export type CrmTask = {
   completedAt?: string;
   priority: "low" | "medium" | "high" | "urgent";
   assignedTo?: string;
-  createdBy?: string;
   status: "pending" | "in_progress" | "completed" | "cancelled";
   type: ActivityType;
-  reminderMinutes?: number;
 };
 
-export type TaskFilter = {
-  assignedTo?: string;
-  status?: "pending" | "in_progress" | "completed" | "cancelled";
-  priority?: "low" | "medium" | "high" | "urgent";
-  dueBefore?: string;
-  dueAfter?: string;
-  entityType?: "lead" | "contact" | "deal" | "account";
-};
+function rowToTask(r: any): CrmTask {
+  // Encode priority/status in `outcome` field as "priority:status"
+  const [priority = "medium", status = "pending"] = (r.outcome ?? "").split(":");
+  return {
+    id: r.id,
+    tenantId: r.organization_id,
+    entityType: r.entity_type,
+    entityId: r.entity_id,
+    title: r.subject,
+    description: r.description ?? undefined,
+    dueDate: r.scheduled_at ?? undefined,
+    completedAt: r.completed_at ?? undefined,
+    priority: priority as CrmTask["priority"],
+    assignedTo: r.user_id ?? undefined,
+    status: status as CrmTask["status"],
+    type: (r.type ?? "task") as ActivityType,
+  };
+}
 
 export class TaskService {
-  private tasks: Map<string, CrmTask> = new Map();
-
-  async create(data: Omit<CrmTask, "id" | "status" | "completedAt">): Promise<CrmTask> {
-    const task: CrmTask = {
-      ...data,
-      id: this.generateId(),
-      status: "pending",
-    };
-    this.tasks.set(task.id, task);
-    return task;
+  async getAll(orgId?: string): Promise<CrmTask[]> {
+    if (!orgId) return [];
+    const { data, error } = await supabase
+      .from("crm_activities")
+      .select("*")
+      .eq("organization_id", orgId)
+      .eq("type", "task")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []).map(rowToTask);
   }
 
-  async findById(id: string, tenantId: string): Promise<CrmTask | undefined> {
-    const task = this.tasks.get(id);
-    if (!task || task.tenantId !== tenantId) return undefined;
-    return task;
+  async create(
+    orgId: string,
+    params: {
+      title: string;
+      description?: string;
+      entityType: CrmTask["entityType"];
+      entityId: string;
+      dueDate?: string;
+      priority?: CrmTask["priority"];
+    },
+  ): Promise<CrmTask> {
+    const priority = params.priority ?? "medium";
+    const { data, error } = await supabase
+      .from("crm_activities")
+      .insert({
+        organization_id: orgId,
+        entity_type: params.entityType,
+        entity_id: params.entityId,
+        type: "task",
+        subject: params.title,
+        description: params.description ?? null,
+        scheduled_at: params.dueDate ?? null,
+        outcome: `${priority}:pending`,
+      })
+      .select("*")
+      .single();
+    if (error || !data) throw error ?? new Error("Failed to create task");
+    return rowToTask(data);
   }
 
-  async findByEntity(
-    tenantId: string,
-    entityType: "lead" | "contact" | "deal" | "account",
-    entityId: string,
-  ): Promise<CrmTask[]> {
-    return Array.from(this.tasks.values()).filter(
-      (t) => t.tenantId === tenantId && t.entityType === entityType && t.entityId === entityId,
-    );
-  }
-
-  async findByAssignee(tenantId: string, userId: string): Promise<CrmTask[]> {
-    return Array.from(this.tasks.values()).filter(
-      (t) => t.tenantId === tenantId && t.assignedTo === userId && t.status === "pending",
-    );
-  }
-
-  async update(
-    id: string,
-    tenantId: string,
-    updates: Partial<CrmTask>,
-  ): Promise<CrmTask | undefined> {
-    const task = await this.findById(id, tenantId);
-    if (!task) return undefined;
-    const updated = { ...task, ...updates };
-    this.tasks.set(id, updated);
-    return updated;
-  }
-
-  async complete(id: string, tenantId: string): Promise<CrmTask | undefined> {
-    return this.update(id, tenantId, {
-      status: "completed",
-      completedAt: new Date().toISOString(),
-    });
-  }
-
-  async delete(id: string, tenantId: string): Promise<boolean> {
-    const task = await this.findById(id, tenantId);
-    if (!task) return false;
-    return this.tasks.delete(id);
-  }
-
-  async getUpcoming(tenantId: string, hours: number = 24): Promise<CrmTask[]> {
-    const now = new Date();
-    const future = new Date(now.getTime() + hours * 60 * 60 * 1000);
-    return Array.from(this.tasks.values()).filter(
-      (t) =>
-        t.tenantId === tenantId &&
-        t.status === "pending" &&
-        t.dueDate &&
-        new Date(t.dueDate) <= future,
-    );
-  }
-
-  getAll(): CrmTask[] {
-    return Array.from(this.tasks.values());
-  }
-
-  private generateId(): string {
-    return `task_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+  async setStatus(taskId: string, status: CrmTask["status"], orgId: string): Promise<void> {
+    // We need to preserve priority — fetch first.
+    const { data: row } = await supabase
+      .from("crm_activities")
+      .select("outcome")
+      .eq("id", taskId)
+      .maybeSingle();
+    const priority = (row?.outcome ?? "medium:pending").split(":")[0];
+    const patch: Record<string, unknown> = { outcome: `${priority}:${status}` };
+    if (status === "completed") patch.completed_at = new Date().toISOString();
+    const { error } = await supabase
+      .from("crm_activities")
+      .update(patch)
+      .eq("id", taskId)
+      .eq("organization_id", orgId);
+    if (error) throw error;
   }
 }
 
