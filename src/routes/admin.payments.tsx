@@ -1,17 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CreditCard } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { listPayments } from "@/lib/dashboard/repositories/payments";
 
 export const Route = createFileRoute("/admin/payments")({
   component: AdminPaymentsPage,
 });
 
-const mockPayments = [
-  { id: "PAY-9012", method: "M-Pesa", amount: "$4,200", status: "Succeeded", date: "Jun 6, 2026" },
-  { id: "PAY-9011", method: "Stripe", amount: "$1,800", status: "Pending", date: "Jun 5, 2026" },
-  { id: "PAY-9010", method: "Bank Transfer", amount: "$960", status: "Failed", date: "Jun 4, 2026" },
-];
-
 function AdminPaymentsPage() {
+  const { data: payments = [], isLoading } = useQuery({
+    queryKey: ["admin-payments"],
+    queryFn: listPayments,
+  });
+
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
@@ -22,28 +23,40 @@ function AdminPaymentsPage() {
         <CreditCard className="h-6 w-6 text-brand-cyan" />
       </header>
       <div className="glass rounded-2xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-white/5 text-xs uppercase text-muted-foreground">
-            <tr>
-              <th className="text-left p-4">Payment</th>
-              <th className="text-left p-4">Method</th>
-              <th className="text-left p-4">Amount</th>
-              <th className="text-left p-4">Status</th>
-              <th className="text-left p-4">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockPayments.map((p) => (
-              <tr key={p.id} className="border-t border-white/5">
-                <td className="p-4 font-medium">{p.id}</td>
-                <td className="p-4">{p.method}</td>
-                <td className="p-4">{p.amount}</td>
-                <td className="p-4"><span className="text-xs px-2 py-1 rounded-full bg-white/5">{p.status}</span></td>
-                <td className="p-4 text-muted-foreground">{p.date}</td>
+        {isLoading ? (
+          <div className="p-6 text-sm text-muted-foreground">Loading…</div>
+        ) : payments.length === 0 ? (
+          <div className="p-6 text-sm text-muted-foreground">No payments recorded yet.</div>
+        ) : (
+          <table className="w-full text-sm">
+            <thead className="bg-white/5 text-xs uppercase text-muted-foreground">
+              <tr>
+                <th className="text-left p-4">Payment</th>
+                <th className="text-left p-4">Invoice</th>
+                <th className="text-left p-4">Amount</th>
+                <th className="text-left p-4">Status</th>
+                <th className="text-left p-4">Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {payments.map((p) => (
+                <tr key={p.id} className="border-t border-white/5">
+                  <td className="p-4 font-medium">{p.id.slice(0, 8)}</td>
+                  <td className="p-4">{p.invoiceId?.slice(0, 8) ?? "—"}</td>
+                  <td className="p-4">
+                    {new Intl.NumberFormat("en-US", { style: "currency", currency: p.currency }).format(p.amount)}
+                  </td>
+                  <td className="p-4">
+                    <span className="text-xs px-2 py-1 rounded-full bg-white/5">{p.status}</span>
+                  </td>
+                  <td className="p-4 text-muted-foreground">
+                    {new Date(p.createdAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

@@ -1,17 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { listAuditEvents } from "@/lib/admin-ops";
 
 export const Route = createFileRoute("/admin/audit-center")({
   component: AuditCenterPage,
 });
 
-const mockAudits = [
-  { id: "AUD-001", actor: "alice@juanet.io", action: "user.role.updated", target: "bob@acme.com", time: "12m ago" },
-  { id: "AUD-002", actor: "system", action: "invoice.paid", target: "INV-1042", time: "1h ago" },
-  { id: "AUD-003", actor: "marcus@juanet.io", action: "project.created", target: "Atlas Core", time: "3h ago" },
-];
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  return `${d}d ago`;
+}
 
 function AuditCenterPage() {
+  const { data: events = [], isLoading } = useQuery({
+    queryKey: ["admin-audit"],
+    queryFn: () => listAuditEvents(200),
+  });
+
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
@@ -22,17 +34,33 @@ function AuditCenterPage() {
         <ShieldCheck className="h-6 w-6 text-brand-cyan" />
       </header>
       <div className="glass rounded-2xl p-5">
-        <ul className="space-y-3">
-          {mockAudits.map((a) => (
-            <li key={a.id} className="flex items-start gap-3 text-sm">
-              <span className="mt-1 h-2 w-2 rounded-full bg-brand-cyan" />
-              <div className="flex-1">
-                <div><span className="font-medium">{a.actor}</span> performed <code className="text-brand-cyan">{a.action}</code> on <span className="font-medium">{a.target}</span></div>
-                <div className="text-[11px] text-muted-foreground">{a.id} • {a.time}</div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        {isLoading ? (
+          <div className="text-sm text-muted-foreground py-6">Loading…</div>
+        ) : events.length === 0 ? (
+          <div className="text-sm text-muted-foreground py-6">No audit events recorded yet.</div>
+        ) : (
+          <ul className="space-y-3">
+            {events.map((e) => (
+              <li key={e.id} className="flex items-start gap-3 text-sm">
+                <span className="mt-1 h-2 w-2 rounded-full bg-brand-cyan" />
+                <div className="flex-1">
+                  <div>
+                    <code className="text-brand-cyan">{e.action}</code>
+                    {e.resourceType && (
+                      <> on <span className="font-medium">{e.resourceType}</span></>
+                    )}
+                    {e.resourceId && (
+                      <> <span className="text-muted-foreground">#{e.resourceId.slice(0, 8)}</span></>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">
+                    {e.id.slice(0, 8)} • {timeAgo(e.createdAt)}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
