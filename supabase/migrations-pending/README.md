@@ -9,6 +9,7 @@ Lovable Cloud is not enabled on this project, so they are NOT auto-applied. Run 
 3. `004_crm_module.sql` — leads, accounts, contacts, pipelines, stages, deals, activities
 4. `005_supporting_tables.sql` — conversations, conversation_members, payment_methods, activity_logs, notifications, automations, automation_runs, audit_events
 5. `006_admin_ops.sql` — products, orders, order_items, licenses, support_tickets, ticket_messages
+6. `007_client_portal.sql` — api_tokens, downloads, billing_addresses; extends `projects` / `requests` / `invoices` with display columns the client dashboard renders
 
 Each file is idempotent-friendly within itself but **assumes the previous one has been applied**. All new tables are RLS-enabled and granted to `authenticated` + `service_role` per Lovable security policy.
 
