@@ -1,14 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Filter, PlusCircle, Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ProjectCard } from "@/components/dashboard/ProjectCard";
 import { ProjectDetailPanel } from "@/components/dashboard/ProjectDetailPanel";
-import {
-  listProjectTimeline,
-  listProjects,
-  type Project,
-  type ProjectStatus,
-} from "@/lib/dashboard";
+import { listProjectTimeline, type Project } from "@/lib/dashboard";
+import { listMyProjects, type ClientProject } from "@/lib/client-dashboard";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard/projects")({
@@ -18,30 +15,48 @@ export const Route = createFileRoute("/dashboard/projects")({
 const filters = ["all", "pending", "in progress", "completed"] as const;
 type FilterKey = (typeof filters)[number];
 
-function matchesFilter(project: Project, filter: FilterKey) {
-  if (filter === "all") return true;
-  return project.status === (filter satisfies ProjectStatus | "all");
+function mapToProject(p: ClientProject): Project {
+  return {
+    id: p.id,
+    name: p.title,
+    client: "—",
+    category: p.category ?? "General",
+    status: (p.status as Project["status"]) ?? "pending",
+    progress: p.progress,
+    dueAt: p.dueAt ?? new Date().toISOString(),
+    dueLabel: p.dueAt ? new Date(p.dueAt).toLocaleDateString() : "—",
+    leadName: p.leadName ?? "—",
+    updatedLabel: new Date(p.updatedAt).toLocaleDateString(),
+  };
 }
 
 function ProjectsPage() {
-  const projects = listProjects();
+  const { data: rawProjects = [], isLoading } = useQuery({
+    queryKey: ["my-projects"],
+    queryFn: listMyProjects,
+  });
+  const projects = useMemo(() => rawProjects.map(mapToProject), [rawProjects]);
+
   const [filter, setFilter] = useState<FilterKey>("all");
   const [query, setQuery] = useState("");
-  const [active, setActive] = useState<Project>(projects[0]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!activeId && projects.length > 0) setActiveId(projects[0].id);
+  }, [activeId, projects]);
 
   const filtered = useMemo(
     () =>
       projects.filter(
         (p) =>
-          matchesFilter(p, filter) &&
-          (query === "" ||
-            p.name.toLowerCase().includes(query.toLowerCase()) ||
-            p.client.toLowerCase().includes(query.toLowerCase())),
+          (filter === "all" || p.status === filter) &&
+          (query === "" || p.name.toLowerCase().includes(query.toLowerCase())),
       ),
     [projects, filter, query],
   );
 
-  const timeline = useMemo(() => listProjectTimeline(active), [active]);
+  const active = projects.find((p) => p.id === activeId) ?? projects[0];
+  const timeline = useMemo(() => (active ? listProjectTimeline(active) : []), [active]);
 
   return (
     <div className="space-y-6">
@@ -66,7 +81,7 @@ function ProjectsPage() {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search projects, clients..."
+            placeholder="Search projects..."
             className="w-full h-9 pl-9 pr-3 rounded-md bg-white/5 border border-border/60 text-sm outline-none focus:border-brand-blue/60"
           />
         </div>
@@ -89,26 +104,42 @@ function ProjectsPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-3">
-          {filtered.map((p, i) => (
-            <ProjectCard
-              key={p.id}
-              project={p}
-              index={i}
-              active={active.id === p.id}
-              onSelect={setActive}
-            />
-          ))}
-          {filtered.length === 0 && (
-            <div className="glass rounded-2xl p-10 text-center text-sm text-muted-foreground">
-              No projects match your filters.
-            </div>
-          )}
+      {isLoading ? (
+        <div className="glass rounded-2xl p-10 text-center text-sm text-muted-foreground">
+          Loading projects…
         </div>
+      ) : projects.length === 0 ? (
+        <div className="glass rounded-2xl p-10 text-center">
+          <p className="text-sm text-muted-foreground">No projects yet.</p>
+          <Link
+            to="/dashboard/requests"
+            className="mt-4 inline-block text-xs text-brand-cyan hover:underline"
+          >
+            Submit your first request →
+          </Link>
+        </div>
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-3">
+            {filtered.map((p, i) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                index={i}
+                active={active?.id === p.id}
+                onSelect={(proj) => setActiveId(proj.id)}
+              />
+            ))}
+            {filtered.length === 0 && (
+              <div className="glass rounded-2xl p-10 text-center text-sm text-muted-foreground">
+                No projects match your filters.
+              </div>
+            )}
+          </div>
 
-        <ProjectDetailPanel project={active} timeline={timeline} />
-      </div>
+          {active && <ProjectDetailPanel project={active} timeline={timeline} />}
+        </div>
+      )}
     </div>
   );
 }
