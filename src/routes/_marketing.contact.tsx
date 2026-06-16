@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Section, SectionHeader } from "@/components/marketing/Section";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { useState, type FormEvent } from "react";
+import { toast } from "sonner";
+import { submitContact } from "@/lib/contact";
 
 export const Route = createFileRoute("/_marketing/contact")({
   head: () => ({
@@ -21,6 +24,31 @@ export const Route = createFileRoute("/_marketing/contact")({
 });
 
 function ContactPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [budget, setBudget] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!name || !email || !message) {
+      toast.error("Name, email, and message are required.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await submitContact({ name, email, company, budget, message });
+      toast.success("Inquiry sent — we'll respond within 24h.");
+      setName(""); setEmail(""); setCompany(""); setBudget(""); setMessage("");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to send. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <Section className="pt-32 md:pt-40">
       <SectionHeader
@@ -31,27 +59,33 @@ function ContactPage() {
 
       <div className="mt-16 grid gap-8 lg:grid-cols-5">
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
           className="lg:col-span-3 glass-strong rounded-2xl p-6 md:p-8 space-y-4"
         >
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Name" placeholder="Jane Doe" />
-            <Field label="Email" placeholder="jane@company.com" type="email" />
+            <Field label="Name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Doe" required />
+            <Field label="Email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="jane@company.com" type="email" required />
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Company" placeholder="Acme Inc." />
-            <Field label="Budget" placeholder="$10k – $50k" />
+            <Field label="Company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Acme Inc." />
+            <Field label="Budget" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="$10k – $50k" />
           </div>
           <div>
             <label className="text-xs text-muted-foreground">Project brief</label>
             <textarea
+              required
               rows={6}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               placeholder="Tell us what you're building..."
               className="mt-1.5 w-full px-3 py-2.5 rounded-md bg-white/5 border border-border/60 text-sm placeholder:text-muted-foreground/60 outline-none focus:border-brand-blue/60"
             />
           </div>
-          <button className="h-11 px-6 rounded-lg text-sm font-medium bg-gradient-to-r from-brand-blue to-brand-violet text-primary-foreground glow-primary">
-            Send inquiry
+          <button
+            disabled={submitting}
+            className="h-11 px-6 rounded-lg text-sm font-medium bg-gradient-to-r from-brand-blue to-brand-violet text-primary-foreground glow-primary disabled:opacity-50"
+          >
+            {submitting ? "Sending…" : "Send inquiry"}
           </button>
         </form>
 
