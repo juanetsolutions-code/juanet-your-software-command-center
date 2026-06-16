@@ -136,10 +136,7 @@ export function AppShell({
             </div>
 
             <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
-            <button className="relative h-9 w-9 grid place-items-center rounded-md hover:bg-white/5">
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-brand-cyan" />
-            </button>
+            <NotificationBell basePath={brand === "Admin Console" ? "/admin" : "/dashboard"} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="h-9 pl-1 pr-2 flex items-center gap-2 rounded-md hover:bg-white/5">
