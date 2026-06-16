@@ -1,6 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  Bell,
   ChevronDown,
   Search,
   Sparkles,
@@ -9,9 +8,10 @@ import {
   LogOut,
   User as UserIcon,
 } from "lucide-react";
-import { useState, type ReactNode, useEffect } from "react";
+import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
+import { NotificationBell } from "@/components/app/NotificationBell";
 import { useAuth } from "@/lib/auth";
 import {
   DropdownMenu,
