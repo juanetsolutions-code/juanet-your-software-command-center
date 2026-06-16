@@ -129,6 +129,35 @@ export async function listMyRequests(): Promise<ClientRequest[]> {
     createdAt: r.created_at,
   }));
 }
+export async function updateRequest(
+  id: string,
+  patch: Partial<{
+    subject: string;
+    description: string;
+    priority: "low" | "medium" | "high" | "urgent";
+    budgetRange: string;
+    timeline: string;
+    deadlineAt: string | null;
+    status: string;
+  }>,
+): Promise<void> {
+  const row: Record<string, unknown> = {};
+  if (patch.subject !== undefined) row.subject = patch.subject;
+  if (patch.description !== undefined) row.description = patch.description;
+  if (patch.priority !== undefined) row.priority = patch.priority;
+  if (patch.budgetRange !== undefined) row.budget_range = patch.budgetRange;
+  if (patch.timeline !== undefined) row.timeline = patch.timeline;
+  if (patch.deadlineAt !== undefined) row.deadline_at = patch.deadlineAt;
+  if (patch.status !== undefined) row.status = patch.status;
+  const { error } = await supabase.from("requests").update(row).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteRequest(id: string): Promise<void> {
+  const { error } = await supabase.from("requests").delete().eq("id", id);
+  if (error) throw error;
+}
+
 export async function createRequest(input: {
   subject: string;
   description?: string;
