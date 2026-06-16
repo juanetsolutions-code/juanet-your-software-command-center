@@ -1,11 +1,27 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Filter, PlusCircle, Search } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { Filter, PlusCircle, Search, Pencil, Trash2, Inbox } from "lucide-react";
+import { useMemo, useState, useEffect, type FormEvent } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { ProjectCard } from "@/components/dashboard/ProjectCard";
 import { ProjectDetailPanel } from "@/components/dashboard/ProjectDetailPanel";
 import { listProjectTimeline, type Project } from "@/lib/dashboard";
-import { listMyProjects, type ClientProject } from "@/lib/client-dashboard";
+import {
+  listMyProjects,
+  listMyRequests,
+  updateRequest,
+  deleteRequest,
+  type ClientProject,
+  type ClientRequest,
+} from "@/lib/client-dashboard";
+import { StatusBadge } from "@/components/app/StatusBadge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard/projects")({
