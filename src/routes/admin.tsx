@@ -17,6 +17,7 @@ import {
   LifeBuoy,
   BarChart3,
   UserPlus,
+  Mail,
 } from "lucide-react";
 import { AppShell, type NavItem } from "@/components/app/AppShell";
 import { requireRole } from "@/lib/auth";
@@ -29,6 +30,7 @@ const items: NavItem[] = [
   { label: "Health", to: "/admin/health", icon: Activity },
   { label: "Audit Center", to: "/admin/audit-center", icon: FileSearch },
   { label: "Support Queue", to: "/admin/support-queue", icon: LifeBuoy },
+  { label: "Contact Inbox", to: "/admin/contact-inbox", icon: Mail },
   { label: "Usage Monitoring", to: "/admin/usage-monitoring", icon: BarChart3 },
   { label: "Integrations", to: "/admin/integrations", icon: Plug },
   { label: "AI Ops", to: "/admin/ai-operations", icon: Brain },

@@ -14,3 +14,7 @@ Lovable Cloud is not enabled on this project, so they are NOT auto-applied. Run 
 Each file is idempotent-friendly within itself but **assumes the previous one has been applied**. All new tables are RLS-enabled and granted to `authenticated` + `service_role` per Lovable security policy.
 
 > When you're ready to switch from mock mode to live data, also set `VITE_DATA_MODE=hybrid` (or `full`) in `.env`.
+
+## 008_messaging_and_contact.sql
+- `conversations`, `conversation_participants`, `messages` (with RLS via `is_conversation_participant`).
+- `contact_submissions` for the public marketing contact form (anon INSERT, admin SELECT/UPDATE/DELETE).

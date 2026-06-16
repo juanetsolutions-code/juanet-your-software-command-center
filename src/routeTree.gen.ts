@@ -41,6 +41,7 @@ import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminLicensesRouteImport } from './routes/admin.licenses'
 import { Route as AdminIntegrationsRouteImport } from './routes/admin.integrations'
 import { Route as AdminHealthRouteImport } from './routes/admin.health'
+import { Route as AdminContactInboxRouteImport } from './routes/admin.contact-inbox'
 import { Route as AdminCmsRouteImport } from './routes/admin.cms'
 import { Route as AdminAuditCenterRouteImport } from './routes/admin.audit-center'
 import { Route as AdminAiOperationsRouteImport } from './routes/admin.ai-operations'
@@ -218,6 +219,11 @@ const AdminHealthRoute = AdminHealthRouteImport.update({
   path: '/health',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminContactInboxRoute = AdminContactInboxRouteImport.update({
+  id: '/contact-inbox',
+  path: '/contact-inbox',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCmsRoute = AdminCmsRouteImport.update({
   id: '/cms',
   path: '/cms',
@@ -318,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/admin/ai-operations': typeof AdminAiOperationsRoute
   '/admin/audit-center': typeof AdminAuditCenterRoute
   '/admin/cms': typeof AdminCmsRoute
+  '/admin/contact-inbox': typeof AdminContactInboxRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/licenses': typeof AdminLicensesRoute
@@ -365,6 +372,7 @@ export interface FileRoutesByTo {
   '/admin/ai-operations': typeof AdminAiOperationsRoute
   '/admin/audit-center': typeof AdminAuditCenterRoute
   '/admin/cms': typeof AdminCmsRoute
+  '/admin/contact-inbox': typeof AdminContactInboxRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/licenses': typeof AdminLicensesRoute
@@ -417,6 +425,7 @@ export interface FileRoutesById {
   '/admin/ai-operations': typeof AdminAiOperationsRoute
   '/admin/audit-center': typeof AdminAuditCenterRoute
   '/admin/cms': typeof AdminCmsRoute
+  '/admin/contact-inbox': typeof AdminContactInboxRoute
   '/admin/health': typeof AdminHealthRoute
   '/admin/integrations': typeof AdminIntegrationsRoute
   '/admin/licenses': typeof AdminLicensesRoute
@@ -470,6 +479,7 @@ export interface FileRouteTypes {
     | '/admin/ai-operations'
     | '/admin/audit-center'
     | '/admin/cms'
+    | '/admin/contact-inbox'
     | '/admin/health'
     | '/admin/integrations'
     | '/admin/licenses'
@@ -517,6 +527,7 @@ export interface FileRouteTypes {
     | '/admin/ai-operations'
     | '/admin/audit-center'
     | '/admin/cms'
+    | '/admin/contact-inbox'
     | '/admin/health'
     | '/admin/integrations'
     | '/admin/licenses'
@@ -568,6 +579,7 @@ export interface FileRouteTypes {
     | '/admin/ai-operations'
     | '/admin/audit-center'
     | '/admin/cms'
+    | '/admin/contact-inbox'
     | '/admin/health'
     | '/admin/integrations'
     | '/admin/licenses'
@@ -839,6 +851,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHealthRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/contact-inbox': {
+      id: '/admin/contact-inbox'
+      path: '/contact-inbox'
+      fullPath: '/admin/contact-inbox'
+      preLoaderRoute: typeof AdminContactInboxRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/cms': {
       id: '/admin/cms'
       path: '/cms'
@@ -989,6 +1008,7 @@ interface AdminRouteChildren {
   AdminAiOperationsRoute: typeof AdminAiOperationsRoute
   AdminAuditCenterRoute: typeof AdminAuditCenterRoute
   AdminCmsRoute: typeof AdminCmsRoute
+  AdminContactInboxRoute: typeof AdminContactInboxRoute
   AdminHealthRoute: typeof AdminHealthRoute
   AdminIntegrationsRoute: typeof AdminIntegrationsRoute
   AdminLicensesRoute: typeof AdminLicensesRoute
@@ -1015,6 +1035,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAiOperationsRoute: AdminAiOperationsRoute,
   AdminAuditCenterRoute: AdminAuditCenterRoute,
   AdminCmsRoute: AdminCmsRoute,
+  AdminContactInboxRoute: AdminContactInboxRoute,
   AdminHealthRoute: AdminHealthRoute,
   AdminIntegrationsRoute: AdminIntegrationsRoute,
   AdminLicensesRoute: AdminLicensesRoute,
@@ -1096,13 +1117,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
