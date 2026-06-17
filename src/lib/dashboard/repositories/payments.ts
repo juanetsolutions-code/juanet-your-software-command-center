@@ -45,11 +45,7 @@ function mapPaymentRow(row: DbPayment): {
 }
 
 export async function listPaymentMethods(): Promise<PaymentMethod[]> {
-  if (!SUPABASE_READY) {
-    logger.info("[Mock Mode] Using mock payment methods data");
-    return mockPaymentMethods;
-  }
-
+  if (!SUPABASE_READY) return mockPaymentMethods;
   try {
     const rows = await safeSelectFrom<DbPaymentMethod>(supabase, "listPaymentMethods", (c) => {
       let q = c.from("payment_methods").select("*").order("is_primary", { ascending: false });
@@ -57,11 +53,10 @@ export async function listPaymentMethods(): Promise<PaymentMethod[]> {
       q = scopedQuery(q as any) as any;
       return q;
     });
-    if (rows.length === 0) return mockPaymentMethods;
     return rows.map(mapDbPaymentMethod);
   } catch (err) {
     handleSupabaseError(err, "listPaymentMethods");
-    return mockPaymentMethods;
+    return [];
   }
 }
 

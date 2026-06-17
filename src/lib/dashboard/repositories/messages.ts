@@ -33,30 +33,18 @@ function mapMessageRow(row: DbMessage, currentUserId = "current-user"): Message 
 const mapDbMessage = mapMessageRow; // alias
 
 export async function listConversations(): Promise<Conversation[]> {
-  if (!SUPABASE_READY) {
-    logger.info("[Mock Mode] Using mock conversations data");
-    return mockConversations;
-  }
-
+  if (!SUPABASE_READY) return mockConversations;
   try {
-    const rows = await safeSelectFrom<Record<string, unknown>>(
-      supabase,
-      "listConversations",
-      (c) => {
-        let q = c.from("conversations").select("*").order("created_at", { ascending: false });
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        q = scopedQuery(q as any) as any;
-        return q;
-      },
-    );
-    // Until conversation metadata (preview/unread/online) + joins modeled,
-    // conversations always fall back to mock to preserve exact UI shape.
-    // (messages table itself is fully wired below)
-    return mockConversations;
+    await safeSelectFrom<Record<string, unknown>>(supabase, "listConversations", (c) => {
+      let q = c.from("conversations").select("*").order("created_at", { ascending: false });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      q = scopedQuery(q as any) as any;
+      return q;
+    });
+    return [];
   } catch (err) {
     handleSupabaseError(err, "listConversations");
-    return mockConversations;
+    return [];
   }
 }
 
@@ -64,7 +52,6 @@ export async function listMessages(conversationId: string): Promise<Message[]> {
   if (!SUPABASE_READY) {
     return mockMessagesByConversation[conversationId] ?? mockMessagesByConversation["c-01"] ?? [];
   }
-
   try {
     const rows = await safeSelectFrom<DbMessage>(supabase, "listMessages", (c) => {
       let q = c
@@ -76,13 +63,10 @@ export async function listMessages(conversationId: string): Promise<Message[]> {
       q = scopedQuery(q as any) as any;
       return q;
     });
-    if (rows.length === 0) {
-      return mockMessagesByConversation[conversationId] ?? [];
-    }
     return rows.map((r) => mapDbMessage(r));
   } catch (err) {
     handleSupabaseError(err, "listMessages");
-    return mockMessagesByConversation[conversationId] ?? [];
+    return [];
   }
 }
 

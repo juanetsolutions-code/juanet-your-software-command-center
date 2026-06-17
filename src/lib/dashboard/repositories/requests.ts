@@ -40,11 +40,10 @@ export async function listRequests(): Promise<ServiceRequest[]> {
       q = scopedQuery(q as any) as any;
       return q;
     });
-    if (rows.length === 0) return mockRequests;
     return rows.map(mapDbRequestToServiceRequest);
   } catch (err) {
     handleSupabaseError(err, "listRequests");
-    return mockRequests;
+    return [];
   }
 }
 
