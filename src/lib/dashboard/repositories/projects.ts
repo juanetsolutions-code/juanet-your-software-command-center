@@ -47,15 +47,12 @@ export async function listProjects(): Promise<Project[]> {
       q = scopedQuery(q as any) as any;
       return q;
     });
-    const result = rows.length === 0 ? mockProjects : rows.map(mapDbProjectToProject);
-    cacheSet(cacheKey, result, 45_000); // 45s TTL
-    logger.info(
-      `[Repo] listProjects source=${rows.length ? "supabase" : "mock-fallback"} count=${result.length}`,
-    );
+    const result = rows.map(mapDbProjectToProject);
+    cacheSet(cacheKey, result, 45_000);
     return result;
   } catch (err) {
     handleSupabaseError(err, "listProjects");
-    return mockProjects;
+    return [];
   }
 }
 
@@ -73,17 +70,12 @@ export async function getProject(id: string): Promise<Project | undefined> {
     const rows = await safeSelectFrom<DbProject>(supabase, "getProject", (c) =>
       c.from("projects").select("*").eq("id", id).limit(1),
     );
-    if (rows.length === 0) {
-      const mockHit = mockProjects.find((p) => p.id === id);
-      return mockHit;
-    }
+    if (rows.length === 0) return undefined;
     const mapped = mapDbProjectToProject(rows[0]);
     cacheSet(cacheKey, mapped, 60_000);
-    logger.info(`[Repo] getProject(${id}) source=supabase`);
     return mapped;
   } catch (err) {
     handleSupabaseError(err, "getProject");
-    logger.warn("[Repo] getProject fallback to mock");
-    return mockProjects.find((p) => p.id === id);
+    return undefined;
   }
 }

@@ -23,11 +23,7 @@ function mapInvoiceRow(row: DbInvoice): Invoice {
 const mapDbInvoice = mapInvoiceRow; // alias
 
 export async function listInvoices(): Promise<Invoice[]> {
-  if (!SUPABASE_READY) {
-    logger.info("[Mock Mode] Using mock invoices data");
-    return mockInvoices;
-  }
-
+  if (!SUPABASE_READY) return mockInvoices;
   try {
     const rows = await safeSelectFrom<DbInvoice>(supabase, "listInvoices", (c) => {
       let q = c.from("invoices").select("*").order("created_at", { ascending: false });
@@ -35,19 +31,15 @@ export async function listInvoices(): Promise<Invoice[]> {
       q = scopedQuery(q as any) as any;
       return q;
     });
-    if (rows.length === 0) return mockInvoices;
     return rows.map(mapDbInvoice);
   } catch (err) {
     handleSupabaseError(err, "listInvoices");
-    return mockInvoices;
+    return [];
   }
 }
 
 export async function getInvoice(id: string): Promise<Invoice | undefined> {
-  if (!SUPABASE_READY) {
-    return mockInvoices.find((i) => i.id === id);
-  }
-
+  if (!SUPABASE_READY) return mockInvoices.find((i) => i.id === id);
   try {
     const rows = await safeSelectFrom<DbInvoice>(supabase, "getInvoice", (c) =>
       c.from("invoices").select("*").eq("id", id).limit(1),
@@ -56,7 +48,7 @@ export async function getInvoice(id: string): Promise<Invoice | undefined> {
     return mapInvoiceRow(rows[0]);
   } catch (err) {
     handleSupabaseError(err, "getInvoice");
-    return mockInvoices.find((i) => i.id === id);
+    return undefined;
   }
 }
 
