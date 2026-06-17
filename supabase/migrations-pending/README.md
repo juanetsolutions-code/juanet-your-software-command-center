@@ -18,3 +18,12 @@ Each file is idempotent-friendly within itself but **assumes the previous one ha
 ## 008_messaging_and_contact.sql
 - `conversations`, `conversation_participants`, `messages` (with RLS via `is_conversation_participant`).
 - `contact_submissions` for the public marketing contact form (anon INSERT, admin SELECT/UPDATE/DELETE).
+
+## 009_cms_services_integrations_settings.sql
+Backs the last admin surfaces that were still on mock data:
+- `cms_pages` — marketing/CMS pages (anon SELECT for `status='published'`, admin write).
+- `service_plans` + `subscriptions` — plan catalog and per-tenant subscriptions for admin/services.
+- `integrations` — connected providers (Stripe, M-Pesa, GitHub, Slack, …) per organization.
+- `tenant_settings` — generic key/value settings used by admin/settings/* (branding, notifications, security, api).
+
+All tenant-scoped, RLS on, GRANTs for `authenticated` + `service_role`, plus shared `set_updated_at` trigger.
