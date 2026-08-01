@@ -8,8 +8,14 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
 // @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
+// Self-hosting (VPS / CloudPanel): set NITRO_PRESET=node-server before `npm run build`
+// to emit a plain Node server in `.output/` instead of the Cloudflare Worker bundle.
+const selfHostPreset = process.env.NITRO_PRESET;
+
 export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  ...(selfHostPreset ? { nitro: { preset: selfHostPreset } } : {}),
 });
+
